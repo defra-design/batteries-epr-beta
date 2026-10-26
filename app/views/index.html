@@ -30,6 +30,9 @@
 {% set tabItems = [] %}
 {% for family in families %}
   {% set panel %}
+    {% if family.intro %}
+      <p class="govuk-body">{{ family.intro }}</p>
+    {% endif %}
     {% if family.versioned %}
       {% if family.latest %}
         {% set card = family.latest %}

@@ -43,6 +43,7 @@ function readRegistry() {
     families: (raw.families || []).map((family) => ({
       id: family.id,
       label: family.label || family.id,
+      intro: family.intro,  // New field for introduction text  
       versioned: family.versioned !== false
     })),
     journeys: raw.journeys || []
@@ -245,7 +246,8 @@ function groupJourneysByFamily() {
     }
     return {
       id: family.id,
-      label: family.label,
+      label: family.label,  
+      intro: family.intro,  
       versioned: family.versioned,
       latest: family.versioned ? all[0] : undefined,
       previous: family.versioned ? all.slice(1) : [],

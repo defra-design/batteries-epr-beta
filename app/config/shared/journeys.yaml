@@ -27,11 +27,15 @@
 families:
   # Unversioned: every journey shows as a card of its own. Drop `versioned:
   # false` from a family whose journeys are versions of one another.
-  - id: example
-    label: Example
+  - id: regulator
+    label: Regulator
+    intro: >-
+      Regulators use a separate internal website, not the producer and
+      scheme service. It's designed to line up with Defra's regulator
+      tooling and move into it later.
     versioned: false
-  - id: other
-    label: Other prototypes
+  - id: example
+    label: Examples
     versioned: false
 
 journeys: []

@@ -1,0 +1,21 @@
+# EB-237: the indicative obligation check page.
+# A proof of concept: a regulator compares this figure with NPWD.
+# Words live in pages/*.md; this file sets the page order.
+
+id: regulator-indicative-obligation
+name: Indicative obligation check
+serviceName: Batteries EPR
+start: obligation
+layout: staff
+
+homepage:
+  family: regulator
+  status: in-progress
+  title: "PoM review: indicative obligation check (EB-237)"
+  description: >-
+    One page for a regulator to compare a compliance scheme's indicative
+    obligation with NPWD. Proof of concept; figures are dummy.
+
+pages:
+  - id: obligation
+    back: []
