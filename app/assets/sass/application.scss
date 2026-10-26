@@ -1,6 +1,16 @@
 //
 // For guidance on how to add CSS and SCSS see:
 // https://prototype-kit.service.gov.uk/adding-css-javascript-and-images/
-// 
+//
+
+// Add-on: Defra internal branding. Re-assert the typeface token set in
+// settings.scss: plugin stylesheets compile in between and reset it, so it's
+// needed here too for this file's own styles. See settings.scss.
+$govuk-font-family: var(--app-font-family, "GDS Transport", arial, sans-serif);
+$govuk-font-family-print: var(--app-font-family-print, sans-serif);
+
+// Add-on: Defra internal header, navigation, footer and typeface for
+// regulator pages. See _defra-internal.scss
+@import "defra-internal";
 
 // Add extra styles here

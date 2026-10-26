@@ -1,0 +1,58 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-237: indicative obligation check page.
+  Option A: everything in tables.
+  All the words and dummy figures: app/content/regulator/indicative-obligation.md
+#}
+
+{% set words = content("regulator/indicative-obligation") %}
+
+{% set pageName = words.heading %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ words.caption }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    <p class="govuk-body-l">{{ words.headline }}</p>
+
+    {{ govukTable({
+      caption: words.calculationHeading,
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      head: [
+        { text: words.yearColumn },
+        { text: words.weightColumn, format: "numeric" }
+      ],
+      rows: [
+        [{ text: words.year1 }, { text: words.year1Weight, format: "numeric" }],
+        [{ text: words.year2 }, { text: words.year2Weight, format: "numeric" }],
+        [{ text: words.year3 }, { html: (words.year3Predicted | escape) + "<br>" + (words.year3DeclaredSoFar | escape), format: "numeric" }],
+        [{ text: words.average }, { text: words.averageWeight, format: "numeric" }],
+        [{ text: words.collectionTarget }, { text: words.collectionTargetFigure, format: "numeric" }],
+        [{ text: words.indicativeObligation }, { text: words.indicativeObligationWeight, format: "numeric" }]
+      ]
+    }) }}
+
+    {{ govukTable({
+      caption: words.chemistryHeading,
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      head: [
+        { text: words.chemistryColumn },
+        { text: words.weightColumn, format: "numeric" }
+      ],
+      rows: [
+        [{ text: words.leadAcid }, { text: words.leadAcidWeight, format: "numeric" }],
+        [{ text: words.nickelCadmium }, { text: words.nickelCadmiumWeight, format: "numeric" }],
+        [{ text: words.other }, { text: words.otherWeight, format: "numeric" }],
+        [{ text: words.total, classes: "govuk-!-font-weight-bold" }, { text: words.totalWeight, format: "numeric", classes: "govuk-!-font-weight-bold" }]
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{#
+  defra-internal — header
+
+  The Defra top bar: the organisation lock-up on the left, and on the right the
+  organisation the signed-in person works for.
+
+  Two organisations, and the pair is the point. The lock-up is the department
+  that owns the service; the name opposite it is the regulator using it. A
+  person who works across regulators needs to see which one they are in before
+  they read anything else on the page, so it sits in the identity bar rather
+  than in the navigation below.
+
+  It pairs with govuk-frontend's own service navigation, rendered next to this
+  one rather than inside it — the same way the GOV.UK header and service
+  navigation are two components combined on the page. The service name, the
+  links, the signed-in person and Sign out all belong to that component, not to
+  this one.
+
+  params:
+    organisationName  {string}  logo lock-up text; use <br> to control wrapping
+    homepageUrl       {string}  where the lock-up links to (default "/")
+    organisation      {string}  the organisation the signed-in person works
+                                for, shown top right. Plain text, not a link —
+                                it says where you are, it is not somewhere to
+                                go. Omit it and nothing renders, which is what
+                                a signed-out page and a documentation page
+                                need.
+
+  Styles: app/assets/sass/_defra-internal.scss
+#}
+{# No `role="banner"`. A top-level `<header>` already is one, and govuk-frontend
+   dropped the explicit role from its own header for the same reason. #}
+<header class="defra-internal-header">
+  <div class="govuk-width-container">
+    <div class="defra-internal-header__main">
+      <div class="defra-internal-header__logo">
+        <a class="defra-internal-header__logo-link" href="{{ params.homepageUrl | default('/') }}">
+          {{ params.organisationName | default("Department for Environment,<br>Food &amp; Rural Affairs") | safe }}
+        </a>
+      </div>
+      {% if params.organisation %}
+        <p class="defra-internal-header__organisation">{{ params.organisation }}</p>
+      {% endif %}
+    </div>
+  </div>
+</header>

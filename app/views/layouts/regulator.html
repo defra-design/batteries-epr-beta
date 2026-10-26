@@ -1,0 +1,48 @@
+{#
+  Layout for regulator (internal) pages.
+
+  Regulators use an internal Defra service, which can't use GOV.UK branding or
+  the GOV.UK font. This layout swaps the GOV.UK header and footer for the Defra
+  internal ones and switches the font to Arial. Everything else is the kit's
+  normal layout.
+
+  The header, navigation, footer and typeface come from Alex Colbeck's regulator
+  prototype (copied 26 October 2026), so this work can move into Defra's shared
+  regulator tooling later. They live in:
+    app/views/macros/defra-internal/
+    app/assets/sass/_defra-internal.scss
+    app/assets/sass/settings.scss
+
+  Use it in a page with:
+    {% extends "layouts/regulator.html" %}
+#}
+
+{% extends "govuk-prototype-kit/layouts/govuk-branded.njk" %}
+
+{% from "macros/defra-internal/header/macro.njk" import defraHeader %}
+{% from "macros/defra-internal/footer/macro.njk" import defraFooter %}
+
+{% set bodyClasses = "defra-internal" %}
+
+{% block pageTitle %}
+  {% if pageName %}{{ pageName }} - {% endif %}{{ serviceName }}
+{% endblock %}
+
+{% block header %}
+  {# Proof of concept: service name only, so no regulator name and no account menu #}
+  {{ defraHeader({}) }}
+
+  {{ govukServiceNavigation({
+    serviceName: serviceName,
+    serviceUrl: "/",
+    navigationId: "service-navigation"
+  }) }}
+{% endblock %}
+
+{% block footer %}
+  {{ defraFooter({
+    links: [
+      { href: "/manage-prototype/clear-data", text: "Clear data" }
+    ]
+  }) }}
+{% endblock %}

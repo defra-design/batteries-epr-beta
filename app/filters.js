@@ -5,6 +5,9 @@
 
 const govukPrototypeKit = require('govuk-prototype-kit')
 const addFilter = govukPrototypeKit.views.addFilter
+const addFunction = govukPrototypeKit.views.addFunction
+
+// Add-on: words-only content files. See app/lib/content.js
+addFunction('content', require('./lib/content').content)
 
 // Add your filters here
-

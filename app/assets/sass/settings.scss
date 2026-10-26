@@ -1,0 +1,36 @@
+// =============================================================================
+// Sass settings
+// -----------------------------------------------------------------------------
+// The Prototype Kit imports this file BEFORE govuk-frontend and the other
+// plugins, so anything set here configures them.
+// See node_modules/govuk-prototype-kit/lib/assets/sass/prototype.scss
+// =============================================================================
+
+// Add-on: Defra internal branding (Alex Colbeck's regulator prototype).
+// See app/assets/sass/_defra-internal.scss and README.md.
+
+// Route every component's typeface through a custom property.
+//
+// govuk-frontend never sets `font-family` on `body` — it sets it per component,
+// through `govuk-typography-common`. That means a scoping class on an ancestor
+// cannot change the font by inheritance: ~70 component selectors match directly
+// and inheritance loses to all of them. Making the Sass value a custom property
+// turns those declarations into one runtime switch, so any scope can adopt a
+// different typeface by setting one variable — no `!important`, no `*` selector.
+//
+// The fallback is the GDS default, so nothing changes until a scope opts in.
+//
+// This configures govuk-frontend itself. Installed plugin stylesheets compile
+// after this file and re-forward govuk-frontend with their own font token,
+// which resets the value for everything compiled afterwards — including this
+// project's own stylesheets. The same token is therefore re-asserted at the top
+// of application.scss. Both lines are needed; see the note there.
+$govuk-font-family: var(--app-font-family, "GDS Transport", arial, sans-serif);
+$govuk-font-family-print: var(--app-font-family-print, sans-serif);
+
+// Must be set by hand. govuk-frontend infers this by looking for the string
+// "GDS Transport" inside $govuk-font-family, and `index()` cannot see inside a
+// `var()`. Without this line the @font-face blocks are dropped and every
+// GDS-branded page silently loses GDS Transport.
+// See govuk-frontend/dist/govuk/settings/_typography-font.scss:34
+$govuk-include-default-font-face: true;

@@ -1,0 +1,388 @@
+// =============================================================================
+// Add-on: Defra internal branding for regulator (internal) pages.
+//
+// Copied from Alex Colbeck's regulator prototype ("pEPR: Regulator
+// capability"), Notes and thinking > Design patterns > Implementation >
+// Defra internal branding components, on 26 October 2026. Don't change it here:
+// if Alex's version changes, copy it across again.
+//
+// Four things: a header, the service navigation (GOV.UK's, restyled), a footer
+// and a typeface switch (Arial instead of GDS Transport). Put `defra-internal`
+// on <body> to use them; app/views/layouts/regulator.html does that.
+//
+// One change from Alex's version: he built on GOV.UK Frontend 5, which had
+// govuk-tint() and govuk-shade(). This kit uses GOV.UK Frontend 6, which
+// doesn't, so the two colours that used them are mixed with Sass's own
+// color.mix() instead. It gives the same colours. Defra's live regulator
+// service (waste-packaging-regulators-fe) made the same change.
+// =============================================================================
+
+@use "sass:color";
+
+$defra-internal-brand: #00a33b;
+$defra-internal-footer-link: #3b3b3b;
+
+// The navigation band: the brand green washed out to the lightest tint that
+// still reads as a band rather than an off-white.
+$defra-internal-nav-background: color.mix(#ffffff, $defra-internal-brand, 92%); // was govuk-tint($defra-internal-brand, 92%)
+
+// Green as the interaction colour, one step darker than the brand. The brand
+// green itself is 2.6:1 on that band — nowhere near readable — where GOV.UK's
+// green is 5.7:1, so the band gets the brand and the links get this.
+$defra-internal-link: govuk-colour("green");
+
+// Hover, the way the Design System does it: the link colour shaded down, so the
+// link darkens rather than changing hue. govuk-frontend pairs `$govuk-link-colour`
+// with dark-blue; there is no "dark green" in the palette, so it is shaded here
+// by the same order of magnitude.
+$defra-internal-link-hover: color.mix(#000000, $defra-internal-link, 40%); // was govuk-shade($defra-internal-link, 40%)
+
+// The crest ships with GOV.UK Frontend. `$govuk-images-path` is re-asserted at
+// the top of application.scss, so the standard helper resolves correctly here.
+$defra-internal-crest: govuk-image-url("govuk-crest.svg");
+
+// -----------------------------------------------------------------------------
+// Header
+// -----------------------------------------------------------------------------
+.defra-internal-header {
+  background-color: govuk-colour("white");
+
+  // The green keyline closes the bar, whether or not the navigation follows it.
+  // Paired, it also separates the white bar from the green band below.
+  border-bottom: 8px solid $defra-internal-brand;
+
+  // Header links are GDS links, nothing more: the standard link colour with no
+  // underline until hover, the standard thick hover underline, the standard
+  // yellow focus state. Sign out stays blue — green is the interaction colour of
+  // the navigation band, not of the whole chrome.
+  //
+  // The three mixins are the whole rule. Nothing is hand-rolled and nothing is
+  // reasserted afterwards: `$govuk-font-family` is already the Defra typeface
+  // (application.scss points it at `--app-font-family`), so the typography that
+  // comes with `govuk-link-common` is the Defra typography.
+  a {
+    @include govuk-link-common;
+    @include govuk-link-style-no-visited-state;
+    @include govuk-link-style-no-underline;
+  }
+
+  // The lock-up is a link that must not look like one — it is the page
+  // identifying itself. The GDS text-link style: black in every state, with the
+  // underline on hover coming from the `a` rule above.
+  //
+  // Written out in full rather than as `&__logo-link` on purpose. Nested like
+  // this it compiles to `.defra-internal-header .defra-internal-header__logo-link`
+  // (0,3,0 with the pseudo-class), which outranks the `a` rule above (0,2,1);
+  // `&__logo-link` would compile to (0,2,0) and lose to it, turning it blue.
+  .defra-internal-header__logo-link {
+    @include govuk-link-style-text;
+  }
+
+  // Defra organisation lock-up — text with a govuk crest and a green keyline,
+  // standing in for the GOV.UK logo. Its colours come from the text-link rule
+  // above; what is left here is the lock-up itself.
+  &__logo-link {
+    position: relative;
+    display: block;
+    @include govuk-font($size: 19, $line-height: 1);
+
+    // The crest sits between the keyline and the text, positioned absolutely, so
+    // the text has to be padded clear of both. Written as the sum of its parts
+    // rather than a single number, so changing the gap below cannot silently
+    // leave the text overlapping the crest.
+    padding-left: 8px + 36px + govuk-spacing(2);
+    border-left: 2px solid $defra-internal-brand;
+
+    // The crest, drawn the way govuk-frontend draws this same asset in its
+    // footer: a background image by default, swapped for a `currentcolor` mask
+    // where masks are supported so it follows the text colour — otherwise it is
+    // painted black on black in dark forced-colours mode and disappears.
+    // See govuk-frontend/dist/govuk/components/footer/_index.scss:100-122
+    &::before {
+      content: "";
+      position: absolute;
+      top: 1px;
+      // Gap between the green keyline and the crest. Off the GDS spacing scale
+      // deliberately — 10px is too wide here and 5px too tight. The padding-left
+      // above adds this to the crest width, so the two stay in step.
+      left: 8px;
+      width: 36px;
+      height: 34px;
+      background: #{$defra-internal-crest} no-repeat 50% 0 / auto 34px;
+
+      @supports ((-webkit-mask-position: initial) or (mask-position: initial)) {
+        background: currentcolor;
+        -webkit-mask: #{$defra-internal-crest} no-repeat 50% 0 / auto 34px;
+        mask: #{$defra-internal-crest} no-repeat 50% 0 / auto 34px;
+
+        // currentcolor is not computed correctly in forced-colours mode, so
+        // pin it to the system link colour as govuk-frontend does.
+        @media screen and (forced-colors: active) {
+          background: linktext;
+        }
+      }
+    }
+  }
+
+  &__main {
+    // Even top and bottom, so the content sits clear of the keyline.
+    @include govuk-responsive-padding(4, "top");
+    @include govuk-responsive-padding(4, "bottom");
+    display: flex;
+    // Below ~390px the lock-up and the regulator cannot share a row without
+    // pushing the page into horizontal scroll (WCAG 1.4.10 Reflow). Let the
+    // regulator drop onto its own row instead; `margin-left: auto` keeps it
+    // right-aligned either way.
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    gap: govuk-spacing(4);
+  }
+
+  &__logo {
+    flex-shrink: 0;
+  }
+
+  // The organisation the signed-in person works for, opposite the lock-up.
+  // Stated, not linked: it says which regulator you are in, and that is not
+  // somewhere to go.
+  &__organisation {
+    // Same type as `govuk-body-s`, which is govuk-font($size: 16). Set through
+    // the mixin rather than by putting the class on the markup, because the
+    // class also carries margins that would break the flex row above.
+    @include govuk-font($size: 16);
+    margin: 0 0 0 auto;
+    // Where the name is too long for the space it wraps, and the ragged edge
+    // belongs on the inside, facing the lock-up.
+    text-align: right;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Service navigation
+// -----------------------------------------------------------------------------
+// govuk-frontend's own component, restyled rather than reimplemented. It is a
+// sibling of the header, not a child — the GOV.UK header and service navigation
+// are two components combined on the page, and this pair follows that.
+//
+// Scoped to `.defra-internal` on <body> rather than to the header, so the rules
+// hold wherever the navigation sits and the standard GDS pages are untouched.
+.defra-internal .govuk-service-navigation {
+  // The GDS grey band goes and a wash of the brand green takes its place. No
+  // line under it: the keyline on the bar above already separates identity from
+  // navigation, and a second one would bracket the band into a stripe. The tint
+  // is its own edge — where it stops, the page starts.
+  background-color: $defra-internal-nav-background;
+  border: 0;
+
+  // Anything in the component's `end` slot — the account menu — sits opposite
+  // the navigation rather than under it. The width container is the only
+  // ancestor the two share, so it becomes the flex row. At every width, not
+  // from tablet up: below tablet the navigation stacks into a column, but the
+  // account menu still belongs beside it rather than under it, hard against
+  // the right edge.
+  > .govuk-width-container {
+    display: flex;
+    // Baseline, not centre. The navigation stacks into a column at narrow
+    // widths and again wherever the links overflow their row, and a centred
+    // account menu then floats in the gap between the service name and the
+    // links, tied to neither. A flex container takes its baseline from its
+    // first item, so this puts the account menu on the same line as the
+    // service name and keeps it there however many rows the links take.
+    align-items: baseline;
+  }
+
+  .govuk-service-navigation__container {
+    flex-grow: 1;
+  }
+
+  // Green is the interaction colour in this band, and that is the only thing
+  // changed. Everything else about these links and the mobile Menu button —
+  // no underline until hover, the thick hover underline, the yellow focus
+  // state, black while pressed — is govuk-frontend's own and is left alone.
+  //
+  // The selectors mirror the component's: it colours the resting state through
+  // `:not(:hover):not(:focus)` so that hover and focus are not fought over, and
+  // matching that is what keeps this to two declarations.
+  .govuk-service-navigation__link,
+  .govuk-service-navigation__toggle {
+    &:not(:hover):not(:focus) {
+      color: $defra-internal-link;
+    }
+
+    // govuk-frontend hands hover to dark-blue, the one place the green band
+    // would flash a second hue. Shade the green instead, the way the Design
+    // System shades its own link colour — the thick underline that comes with
+    // the hover is what signals it, the colour only backs it up.
+    &:hover {
+      color: $defra-internal-link-hover;
+    }
+  }
+
+  // The current-page indicator is a border on the item, not on the link, so it
+  // takes its colour from govuk-frontend's own link variable and has to be
+  // moved across separately.
+  .govuk-service-navigation__item {
+    border-color: $defra-internal-link;
+  }
+}
+
+// The signed-in person and the way out, in the navigation's `end` slot.
+//
+// Here rather than in the bar above because the bar names two organisations —
+// the department and the regulator — and a person's name among them reads as a
+// third. Signing out is not a place to go either, so it sits at the end of the
+// row of links rather than among them.
+//
+// An inline list rather than a flex row: the two items and the rule between
+// them wrap as one run of text, so a narrow viewport breaks the line where the
+// words run out instead of stranding the divider at the end of a row.
+.defra-internal-service-navigation__account {
+  @include govuk-font($size: 16);
+  // Black, not the band's green: the name is the one item in the row that does
+  // nothing. Stated rather than inherited — the DWP frontend plugin styles bare
+  // `p` and `li`, and a declaration that matches the element beats an inherited
+  // value whatever its specificity.
+  @include govuk-text-colour;
+  margin: 0 0 0 govuk-spacing(4);
+  padding: 0;
+  list-style: none;
+
+  // Right-aligned, not just pushed right. Below tablet the row is narrow
+  // enough to wrap, and a ragged left edge against the viewport edge reads as
+  // a mistake — the ragged edge belongs on the inside, facing the navigation.
+  text-align: right;
+
+  li {
+    display: inline;
+  }
+
+  // The divider the design asks for, drawn as generated content so it is
+  // punctuation between two items rather than a third thing in the list.
+  //
+  // Hung off the END of the item before, not the start of the item after. The
+  // only place the run of text can break is the whitespace between the two
+  // list items, so a leading divider wraps to the next line on its own and
+  // reads as a bullet — "Syed Raza" then "| Sign out". This way the break falls
+  // after it.
+  //
+  // The right margin is the smaller of the two because that same whitespace
+  // renders as a space and makes up the difference; the left has nothing to
+  // add to it.
+  li:not(:last-child)::after {
+    content: "|";
+    margin: 0 govuk-spacing(1) 0 govuk-spacing(2);
+  }
+
+  // Sign out takes the band's green, the same as every other link in the row.
+  // In the bar above it was the one blue thing on the page; down here it is
+  // simply one of the links, and the resting/hover pair below is the same one
+  // `.govuk-service-navigation__link` gets.
+  a {
+    @include govuk-link-common;
+    @include govuk-link-style-no-visited-state;
+    @include govuk-link-style-no-underline;
+
+    &:not(:hover):not(:focus) {
+      color: $defra-internal-link;
+    }
+
+    &:hover {
+      color: $defra-internal-link-hover;
+    }
+  }
+
+  @include govuk-media-query($from: tablet) {
+    margin-left: govuk-spacing(6);
+    padding: govuk-spacing(4) 0;
+
+    // From tablet the navigation is a wrapping row, so it can give way and
+    // there is always somewhere for a long list of links to go. Hold the
+    // account menu on one line and let the navigation wrap instead — without
+    // this the navigation's min-content width squeezes it into two lines at
+    // widths where the band is half empty. Below tablet the shrink is left
+    // alone: at 320px something has to give, and it is this.
+    flex-shrink: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Footer
+// -----------------------------------------------------------------------------
+// Sticky footer — on pages using the Defra footer, keep it at the bottom of the
+// viewport when the content is too short to fill the screen, rather than
+// floating up under the content.
+//
+// Done with `position: sticky` rather than a flex body on purpose: making the
+// body a flex container suppresses the cross-axis stretch on
+// `.govuk-width-container` (a flex item with auto side margins opts out of
+// stretching), which collapses the page content to its intrinsic width and
+// knocks it out of line with the header and footer.
+//
+// Scoped with :has() so the standard GDS-branded pages are untouched.
+body:has(> .defra-internal-footer) {
+  min-height: 100vh;
+
+  > .defra-internal-footer {
+    position: sticky;
+    top: 100vh;
+  }
+}
+
+.defra-internal-footer {
+  @include govuk-font($size: 16);
+  @include govuk-responsive-padding(6, "top");
+  @include govuk-responsive-padding(6, "bottom");
+  border-top: 1px solid govuk-colour("mid-grey");
+  background-color: govuk-colour("white");
+
+  // Footer links reuse the GDS link behaviour wholesale — underline thickness
+  // and offset, hover thickening and the yellow focus state — and override only
+  // the colour to the Defra footer grey. The focus state is declared here
+  // rather than left to the global `a:focus` that the DWP frontend plugin
+  // happens to ship, which would disappear with that plugin.
+  &__link {
+    @include govuk-link-common;
+
+    &:link,
+    &:visited,
+    &:hover,
+    &:active {
+      color: $defra-internal-footer-link;
+    }
+
+    // Re-assert the GDS focus colour: the colours above are emitted after
+    // govuk-link-common's :focus rule and match it on specificity, so they
+    // would otherwise win while the link is focused.
+    &:focus {
+      color: $govuk-focus-text-colour;
+    }
+  }
+
+  // The licence and copyright row needs no styles of its own. The markup uses
+  // govuk-frontend's `govuk-footer__meta`, `__meta-item`, `__licence-logo`,
+  // `__licence-description` and `__copyright-logo` classes, which are top-level
+  // selectors rather than nested under `.govuk-footer`, so they apply here and
+  // keep this row pixel-identical to the GDS footer. Only the link colour is
+  // ours, from `&__link` above.
+}
+
+// -----------------------------------------------------------------------------
+// Typeface — Arial instead of GDS Transport.
+//
+// Setting the token is enough: every GOV.UK Frontend component asks for its
+// font through `$govuk-font-family`, which settings.scss points at this custom
+// property (and application.scss re-asserts). Anything that deliberately sets
+// its own font — the monospace code blocks, the email-client preview — keeps it.
+//
+// Put `defra-internal` on <body> (or any ancestor) to switch a page, a folder
+// or a whole version. Nothing else is needed.
+// -----------------------------------------------------------------------------
+.defra-internal {
+  --app-font-family: arial, sans-serif;
+  --app-font-family-print: arial, sans-serif;
+
+  // govuk-frontend styles components, never `body`, so unclassed containers
+  // would otherwise fall back to the browser default.
+  font-family: var(--app-font-family);
+}

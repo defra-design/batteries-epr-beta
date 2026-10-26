@@ -1,20 +1,65 @@
 {% extends "layouts/main.html" %}
 
-{% set pageName="Home" %}
+{#
+  The prototype's index page. It's GOV.UK-branded because the external service
+  (producers and compliance schemes) is.
+
+  Keeping it up to date: when you change a piece of work, change its
+  "Last updated" date here (and on its own page), and move it to the top of
+  the list so the newest is first.
+#}
+
+{% set pageName = "Home" %}
 
 {% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">Batteries EPR prototypes</h1>
+
+    <p class="govuk-body-l">Private beta prototypes for Batteries EPR.</p>
+
+    {% set externalTag %}<strong class="govuk-tag govuk-tag--blue">External</strong>{% endset %}
+    {% set internalTag %}<strong class="govuk-tag govuk-tag--green">Internal</strong>{% endset %}
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: { html: externalTag },
+          value: { text: "For producers and compliance schemes, on GOV.UK." }
+        },
+        {
+          key: { html: internalTag },
+          value: { text: "For regulators, on an internal Defra website. Built with Regulator tooling's components, so it can be handed over to them later." }
+        }
+      ]
+    }) }}
+
+  </div>
+</div>
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% include "govuk-prototype-kit/includes/homepage-top.njk" %}
+    <h2 class="govuk-heading-m">Latest work</h2>
 
-    <h1 class="govuk-heading-xl">
-      {{ serviceName }}
-    </h1>
+    {{ govukTaskList({
+      idPrefix: "latest-work",
+      items: [
+        {
+          title: { text: "Indicative obligation check" },
+          href: "/regulator/indicative-obligation",
+          hint: { text: "EB-237. Last updated 26 October 2026" },
+          status: { tag: { text: "Internal", classes: "govuk-tag--green" } }
+        },
+        {
+          title: { text: "Example: producer journey" },
+          hint: { text: "A placeholder to show how external work will look. Nothing built yet." },
+          status: { tag: { text: "External", classes: "govuk-tag--blue" } }
+        }
+      ]
+    }) }}
 
-    {% include "govuk-prototype-kit/includes/homepage-bottom.njk" %}
   </div>
 </div>
-
 {% endblock %}

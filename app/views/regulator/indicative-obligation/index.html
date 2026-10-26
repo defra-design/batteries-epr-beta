@@ -1,0 +1,54 @@
+{% extends "layouts/main.html" %}
+
+{#
+  The overview for one piece of work: what it is, its Jira ticket and the
+  pages in it. The index page links here. Pages are listed newest first.
+  When you change something, update "Last updated" here and on the index page.
+#}
+
+{% set pageName = "Indicative obligation check" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "All prototypes", href: "/" }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">Indicative obligation check</h1>
+
+    <p class="govuk-body-l">One page for a regulator to compare a compliance scheme's indicative obligation with NPWD. A proof of concept, with dummy figures.</p>
+
+    {% set areaTag %}<strong class="govuk-tag govuk-tag--green">Internal</strong>{% endset %}
+    {% set jiraLink %}<a href="https://eaflood.atlassian.net/browse/EB-237" class="govuk-link">EB-237</a>{% endset %}
+
+    {{ govukSummaryList({
+      rows: [
+        { key: { text: "Area" }, value: { html: areaTag } },
+        { key: { text: "Jira" }, value: { html: jiraLink } },
+        { key: { text: "Last updated" }, value: { text: "26 October 2026" } }
+      ]
+    }) }}
+
+    <h2 class="govuk-heading-m">Pages</h2>
+
+    {{ govukTaskList({
+      idPrefix: "pages",
+      items: [
+        {
+          title: { text: "Option A: tables" },
+          href: "/regulator/indicative-obligation/option-a-table",
+          hint: { text: "The calculation and the chemistry split, both in tables" }
+        },
+        {
+          title: { text: "Option B: table and summary lists" },
+          href: "/regulator/indicative-obligation/option-b-summary-list",
+          hint: { text: "The years in a table, the rest in summary lists" }
+        }
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

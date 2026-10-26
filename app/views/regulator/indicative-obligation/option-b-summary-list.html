@@ -1,0 +1,59 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-237: indicative obligation check page.
+  Option B: the years in a table, the calculation and chemistry in summary lists.
+  Same words file as option A.
+  All the words and dummy figures: app/content/regulator/indicative-obligation.md
+#}
+
+{% set words = content("regulator/indicative-obligation") %}
+
+{% set pageName = words.heading %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ words.caption }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    <p class="govuk-body-l">{{ words.headline }}</p>
+
+    <h2 class="govuk-heading-m">{{ words.calculationHeading }}</h2>
+
+    {{ govukTable({
+      firstCellIsHeader: true,
+      head: [
+        { text: words.yearColumn },
+        { text: words.weightColumn, format: "numeric" }
+      ],
+      rows: [
+        [{ text: words.year1 }, { text: words.year1Weight, format: "numeric" }],
+        [{ text: words.year2 }, { text: words.year2Weight, format: "numeric" }],
+        [{ text: words.year3 }, { html: (words.year3Predicted | escape) + "<br>" + (words.year3DeclaredSoFar | escape), format: "numeric" }]
+      ]
+    }) }}
+
+    {{ govukSummaryList({
+      rows: [
+        { key: { text: words.average }, value: { text: words.averageWeight + " " + words.tonnes } },
+        { key: { text: words.collectionTarget }, value: { text: words.collectionTargetFigure } },
+        { key: { text: words.indicativeObligation }, value: { text: words.indicativeObligationWeight + " " + words.tonnes } }
+      ]
+    }) }}
+
+    <h2 class="govuk-heading-m">{{ words.chemistryHeading }}</h2>
+
+    {{ govukSummaryList({
+      rows: [
+        { key: { text: words.leadAcid }, value: { text: words.leadAcidWeight + " " + words.tonnes } },
+        { key: { text: words.nickelCadmium }, value: { text: words.nickelCadmiumWeight + " " + words.tonnes } },
+        { key: { text: words.other }, value: { text: words.otherWeight + " " + words.tonnes } },
+        { key: { text: words.total }, value: { text: words.totalWeight + " " + words.tonnes } }
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}
