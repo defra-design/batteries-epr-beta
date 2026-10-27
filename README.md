@@ -27,6 +27,19 @@ Then open http://localhost:3000.
 | Layout for regulator (internal) pages | `app/views/layouts/regulator.html` |
 | Service name | `app/config.json` |
 
+## Changing the words (for content designers)
+
+You change the words on the GitHub website. There's nothing to install.
+
+1. Sign in to [GitHub](https://github.com) with your Defra GitHub account
+2. Open the prototype, go to the page's overview (for example "Indicative obligation check") and select **Edit the words on GitHub**. Or find the file yourself in `app/content/`
+3. Change the words under the labels. Don't change the labels themselves (the lines starting `##`)
+4. To add a paragraph, leave a blank line and type it, under a label that says "paragraphs welcome"
+5. Select **Commit changes...**, write a short note of what you changed, leave "Commit directly to the main branch" selected, and select **Commit changes**
+6. The live prototype updates in about 5 minutes. Refresh to see it
+
+If something looks wrong, edit it again, or ask Marie. Every change is saved in GitHub's history, so anything can be undone. New headings, tables and other components: ask Marie.
+
 ## How we work
 
 - Pages use GOV.UK Design System components, set up the way the Design

@@ -8,7 +8,11 @@
 
 {% set words = content("regulator/indicative-obligation") %}
 
-{% set pageName = words.heading %}
+{% set pageName = words.heading + " (Option A)" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: "Back to the indicative obligation check", href: "/regulator/indicative-obligation" }) }}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -19,9 +23,13 @@
 
     <p class="govuk-body-l">{{ words.headline }}</p>
 
+    <h2 class="govuk-heading-m">{{ words.calculationHeading }}</h2>
+
+    {{ words.calculationIntro | paragraphs }}
+
     {{ govukTable({
       caption: words.calculationHeading,
-      captionClasses: "govuk-table__caption--m",
+      captionClasses: "govuk-visually-hidden",
       firstCellIsHeader: true,
       head: [
         { text: words.yearColumn },
@@ -37,9 +45,13 @@
       ]
     }) }}
 
+    <h2 class="govuk-heading-m">{{ words.chemistryHeading }}</h2>
+
+    {{ words.chemistryIntro | paragraphs }}
+
     {{ govukTable({
       caption: words.chemistryHeading,
-      captionClasses: "govuk-table__caption--m",
+      captionClasses: "govuk-visually-hidden",
       firstCellIsHeader: true,
       head: [
         { text: words.chemistryColumn },

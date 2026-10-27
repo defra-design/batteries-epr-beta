@@ -4,6 +4,10 @@ appear on the page.
 Change the words under each label. Please don't change the labels
 themselves (the lines starting ##), as the page uses them to find the words.
 
+To add a paragraph: leave a blank line, then type the new paragraph, under
+a label that says "paragraphs welcome". Empty labels show nothing on the page.
+Ask Marie if you need a new heading, table or other component.
+
 The figures are dummy ones for the prototype. Developers will use the real
 data moved across from NPWD.
 
@@ -18,6 +22,9 @@ Indicative obligation: 4,290 tonnes
 
 ## Calculation heading
 How it's worked out
+
+## Calculation intro (paragraphs welcome)
+
 
 ## Year column
 Year
@@ -66,6 +73,9 @@ Indicative obligation
 
 ## Chemistry heading
 2026 placed on the market, by chemistry
+
+## Chemistry intro (paragraphs welcome)
+
 
 ## Chemistry column
 Chemistry

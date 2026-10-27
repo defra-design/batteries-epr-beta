@@ -9,5 +9,6 @@ const addFunction = govukPrototypeKit.views.addFunction
 
 // Add-on: words-only content files. See app/lib/content.js
 addFunction('content', require('./lib/content').content)
+addFilter('paragraphs', require('./lib/content').paragraphs, { renderAsHtml: true })
 
 // Add your filters here

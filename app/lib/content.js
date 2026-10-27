@@ -21,6 +21,12 @@
 // A label becomes a short name: "Heading" is words.heading, and
 // "Collection target" is words.collectionTarget.
 //
+// Paragraphs: under a label, a blank line starts a new paragraph. Show them
+// with the paragraphs filter, which wraps each one in <p class="govuk-body">
+// and shows nothing if the label is empty:
+//
+//   {{ words.calculationIntro | paragraphs }}
+//
 // The file is read every time the page loads, so a saved change shows when
 // you refresh. A label the page asks for but the file doesn't have shows as
 // [missing: ...] so it's easy to spot, and the rest of the page still works.
@@ -36,8 +42,11 @@ const path = require('path')
 const CONTENT_DIR = path.join(__dirname, '..', 'content')
 
 // "Collection target" -> "collectionTarget"
+// Anything in brackets is a note for the editor, not part of the name:
+// "Calculation intro (paragraphs welcome)" -> "calculationIntro"
 function toName (label) {
   const words = label
+    .replace(/\(.*?\)/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9 ]/g, ' ')
     .trim()
@@ -97,4 +106,20 @@ function content (file) {
   return withMissingMarkers(parse(text), file)
 }
 
-module.exports = { content, parse, toName }
+const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
+
+// Words with blank lines between them -> one <p class="govuk-body"> each.
+// The words are escaped, so nothing typed in a content file can become code.
+function paragraphs (text) {
+  if (!text || String(text).startsWith('[missing:')) {
+    return text || ''
+  }
+  return String(text)
+    .split(/\n\s*\n/)
+    .map((para) => para.trim().replace(/\s*\n\s*/g, ' '))
+    .filter(Boolean)
+    .map((para) => `<p class="govuk-body">${para.replace(/[&<>"']/g, (c) => ESCAPES[c])}</p>`)
+    .join('\n')
+}
+
+module.exports = { content, paragraphs, parse, toName }
