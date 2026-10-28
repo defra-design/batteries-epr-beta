@@ -18,7 +18,7 @@
 
     <h1 class="govuk-heading-xl">Indicative obligation check</h1>
 
-    <p class="govuk-body-l">One page for a regulator to compare a compliance scheme's indicative obligation with NPWD. A proof of concept, with dummy figures.</p>
+    <p class="govuk-body-l">One page for a regulator to compare a compliance scheme's indicative obligation with NPWD.</p>
 
     {% set areaTag %}<strong class="govuk-tag govuk-tag--green">Internal</strong>{% endset %}
     {% set jiraLink %}<a href="https://eaflood.atlassian.net/browse/EB-237" class="govuk-link">EB-237</a>{% endset %}
@@ -27,33 +27,43 @@
       rows: [
         { key: { text: "Area" }, value: { html: areaTag } },
         { key: { text: "Jira" }, value: { html: jiraLink } },
-        { key: { text: "Last updated" }, value: { text: "27 October 2026" } }
+        { key: { text: "Last updated" }, value: { text: "28 October 2026" } }
       ]
     }) }}
 
-    <h2 class="govuk-heading-m">Pages</h2>
+    <h2 class="govuk-heading-m">Versions</h2>
+
+    <p class="govuk-body">Newest first. To get back here from a version, use the link in the footer.</p>
 
     {{ govukTaskList({
-      idPrefix: "pages",
+      idPrefix: "versions",
       items: [
         {
-          title: { text: "Option A: tables" },
-          href: "/regulator/indicative-obligation/option-a-table",
-          hint: { text: "The calculation and the chemistry split, both in tables" }
+          title: { text: "Option A: tables, without chemistry" },
+          href: "/regulator/indicative-obligation/without-chemistry",
+          hint: { html: "<strong>28 October 2026</strong><br>The calculation table only." },
+          status: { tag: { text: "Ready for dev", classes: "govuk-tag--orange" } }
         },
         {
-          title: { text: "Option B: table and summary lists" },
+          title: { text: "Option A: tables, with chemistry" },
+          href: "/regulator/indicative-obligation/option-a-table",
+          hint: { html: "<strong>27 October 2026</strong><br>The calculation and the chemistry split, both in tables." },
+          status: { tag: { text: "Test later", classes: "govuk-tag--purple" } }
+        },
+        {
+          title: { text: "Option B: summary lists" },
           href: "/regulator/indicative-obligation/option-b-summary-list",
-          hint: { text: "The years in a table, the rest in summary lists" }
+          hint: { html: "<strong>27 October 2026</strong><br>The years in a table, the rest in summary lists." },
+          status: { tag: { text: "Discounted", classes: "govuk-tag--grey" } }
         }
       ]
     }) }}
 
     <h2 class="govuk-heading-m">Change the words</h2>
 
-    <p class="govuk-body">Both options use the same words file. Changes show on the live prototype a few minutes after you commit them.</p>
+    <p class="govuk-body">All the versions use the same words file. Changes show on the live prototype a few minutes after you commit them.</p>
 
-    <p class="govuk-body"><a href="https://github.com/defra-design/batteries-epr-beta/edit/main/app/content/regulator/indicative-obligation.md" class="govuk-link">Edit the words on GitHub</a></p>
+    <p class="govuk-body"><a href="https://github.com/defra-design/batteries-epr-beta/edit/main/app/content/regulator/indicative-obligation.md" class="govuk-link" rel="noreferrer noopener" target="_blank">Edit the words on GitHub (opens in new tab)</a></p>
 
   </div>
 </div>

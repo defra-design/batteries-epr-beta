@@ -2,17 +2,18 @@
 
 {#
   EB-237: indicative obligation check page.
-  Option A: everything in tables.
+  With the chemistry split (27 October 2026). Not for build yet: to test with
+  regulators later, as part of the placed on the market journey.
+  Everything in tables.
   All the words and dummy figures: app/content/regulator/indicative-obligation.md
 #}
 
 {% set words = content("regulator/indicative-obligation") %}
 
-{% set pageName = words.heading + " (Option A)" %}
+{% set pageName = words.heading + " (with chemistry)" %}
 
-{% block beforeContent %}
-  {{ govukBackLink({ text: "Back to the indicative obligation check", href: "/regulator/indicative-obligation" }) }}
-{% endblock %}
+{# Prototype only, not part of the design: a link back to the overview, in the footer #}
+{% set prototypeBackLink = { href: "/regulator/indicative-obligation", text: "Back to indicative obligation check" } %}
 
 {% block content %}
 <div class="govuk-grid-row">

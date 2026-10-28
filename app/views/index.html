@@ -4,9 +4,9 @@
   The prototype's index page. It's GOV.UK-branded because the external service
   (producers and compliance schemes) is.
 
-  Keeping it up to date: when you change a piece of work, change its
-  "Last updated" date here (and on its own page), and move it to the top of
-  the list so the newest is first.
+  Keeping it up to date: when you change a piece of work, change its date
+  here (and "Last updated" on its own page), and move it to the top of the
+  list so the newest is first.
 #}
 
 {% set pageName = "Home" %}
@@ -19,7 +19,7 @@
 
     <p class="govuk-body-l">Private beta prototypes for Batteries EPR.</p>
 
-    {% set externalTag %}<strong class="govuk-tag govuk-tag--blue">External</strong>{% endset %}
+    {% set externalTag %}<strong class="govuk-tag">External</strong>{% endset %}
     {% set internalTag %}<strong class="govuk-tag govuk-tag--green">Internal</strong>{% endset %}
 
     {{ govukSummaryList({
@@ -49,13 +49,13 @@
         {
           title: { text: "Indicative obligation check" },
           href: "/regulator/indicative-obligation",
-          hint: { text: "EB-237. Last updated 27 October 2026" },
+          hint: { html: "<strong>28 October 2026</strong><br>EB-237. One page for a regulator to compare a compliance scheme's indicative obligation with NPWD." },
           status: { tag: { text: "Internal", classes: "govuk-tag--green" } }
         },
         {
           title: { text: "Example: producer journey" },
-          hint: { text: "A placeholder to show how external work will look. Nothing built yet." },
-          status: { tag: { text: "External", classes: "govuk-tag--blue" } }
+          hint: { text: "A placeholder to show how external work will look." },
+          status: { tag: { text: "External" } }
         }
       ]
     }) }}

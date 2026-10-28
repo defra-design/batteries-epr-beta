@@ -1,0 +1,51 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-237: indicative obligation check page.
+  Without the chemistry split (28 October 2026). This is the version to build.
+  Agreed at the 28 October playback: the calculation table only. The chemistry
+  split is placed on the market data, so it comes later with that journey.
+  All the words and dummy figures: app/content/regulator/indicative-obligation.md
+#}
+
+{% set words = content("regulator/indicative-obligation") %}
+
+{% set pageName = words.heading + " (without chemistry)" %}
+
+{# Prototype only, not part of the design: a link back to the overview, in the footer #}
+{% set prototypeBackLink = { href: "/regulator/indicative-obligation", text: "Back to indicative obligation check" } %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ words.caption }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    <p class="govuk-body-l">{{ words.headline }}</p>
+
+    <h2 class="govuk-heading-m">{{ words.calculationHeading }}</h2>
+
+    {{ words.calculationIntro | paragraphs }}
+
+    {{ govukTable({
+      caption: words.calculationHeading,
+      captionClasses: "govuk-visually-hidden",
+      firstCellIsHeader: true,
+      head: [
+        { text: words.yearColumn },
+        { text: words.weightColumn, format: "numeric" }
+      ],
+      rows: [
+        [{ text: words.year1 }, { text: words.year1Weight, format: "numeric" }],
+        [{ text: words.year2 }, { text: words.year2Weight, format: "numeric" }],
+        [{ text: words.year3 }, { html: (words.year3Predicted | escape) + "<br>" + (words.year3DeclaredSoFar | escape), format: "numeric" }],
+        [{ text: words.average }, { text: words.averageWeight, format: "numeric" }],
+        [{ text: words.collectionTarget }, { text: words.collectionTargetFigure, format: "numeric" }],
+        [{ text: words.indicativeObligation }, { text: words.indicativeObligationWeight, format: "numeric" }]
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

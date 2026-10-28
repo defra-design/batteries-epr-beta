@@ -3,6 +3,7 @@
 {#
   EB-237: indicative obligation check page.
   Option B: the years in a table, the calculation and chemistry in summary lists.
+  Discounted (27 October 2026): the team went with tables. Kept for reference.
   Same words file as option A.
   All the words and dummy figures: app/content/regulator/indicative-obligation.md
 #}
@@ -11,9 +12,8 @@
 
 {% set pageName = words.heading + " (Option B)" %}
 
-{% block beforeContent %}
-  {{ govukBackLink({ text: "Back to the indicative obligation check", href: "/regulator/indicative-obligation" }) }}
-{% endblock %}
+{# Prototype only, not part of the design: a link back to the overview, in the footer #}
+{% set prototypeBackLink = { href: "/regulator/indicative-obligation", text: "Back to indicative obligation check" } %}
 
 {% block content %}
 <div class="govuk-grid-row">

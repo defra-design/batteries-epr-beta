@@ -40,9 +40,17 @@
 {% endblock %}
 
 {% block footer %}
-  {{ defraFooter({
-    links: [
-      { href: "/manage-prototype/clear-data", text: "Clear data" }
-    ]
-  }) }}
+  {#
+    Prototype only, not part of the design: the footer links. A page can add a
+    link back to its overview, out of the way of research participants, with:
+      {% set prototypeBackLink = { href: "/...", text: "Back to ..." } %}
+  #}
+  {% set clearData = { href: "/manage-prototype/clear-data", text: "Clear data" } %}
+  {% if prototypeBackLink %}
+    {% set footerLinks = [prototypeBackLink, clearData] %}
+  {% else %}
+    {% set footerLinks = [clearData] %}
+  {% endif %}
+
+  {{ defraFooter({ links: footerLinks }) }}
 {% endblock %}
