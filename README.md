@@ -30,7 +30,7 @@ Then open http://localhost:3000.
 | Layout for regulator (internal) pages | `app/views/layouts/regulator.html` |
 | Service name | `app/config.json` |
 
-## Changing the words (for content designers)
+## Updating the content
 
 You change the words on the GitHub website. There's nothing to install.
 
