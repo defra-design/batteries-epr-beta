@@ -1,15 +1,50 @@
-{% extends "layouts/main.html" %}
+{% extends "layouts/areas.html" %}
 
 {#
-  The prototype's index page. It's GOV.UK-branded because the external service
-  (producers and compliance schemes) is.
+  The prototype's homepage: one section per area, in plain HTML.
+  Each area: its name (h2), Internal or External tag, what it is, then its
+  latest work: one link, with the date and version underneath.
 
-  Keeping it up to date: when you change a piece of work, change its date
-  here (and "Last updated" on its own page), and move it to the top of the
-  list so the newest is first.
+  Keeping it up to date: when an area has newer work, change its "latest"
+  below to match the top of "Latest work" on the area's page.
+
+  Each area also has its own page listing its work (for example app/views/regulators.html).
 #}
 
 {% set pageName = "Home" %}
+
+{% set areas = [
+  {
+    name: "Regulators",
+    tag: "Internal",
+    tagClasses: "govuk-tag--green",
+    description: "The Environment Agency, the devolved regulators (SEPA, NRW and NIEA) and OPSS. They register, approve, monitor and enforce, and review placed on the market returns.",
+    latest: {
+      title: "Indicative obligation check",
+      href: "/regulator/indicative-obligation/without-chemistry",
+      date: "28 October 2026",
+      version: "2"
+    }
+  },
+  {
+    name: "Compliance schemes",
+    tag: "External",
+    tagClasses: "",
+    description: "Battery compliance schemes, acting for large producers. They register their members, report placed on the market data each quarter, by CSV or web form, and get evidence of recycling."
+  },
+  {
+    name: "Treatment operators",
+    tag: "External",
+    tagClasses: "",
+    description: "ABTOs, ABEs and ATFs. They treat, export or dismantle batteries, and issue evidence notes for what they recycle."
+  },
+  {
+    name: "Producers",
+    tag: "External",
+    tagClasses: "",
+    description: "Businesses that place batteries on the UK market. Small producers register directly. Large producers join a compliance scheme, which reports for them."
+  }
+] %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -17,48 +52,19 @@
 
     <h1 class="govuk-heading-xl">Batteries EPR prototypes</h1>
 
-    <p class="govuk-body-l">Private beta prototypes for Batteries EPR.</p>
+    <p class="govuk-body-l">The prototypes for the Batteries EPR service, in private beta.</p>
 
-    {% set externalTag %}<strong class="govuk-tag">External</strong>{% endset %}
-    {% set internalTag %}<strong class="govuk-tag govuk-tag--green">Internal</strong>{% endset %}
+    {% for area in areas %}
+      <h2 class="govuk-heading-l govuk-!-margin-top-8 govuk-!-margin-bottom-3">{{ area.name }}</h2>
+      <p class="govuk-body"><strong class="govuk-tag {{ area.tagClasses }}">{{ area.tag }}</strong></p>
+      <p class="govuk-body">{{ area.description }}</p>
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: { html: externalTag },
-          value: { text: "For producers and compliance schemes, on GOV.UK." }
-        },
-        {
-          key: { html: internalTag },
-          value: { text: "For regulators, on an internal Defra website. Built with Regulator tooling's components, so it can be handed over to them later." }
-        }
-      ]
-    }) }}
-
-  </div>
-</div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-
-    <h2 class="govuk-heading-m">Latest work</h2>
-
-    {{ govukTaskList({
-      idPrefix: "latest-work",
-      items: [
-        {
-          title: { text: "Indicative obligation check" },
-          href: "/regulator/indicative-obligation",
-          hint: { html: "<strong>28 October 2026</strong><br>EB-237. One page for a regulator to compare a compliance scheme's indicative obligation with NPWD." },
-          status: { tag: { text: "Internal", classes: "govuk-tag--green" } }
-        },
-        {
-          title: { text: "Example: producer journey" },
-          hint: { text: "A placeholder to show how external work will look." },
-          status: { tag: { text: "External" } }
-        }
-      ]
-    }) }}
+      {% if area.latest %}
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Latest work</h3>
+        <p class="govuk-body govuk-!-margin-bottom-1"><a href="{{ area.latest.href }}" class="govuk-link">{{ area.latest.title }}</a></p>
+        <p class="govuk-body">{{ area.latest.date }}, version {{ area.latest.version }}</p>
+      {% endif %}
+    {% endfor %}
 
   </div>
 </div>

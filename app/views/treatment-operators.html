@@ -1,0 +1,27 @@
+{% extends "layouts/areas.html" %}
+
+{#
+  The Treatment operators area. Nothing in the beta yet. When work starts, copy the
+  layout of app/views/regulators.html: Latest work, then Previous versions.
+#}
+
+{% set pageName = "Treatment operators" %}
+{% set area = "treatment-operators" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Treatment operators</h1>
+
+    <p class="govuk-body"><strong class="govuk-tag">External</strong></p>
+
+    <p class="govuk-body">ABTOs, ABEs and ATFs. They treat, export or dismantle batteries, and issue evidence notes for what they recycle.</p>
+
+    <p class="govuk-body">Nothing in the beta yet.</p>
+
+    <p class="govuk-body govuk-!-margin-top-6"><a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype#persona-operator" class="govuk-link" rel="noreferrer noopener" target="_blank">Alpha prototype: treatment operator (opens in new tab)</a></p>
+
+  </div>
+</div>
+{% endblock %}

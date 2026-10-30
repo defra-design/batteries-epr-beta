@@ -1,0 +1,27 @@
+{% extends "layouts/areas.html" %}
+
+{#
+  The Producers area. Nothing in the beta yet. When work starts, copy the
+  layout of app/views/regulators.html: Latest work, then Previous versions.
+#}
+
+{% set pageName = "Producers" %}
+{% set area = "producers" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Producers</h1>
+
+    <p class="govuk-body"><strong class="govuk-tag">External</strong></p>
+
+    <p class="govuk-body">Businesses that place batteries on the UK market. Small producers register directly. Large producers join a compliance scheme, which reports for them.</p>
+
+    <p class="govuk-body">Nothing in the beta yet.</p>
+
+    <p class="govuk-body govuk-!-margin-top-6"><a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype#persona-producer" class="govuk-link" rel="noreferrer noopener" target="_blank">Alpha prototype: producer (opens in new tab)</a></p>
+
+  </div>
+</div>
+{% endblock %}

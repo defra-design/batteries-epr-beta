@@ -1,0 +1,50 @@
+{% extends "layouts/areas.html" %}
+
+{#
+  What's changed: the change log, newest first.
+  To add a change, add it to the top of app/views/includes/changes.njk
+#}
+
+{% from "includes/changes.njk" import changes %}
+
+{% set pageName = "What's changed" %}
+{% set area = "changes" %}
+
+{# Tag colours as in Alex Colbeck's record-a-change plugin. All text is the
+   standard table size: the Design System only shrinks table text for a lot of data #}
+{% set typeClasses = { "New": "govuk-tag--green", "Change": "govuk-tag--yellow", "Fix": "", "Bug": "govuk-tag--red" } %}
+
+{% set rows = [] %}
+{% for change in changes %}
+  {% set changeHtml %}<div class="govuk-!-margin-bottom-1"><strong class="govuk-tag {{ typeClasses[change.type] }}">{{ change.type }}</strong></div><a href="{{ change.href }}" class="govuk-link govuk-!-font-weight-bold">{{ change.title }}</a><br>{{ change.why }}{% endset %}
+  {# push adds the row to the list (a set inside a for loop wouldn't last) #}
+  {% if rows.push([
+    { html: changeHtml },
+    { text: change.area },
+    { text: change.date }
+  ]) %}{% endif %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-xl">What's changed</h1>
+
+    <p class="govuk-body-l">Every finished change to the designs: what changed and why. Newest first.</p>
+
+    {{ govukTable({
+      caption: "Changes to the designs",
+      captionClasses: "govuk-visually-hidden",
+      firstCellIsHeader: false,
+      head: [
+        { text: "Change", classes: "govuk-!-width-one-half" },
+        { text: "Area", classes: "govuk-!-width-one-quarter" },
+        { text: "Date", classes: "govuk-!-width-one-quarter" }
+      ],
+      rows: rows
+    }) }}
+
+  </div>
+</div>
+{% endblock %}

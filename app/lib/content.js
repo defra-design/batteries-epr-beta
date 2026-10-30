@@ -27,6 +27,14 @@
 //
 //   {{ words.calculationIntro | paragraphs }}
 //
+// Links: inside a paragraph, [link text](address) becomes a GOV.UK link.
+// Addresses starting / stay on the prototype. Addresses starting https://
+// or http:// open in a new tab, and "(opens in new tab)" is added to the
+// link text, as the GOV.UK Design System asks. Anything else is left as
+// plain text, so a typo can't become a broken or unsafe link.
+//
+//   Read the [guidance on batteries](https://www.gov.uk/...) first.
+//
 // The file is read every time the page loads, so a saved change shows when
 // you refresh. A label the page asks for but the file doesn't have shows as
 // [missing: ...] so it's easy to spot, and the rest of the page still works.
@@ -108,6 +116,22 @@ function content (file) {
 
 const ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
 
+// [link text](address) -> a GOV.UK link. Runs on words that are already
+// escaped, so the link text and address can't become code either.
+function links (escaped) {
+  return escaped.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (match, text, href) => {
+    if (/^https?:\/\//.test(href)) {
+      // If "(opens in new tab)" was typed already, don't add it twice
+      const label = text.replace(/\s*\(opens in new tab\)\s*$/i, '')
+      return `<a href="${href}" class="govuk-link" rel="noreferrer noopener" target="_blank">${label} (opens in new tab)</a>`
+    }
+    if (href.startsWith('/')) {
+      return `<a href="${href}" class="govuk-link">${text}</a>`
+    }
+    return match
+  })
+}
+
 // Words with blank lines between them -> one <p class="govuk-body"> each.
 // The words are escaped, so nothing typed in a content file can become code.
 function paragraphs (text) {
@@ -118,8 +142,8 @@ function paragraphs (text) {
     .split(/\n\s*\n/)
     .map((para) => para.trim().replace(/\s*\n\s*/g, ' '))
     .filter(Boolean)
-    .map((para) => `<p class="govuk-body">${para.replace(/[&<>"']/g, (c) => ESCAPES[c])}</p>`)
+    .map((para) => `<p class="govuk-body">${links(para.replace(/[&<>"']/g, (c) => ESCAPES[c]))}</p>`)
     .join('\n')
 }
 
-module.exports = { content, paragraphs, parse, toName }
+module.exports = { content, paragraphs, links, parse, toName }

@@ -7,7 +7,8 @@
   params:
     getHelp   {object}  { email, telephone, hours }; omit to hide the block
     meta      {string}  the departmental service line
-    links     {array}   [{ href, text }] support links
+    links     {array}   [{ href, text, attributes }] support links
+                        (attributes added for the prototype only, see below)
     licence   {bool}    show the Open Government Licence line (default true)
     copyright {bool}    show the Crown copyright line (default true)
 
@@ -55,7 +56,10 @@
           <ul class="govuk-footer__inline-list">
             {% for link in params.links %}
               <li class="govuk-footer__inline-list-item">
-                <a class="defra-internal-footer__link" href="{{ link.href }}">{{ link.text }}</a>
+                {# Prototype only: `attributes` lets a prototype link open in a new tab
+                   (e.g. "Content update"). Not in Alex's original footer
+                   and not for the live service, where these links won't exist. #}
+                <a class="defra-internal-footer__link" href="{{ link.href }}"{% for name, value in link.attributes %} {{ name }}="{{ value }}"{% endfor %}>{{ link.text }}</a>
               </li>
             {% endfor %}
           </ul>

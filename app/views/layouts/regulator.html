@@ -41,16 +41,27 @@
 
 {% block footer %}
   {#
-    Prototype only, not part of the design: the footer links. A page can add a
-    link back to its overview, out of the way of research participants, with:
-      {% set prototypeBackLink = { href: "/...", text: "Back to ..." } %}
+    Prototype only, not part of the design. Developers: don't build these links.
+    They sit in the footer, out of the way of research participants. A page adds:
+      {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+      {% set wordsFile = "regulator/..." %}   (its file in app/content, without .md)
+    and gets, in this order: the area name, Content update, Clear data.
+    Content update (a link to the words file on GitHub) opens in a new tab,
+    which Alex's footer doesn't normally
+    allow: see app/views/macros/defra-internal/footer/template.njk.
   #}
-  {% set clearData = { href: "/manage-prototype/clear-data", text: "Clear data" } %}
+  {% set footerLinks = [] %}
   {% if prototypeBackLink %}
-    {% set footerLinks = [prototypeBackLink, clearData] %}
-  {% else %}
-    {% set footerLinks = [clearData] %}
+    {% set footerLinks = footerLinks.concat([prototypeBackLink]) %}
   {% endif %}
+  {% if wordsFile %}
+    {% set footerLinks = footerLinks.concat([{
+      href: "https://github.com/defra-design/batteries-epr-beta/edit/main/app/content/" + wordsFile + ".md",
+      text: "Content update (opens in new tab)",
+      attributes: { target: "_blank", rel: "noreferrer noopener" }
+    }]) %}
+  {% endif %}
+  {% set footerLinks = footerLinks.concat([{ href: "/manage-prototype/clear-data", text: "Clear data" }]) %}
 
   {{ defraFooter({ links: footerLinks }) }}
 {% endblock %}

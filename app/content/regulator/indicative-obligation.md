@@ -1,15 +1,10 @@
-Words for the indicative obligation check page (EB-237), in the order they
-appear on the page.
+Page: Indicative obligation check (EB-237) - Indicative obligation for 2027
 
-Change the words under each label. Please don't change the labels
-themselves (the lines starting ##), as the page uses them to find the words.
-
-To add a paragraph: leave a blank line, then type the new paragraph, under
-a label that says "paragraphs welcome". Empty labels show nothing on the page.
-Ask Marie if you need a new heading, table or other component.
-
-The figures are dummy ones for the prototype. Developers will use the real
-data moved across from NPWD.
+Change the words under each label. Don't change the labels (lines starting ##).
+New paragraph: leave a blank line, under a label that says "paragraphs welcome".
+Link: [link text](https://www.gov.uk/...) in a paragraph. Don't type "(opens in new tab)": it's added for you.
+Need a heading, list or anything else? Ask Marie.
+Done? Select Commit changes. It's live in about 5 minutes.
 
 ## Caption
 Compliance Scheme Ltd

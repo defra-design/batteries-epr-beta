@@ -1,0 +1,50 @@
+{#
+  The change log: every finished change to a design, newest first.
+  Shown in full at /changes, and the newest three on the homepage.
+
+  Only changes people would notice in a design go here (a new page, a new
+  version, different wording or layout, an accessibility fix). Changes to how
+  the prototype itself works (menus, footer links, the words add-on) don't.
+
+  Each change:
+    type:  "New" (new functionality), "Change" (an adjustment to an existing
+           design), "Fix" (a smaller correction or tidy-up) or "Bug" (a defect
+           in data or logic). The same types as Alex Colbeck's record-a-change
+           plugin, so its records can be added here later
+    title: a short action starting with a verb, for example
+           "Move cancelled applications to their own table"
+    why:   one or two sentences on why
+    area:  "Regulators", "Compliance schemes", "Treatment operators" or "Producers"
+    date:  "28 October 2026"
+    href:  the page it changed
+
+  Use it in a page with:
+    {% from "includes/changes.njk" import changes %}
+#}
+
+{% set changes = [
+  {
+    type: "Change",
+    title: "Split the indicative obligation check into three dated versions",
+    why: "The team chose the calculation table only. The chemistry split is placed on the market data, so it comes later with that journey.",
+    area: "Regulators",
+    date: "28 October 2026",
+    href: "/regulator/indicative-obligation/without-chemistry"
+  },
+  {
+    type: "Fix",
+    title: "Fix accessibility issues on the indicative obligation check",
+    why: "Section titles are now real headings, each version has its own page title, and every table has a caption.",
+    area: "Regulators",
+    date: "27 October 2026",
+    href: "/regulator/indicative-obligation/option-a-table"
+  },
+  {
+    type: "New",
+    title: "Add the indicative obligation check",
+    why: "A first page for a regulator to check a compliance scheme's obligation matches NPWD, in two layouts to compare.",
+    area: "Regulators",
+    date: "27 October 2026",
+    href: "/regulator/indicative-obligation/option-a-table"
+  }
+] %}

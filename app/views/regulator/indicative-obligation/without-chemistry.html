@@ -8,12 +8,13 @@
   All the words and dummy figures: app/content/regulator/indicative-obligation.md
 #}
 
-{% set words = content("regulator/indicative-obligation") %}
+{% set wordsFile = "regulator/indicative-obligation" %}
+{% set words = content(wordsFile) %}
 
 {% set pageName = words.heading + " (without chemistry)" %}
 
-{# Prototype only, not part of the design: a link back to the overview, in the footer #}
-{% set prototypeBackLink = { href: "/regulator/indicative-obligation", text: "Back to indicative obligation check" } %}
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
 
 {% block content %}
 <div class="govuk-grid-row">

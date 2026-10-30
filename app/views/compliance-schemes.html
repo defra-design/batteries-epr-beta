@@ -1,0 +1,27 @@
+{% extends "layouts/areas.html" %}
+
+{#
+  The Compliance schemes area. Nothing in the beta yet. When work starts, copy the
+  layout of app/views/regulators.html: Latest work, then Previous versions.
+#}
+
+{% set pageName = "Compliance schemes" %}
+{% set area = "compliance-schemes" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Compliance schemes</h1>
+
+    <p class="govuk-body"><strong class="govuk-tag">External</strong></p>
+
+    <p class="govuk-body">Battery compliance schemes, acting for large producers. They register their members, report placed on the market data each quarter, by CSV or web form, and get evidence of recycling.</p>
+
+    <p class="govuk-body">Nothing in the beta yet.</p>
+
+    <p class="govuk-body govuk-!-margin-top-6"><a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype#persona-complianceScheme" class="govuk-link" rel="noreferrer noopener" target="_blank">Alpha prototype: compliance scheme (opens in new tab)</a></p>
+
+  </div>
+</div>
+{% endblock %}

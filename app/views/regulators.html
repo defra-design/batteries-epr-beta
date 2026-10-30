@@ -1,0 +1,53 @@
+{% extends "layouts/areas.html" %}
+
+{#
+  The Regulators area: every piece of regulator work in the prototype, in plain HTML.
+
+  Latest work: newest first. Previous versions: versions we've parked or decided against.
+  Each item, in this order:
+    the name (a link to the page), with a tag next to it for where it's up to: Ideation (govuk-tag--light-blue), Validation
+      (govuk-tag--yellow), Refinement (govuk-tag--pink), Ready for dev
+      (govuk-tag--orange), Test later (govuk-tag--purple), Discounted (govuk-tag--grey)
+    the date and version
+    what it is, with the Jira ticket in brackets
+  Put a section break (hr) between items in the same list.
+#}
+
+{% set pageName = "Regulators" %}
+{% set area = "regulators" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">Regulators</h1>
+
+    <p class="govuk-body"><strong class="govuk-tag govuk-tag--green">Internal</strong></p>
+
+    <p class="govuk-body">The Environment Agency, the devolved regulators (SEPA, NRW and NIEA) and OPSS. They register, approve, monitor and enforce, and review placed on the market returns.</p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Latest work</h2>
+
+    <p class="govuk-body govuk-!-margin-bottom-1"><a href="/regulator/indicative-obligation/without-chemistry" class="govuk-link">Indicative obligation check</a> <strong class="govuk-tag govuk-tag--orange govuk-!-margin-left-2">Ready for dev</strong></p>
+    <p class="govuk-body govuk-!-margin-bottom-1">28 October 2026, version 2</p>
+    <p class="govuk-body">Check a compliance scheme's obligation matches NPWD (EB-237).</p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-8">Previous versions</h2>
+
+    <p class="govuk-body">Versions we've parked or decided against.</p>
+
+    <p class="govuk-body govuk-!-margin-bottom-1"><a href="/regulator/indicative-obligation/option-a-table" class="govuk-link">Indicative obligation check, with chemistry</a> <strong class="govuk-tag govuk-tag--purple govuk-!-margin-left-2">Test later</strong></p>
+    <p class="govuk-body govuk-!-margin-bottom-1">27 October 2026, version 1</p>
+    <p class="govuk-body">To test with the placed on the market journey (EB-237).</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <p class="govuk-body govuk-!-margin-bottom-1"><a href="/regulator/indicative-obligation/option-b-summary-list" class="govuk-link">Indicative obligation check, summary lists</a> <strong class="govuk-tag govuk-tag--grey govuk-!-margin-left-2">Discounted</strong></p>
+    <p class="govuk-body govuk-!-margin-bottom-1">27 October 2026, version 1</p>
+    <p class="govuk-body">The team chose tables instead (EB-237).</p>
+
+    <p class="govuk-body govuk-!-margin-top-6"><a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype#persona-regulator" class="govuk-link" rel="noreferrer noopener" target="_blank">Alpha prototype: regulator (opens in new tab)</a></p>
+
+  </div>
+</div>
+{% endblock %}
