@@ -18,8 +18,6 @@ Indicative obligation: 4,290 tonnes
 ## Calculation heading
 
 ## Calculation intro (paragraphs welcome)
-This is a test.
-Another para
 
 ## Year column
 Year
