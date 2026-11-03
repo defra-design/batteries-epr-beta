@@ -10,13 +10,13 @@ Done? Select Commit changes. It's live in about 5 minutes.
 Compliance Scheme Ltd
 
 ## Heading
-Indicative obligation for 202777777
+Indicative obligation for 2027
 
 ## Headline
 Indicative obligation: 4,290 tonnes
 
 ## Calculation heading
-How it's worked out
+
 
 ## Calculation intro (paragraphs welcome)
 This is a test.
