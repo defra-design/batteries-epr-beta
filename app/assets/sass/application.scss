@@ -22,3 +22,31 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   max-width: 100%;
   border: 1px solid $govuk-border-colour;
 }
+
+// Add-on: scrollable pane for wide tables. The same idea as the MOJ
+// scrollable pane (https://design-patterns.service.justice.gov.uk/components/scrollable-pane/),
+// which isn't in MOJ Frontend 10, the newest version that works with this kit.
+// Only the table scrolls sideways at small widths and 400% zoom, not the page
+// (WCAG 1.4.10 Reflow). The pane can take keyboard focus, so keyboard users
+// can scroll it, and the shadows at the edges show there's more to see.
+// Swap for the MOJ component when we can upgrade MOJ Frontend.
+.app-scrollable-pane {
+  // relative, so visually hidden text in the table stays inside the pane
+  position: relative;
+  overflow-x: auto;
+  margin-bottom: govuk-spacing(6);
+  background:
+    linear-gradient(to right, $govuk-body-background-colour 30%, rgba(255, 255, 255, 0)) left center / 40px 100% no-repeat local,
+    linear-gradient(to left, $govuk-body-background-colour 30%, rgba(255, 255, 255, 0)) right center / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) left center / 14px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) right center / 14px 100% no-repeat scroll;
+
+  &:focus {
+    outline: $govuk-focus-width solid $govuk-focus-colour;
+    outline-offset: 0;
+  }
+
+  .govuk-table {
+    margin-bottom: 0;
+  }
+}

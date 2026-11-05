@@ -1,0 +1,33 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  Prototype only: a holding page for links to pages we haven't built yet
+  (scheme details and submission, from the PoM submissions pages, EB-324).
+  The route in app/routes.js passes the page, the scheme's name and where to go back to.
+#}
+
+{% set wordsFile = "regulator/not-built" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = words.heading %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if schemeName %}<span class="govuk-caption-l">{{ schemeName }}</span>{% endif %}
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    {% if page == "submission" %}
+      {{ words.submissionExplanation | paragraphs }}
+    {% else %}
+      {{ words.schemeDetailsExplanation | paragraphs }}
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-324: placed on the market (PoM) submissions, version A: one quarter at a time.
+  5 November 2026. Lands on the latest quarter with submissions (July to September 2026).
+  Year and quarter filters, no status filter, no summary line (Jen).
+  A plain GOV.UK table: only ever 4 rows (one per scheme), soonest due first.
+  The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
+  The words: app/content/regulator/pom-submissions.md
+#}
+
+{% set wordsFile = "regulator/pom-submissions" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = words.heading + " (version A)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% set yearItems = [] %}
+{% for year in pom.YEARS %}
+  {% set yearItems = (yearItems.push({ value: year, text: year, selected: year == filters.year }), yearItems) %}
+{% endfor %}
+{% set quarterItems = [] %}
+{% for quarterName in pom.QUARTERS %}
+  {% set quarterItems = (quarterItems.push({ value: loop.index | string, text: quarterName, selected: (loop.index | string) == filters.quarter }), quarterItems) %}
+{% endfor %}
+
+{% set tableRows = [] %}
+{% for row in rows %}
+  {% set dueHtml %}{% if row.overdue %}<strong class="govuk-tag govuk-tag--red">{{ words.overdueTag }}</strong><br>{{ words.beforeTheDueDateWhenOverdue }} {{ row.dueText }}{% elif row.dueText %}{{ row.dueText }}{% else %}<span class="govuk-visually-hidden">{{ words.nothingDue }}</span><span aria-hidden="true">—</span>{% endif %}{% endset %}
+  {% set tableRows = (tableRows.push([
+    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>' },
+    { text: row.submittedText },
+    { html: dueHtml },
+    { html: '<strong class="govuk-tag ' + row.statusClasses + '">' + row.status + '</strong>' },
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>' }
+  ]), tableRows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    <form method="get" action="/regulator/pom-submissions/latest-quarter" novalidate>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+          {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel }, items: yearItems }) }}
+        </div>
+        <div class="govuk-grid-column-one-quarter">
+          {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel }, items: quarterItems }) }}
+        </div>
+      </div>
+      {{ govukButton({ text: words.applyFiltersButton, classes: "govuk-button--secondary" }) }}
+    </form>
+
+    {% if rows.length %}
+      {# Add-on: scrollable pane (see app/assets/sass/application.scss), so only the table scrolls sideways at small widths #}
+      <div class="app-scrollable-pane" tabindex="0" role="region" aria-label="{{ words.tableCaption }}">
+      {{ govukTable({
+        caption: words.tableCaption + ", " + quarterText,
+        captionClasses: "govuk-visually-hidden",
+        head: [
+          { text: words.schemeColumn },
+          { text: words.dateSubmittedColumn },
+          { text: words.dueColumn },
+          { text: words.statusColumn },
+          { html: '<span class="govuk-visually-hidden">' + (words.linkColumn | escape) + '</span>' }
+        ],
+        rows: tableRows
+      }) }}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ words.noSubmissions }}</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

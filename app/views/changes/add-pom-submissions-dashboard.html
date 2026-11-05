@@ -1,0 +1,78 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Add the placed on the market submissions page, in two versions to compare" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">5 November 2026</span>
+<h1 class="govuk-heading-l">Add the placed on the market submissions page, in two versions to compare</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
+<p class="govuk-body">Regulators need one place to see which compliance schemes have sent their placed on the market data, and what needs reviewing first. We don't know yet whether they want one quarter at a time or everything, so there are two versions to test.</p>
+<p class="govuk-body"><strong>Both versions</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The 4 real compliance schemes, with dummy dates and statuses</li><li>Quarters in words (&quot;July to September&quot;), not &quot;Q3&quot;</li><li>Columns: scheme, date submitted, due, status, and a link to the submission</li><li>Statuses: To review, In progress, Query raised, Review response, Accepted. An overdue return has a red Overdue tag next to its due date</li><li>Scheme names and &quot;View submission&quot; go to a holding page for now: those pages aren't built yet</li><li>Only the table scrolls sideways at small widths, not the page</li></ul>
+<p class="govuk-body"><strong>Version A: latest quarter</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Opens on the latest quarter with submissions (July to September 2026), with year and quarter filters</li><li>Always 4 rows, soonest due first</li></ul>
+<p class="govuk-body"><strong>Version B: all submissions</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Opens on everything from 2024 to 2026 (44 submissions), with year, quarter and status filters, and a line saying what's showing</li><li>An extra quarter column, and every column sorts</li><li>All on one page. Sorting wouldn't work across pages, so a real service with more years would need to sort on the server</li></ul>
+<p class="govuk-body"><strong>Not in this version</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Members, versions and flags columns (members and flags move to other pages)</li><li>Tabs for waste and evidence</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/latest-quarter">Version A: latest quarter</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/all-submissions">Version B: all submissions</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Version A, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<p class="govuk-body">No before: this is new</p>
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-pom-submissions-dashboard/after--version-a-1020-pixels.png" alt="After: Version A, desktop (1020 pixels wide)" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Version A, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<p class="govuk-body">No before: this is new</p>
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-pom-submissions-dashboard/after--version-a-320-pixels.png" alt="After: Version A, 320 pixels wide" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Version B, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<p class="govuk-body">No before: this is new</p>
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-pom-submissions-dashboard/after--version-b-1020-pixels.png" alt="After: Version B, desktop (1020 pixels wide)" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Version B, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<p class="govuk-body">No before: this is new</p>
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-pom-submissions-dashboard/after--version-b-320-pixels.png" alt="After: Version B, 320 pixels wide" class="app-change-screenshot">
+</div>
+</div>
+
+{% endblock %}
