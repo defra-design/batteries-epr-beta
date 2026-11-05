@@ -1,0 +1,40 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Add version 3 of the indicative obligation check, with Jen's content" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">5 November 2026</span>
+<h1 class="govuk-heading-l">Add version 3 of the indicative obligation check, with Jen's content</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
+<p class="govuk-body">Version 2 was built to check our figures match NPWD, so it doesn't explain the obligation to a regulatory officer. Version 3 is Jen's rewrite, for Jason's research.</p>
+<p class="govuk-body"><strong>What changed</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The heading is now the year: &quot;2027 indicative obligation&quot;, with the figure underneath</li><li>A sentence on what the scheme has to do to meet the obligation</li><li>&quot;How this was calculated&quot;: the rule, then the weight placed on the market each year, with this year's reported and estimated figures as separate rows</li><li>The sum itself as a summary list: the 3-year average, then 45% of it</li></ul>
+<p class="govuk-body"><strong>Also</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Version 2 hasn't changed: it's still the one ready for dev</li><li>The figures are dummy data</li><li>Open content questions (battery categories, how the estimate is worked out, why an officer comes here) are with Jason and Mak</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/indicative-obligation/jens-content">Indicative obligation check, Jen's latest content</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Indicative obligation check, version 3</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<p class="govuk-body">No before: this is new</p>
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-indicative-obligation-version-3/after--indicative-obligation-check-version-3.png" alt="After: Indicative obligation check, version 3" class="app-change-screenshot">
+</div>
+</div>
+
+{% endblock %}

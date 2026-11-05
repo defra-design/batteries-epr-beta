@@ -1,0 +1,27 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Fix accessibility issues on the indicative obligation check" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">27 October 2026</span>
+<h1 class="govuk-heading-l">Fix accessibility issues on the indicative obligation check</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--blue">Fix</strong></p>
+<p class="govuk-body">Some section titles weren't real headings, the versions shared one page title, and the tables had no captions.</p>
+<p class="govuk-body"><strong>What changed</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Section titles are now real headings</li><li>Each version has its own page title</li><li>Every table has a caption</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/indicative-obligation/option-a-table">Indicative obligation check, with chemistry</a></li>
+</ul>
+</div>
+</div>
+
+{% endblock %}

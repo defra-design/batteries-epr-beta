@@ -1,0 +1,18 @@
+{
+  "title": "Add version 3 of the indicative obligation check, with Jen's content",
+  "type": "new",
+  "date": "2026-11-05",
+  "why": "Version 2 was built to check our figures match NPWD, so it doesn't explain the obligation to a regulatory officer. Version 3 is Jen's rewrite, for Jason's research.\n\n**What changed**\n\n- The heading is now the year: \"2027 indicative obligation\", with the figure underneath\n- A sentence on what the scheme has to do to meet the obligation\n- \"How this was calculated\": the rule, then the weight placed on the market each year, with this year's reported and estimated figures as separate rows\n- The sum itself as a summary list: the 3-year average, then 45% of it\n\n**Also**\n\n- Version 2 hasn't changed: it's still the one ready for dev\n- The figures are dummy data\n- Open content questions (battery categories, how the estimate is worked out, why an officer comes here) are with Jason and Mak",
+  "pages": [
+    {
+      "label": "Indicative obligation check, Jen's latest content",
+      "url": "/regulator/indicative-obligation/jens-content"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Indicative obligation check, version 3",
+      "after": "changes/add-indicative-obligation-version-3/after--indicative-obligation-check-version-3.png"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Split the indicative obligation check into three dated versions",
+  "type": "change",
+  "date": "2026-10-28",
+  "why": "At the 28 October playback the team chose the calculation table only, without the chemistry split.\n\n**What changed**\n\n- Version 2, without the chemistry split, is the one to build\n- The chemistry split is placed on the market data, so it comes later with that journey (version 1, test later)\n- The summary lists version is discounted",
+  "pages": [
+    {
+      "label": "Indicative obligation check, without chemistry",
+      "url": "/regulator/indicative-obligation/without-chemistry"
+    }
+  ]
+}

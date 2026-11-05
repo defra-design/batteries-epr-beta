@@ -1,0 +1,27 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Split the indicative obligation check into three dated versions" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">28 October 2026</span>
+<h1 class="govuk-heading-l">Split the indicative obligation check into three dated versions</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+<p class="govuk-body">At the 28 October playback the team chose the calculation table only, without the chemistry split.</p>
+<p class="govuk-body"><strong>What changed</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Version 2, without the chemistry split, is the one to build</li><li>The chemistry split is placed on the market data, so it comes later with that journey (version 1, test later)</li><li>The summary lists version is discounted</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/indicative-obligation/without-chemistry">Indicative obligation check, without chemistry</a></li>
+</ul>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "What's changed" %}
+{% set area = "changes" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<h1 class="govuk-heading-xl">What's changed</h1>
+<p class="govuk-body-l">Interaction design changes to the prototype: what changed and why. Newest first.</p>
+<p class="govuk-body">Content changes aren't listed here. See every <a href="https://github.com/defra-design/batteries-epr-beta/commits/main/app/content" class="govuk-link" rel="noreferrer noopener" target="_blank">content change on GitHub (opens in new tab)</a>.</p>
+<div class="govuk-!-margin-bottom-6">
+<p class="govuk-body-s govuk-!-margin-bottom-1">5 November 2026 <strong class="govuk-tag govuk-tag--green">New</strong></p>
+<h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a class="govuk-link" href="/changes/add-indicative-obligation-version-3">Add version 3 of the indicative obligation check, with Jen's content</a></h2>
+<p class="govuk-body">Version 2 was built to check our figures match NPWD, so it doesn't explain the obligation to a regulatory officer. Version 3 is Jen's rewrite, for Jason's research.</p>
+</div>
+<div class="govuk-!-margin-bottom-6">
+<p class="govuk-body-s govuk-!-margin-bottom-1">28 October 2026 <strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+<h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a class="govuk-link" href="/changes/split-indicative-obligation-check-into-versions">Split the indicative obligation check into three dated versions</a></h2>
+<p class="govuk-body">At the 28 October playback the team chose the calculation table only, without the chemistry split.</p>
+</div>
+<div class="govuk-!-margin-bottom-6">
+<p class="govuk-body-s govuk-!-margin-bottom-1">27 October 2026 <strong class="govuk-tag govuk-tag--green">New</strong></p>
+<h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a class="govuk-link" href="/changes/add-indicative-obligation-check">Add the indicative obligation check</a></h2>
+<p class="govuk-body">Regulators had no page to check that a compliance scheme's indicative obligation in the new service matches NPWD.</p>
+</div>
+<div class="govuk-!-margin-bottom-6">
+<p class="govuk-body-s govuk-!-margin-bottom-1">27 October 2026 <strong class="govuk-tag govuk-tag--blue">Fix</strong></p>
+<h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a class="govuk-link" href="/changes/fix-accessibility-indicative-obligation-check">Fix accessibility issues on the indicative obligation check</a></h2>
+<p class="govuk-body">Some section titles weren't real headings, the versions shared one page title, and the tables had no captions.</p>
+</div>
+</div>
+</div>
+
+{% endblock %}

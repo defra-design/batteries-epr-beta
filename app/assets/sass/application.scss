@@ -14,3 +14,11 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
 @import "defra-internal";
 
 // Add extra styles here
+
+// Add-on: record a change. A border round the screenshots on change records
+// (/changes/...), so you can see where each screenshot starts and ends.
+// Used by scripts/build-changes.js.
+.app-change-screenshot {
+  max-width: 100%;
+  border: 1px solid $govuk-border-colour;
+}

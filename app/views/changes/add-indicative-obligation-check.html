@@ -1,0 +1,28 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Add the indicative obligation check" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">27 October 2026</span>
+<h1 class="govuk-heading-l">Add the indicative obligation check</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
+<p class="govuk-body">Regulators had no page to check that a compliance scheme's indicative obligation in the new service matches NPWD.</p>
+<p class="govuk-body"><strong>What changed</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>A first page showing a compliance scheme's indicative obligation and how it's calculated</li><li>Two layouts to compare: the calculation as a table, and as summary lists</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/indicative-obligation/option-a-table">Indicative obligation check, with chemistry</a></li>
+<li><a class="govuk-link" href="/regulator/indicative-obligation/option-b-summary-list">Indicative obligation check, summary lists</a></li>
+</ul>
+</div>
+</div>
+
+{% endblock %}

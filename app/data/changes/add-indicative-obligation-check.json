@@ -1,0 +1,16 @@
+{
+  "title": "Add the indicative obligation check",
+  "type": "new",
+  "date": "2026-10-27",
+  "why": "Regulators had no page to check that a compliance scheme's indicative obligation in the new service matches NPWD.\n\n**What changed**\n\n- A first page showing a compliance scheme's indicative obligation and how it's calculated\n- Two layouts to compare: the calculation as a table, and as summary lists",
+  "pages": [
+    {
+      "label": "Indicative obligation check, with chemistry",
+      "url": "/regulator/indicative-obligation/option-a-table"
+    },
+    {
+      "label": "Indicative obligation check, summary lists",
+      "url": "/regulator/indicative-obligation/option-b-summary-list"
+    }
+  ]
+}
