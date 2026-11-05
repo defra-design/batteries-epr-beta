@@ -47,7 +47,7 @@ Scheme
 Quarter
 
 ## Date submitted column
-Date submitted
+Submitted
 
 ## Due column
 Due
@@ -55,17 +55,11 @@ Due
 ## Status column
 Status
 
-## Link column (only screen readers hear this)
-Submission
+## Link column
+Action
 
 ## View submission link
 View submission
 
-## Nothing due (only screen readers hear this, instead of a dash)
-Nothing due
-
 ## Overdue tag
 Overdue
-
-## Before the due date, when overdue
-due

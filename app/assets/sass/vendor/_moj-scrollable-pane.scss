@@ -1,0 +1,55 @@
+// Add-on: the MOJ scrollable pane, copied exactly from MOJ Frontend 12.0.0
+// (moj/components/scrollable-pane/_scrollable-pane.scss, MIT licence) on 5 November 2026.
+// Our MOJ Frontend (10.0.1, the newest that works with this kit) doesn't have it.
+// Delete this file when we can upgrade MOJ Frontend, and use the real one.
+// Only change: the first line (@use ...) is removed, as application.scss already has GOV.UK Frontend.
+
+
+.moj-scrollable-pane {
+  --moj-scrollable-pane-background-colour: #{govuk-functional-colour("body-background")};
+  --moj-scrollable-pane-transparent-colour: rgb(255, 255, 255, 0);
+  --moj-scrollable-pane-shadow-colour: rgb(0, 0, 0, 0.3);
+  --moj-scrollable-pane-shadow-size: 1.25em;
+}
+
+.moj-scrollable-pane[role="region"][tabindex][aria-label],
+.moj-scrollable-pane[role="region"][tabindex][aria-labelledby] {
+  overflow-x: scroll;
+  background:
+    linear-gradient(
+      to right,
+      var(--moj-scrollable-pane-background-colour),
+      var(--moj-scrollable-pane-background-colour),
+      var(--moj-scrollable-pane-transparent-colour) calc(var(--moj-scrollable-pane-shadow-size) * 2)
+    ),
+    radial-gradient(
+      farthest-side at 0 50%,
+      var(--moj-scrollable-pane-shadow-colour),
+      var(--moj-scrollable-pane-transparent-colour)
+    ),
+    linear-gradient(
+      to left,
+      var(--moj-scrollable-pane-background-colour),
+      var(--moj-scrollable-pane-background-colour),
+      var(--moj-scrollable-pane-transparent-colour) calc(var(--moj-scrollable-pane-shadow-size) * 2)
+    ),
+    radial-gradient(
+        farthest-side at 100% 50%,
+        var(--moj-scrollable-pane-shadow-colour),
+        var(--moj-scrollable-pane-transparent-colour)
+      )
+      100%;
+  background-color: var(--moj-scrollable-pane-background-colour);
+  background-repeat: no-repeat;
+  background-attachment: local, scroll, local, scroll;
+  background-size:
+    100% 100%,
+    var(--moj-scrollable-pane-shadow-size) 100%,
+    100% 100%,
+    var(--moj-scrollable-pane-shadow-size) 100%;
+
+  &:focus {
+    @include govuk-focused-box;
+  }
+}
+

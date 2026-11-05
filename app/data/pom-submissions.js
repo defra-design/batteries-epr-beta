@@ -12,12 +12,14 @@ const TODAY = '2026-11-05'
 
 const SCHEMES = [
   { slug: 'batteryback', name: 'BatteryBack' },
-  { slug: 'recycling-lives', name: 'Recycling Lives Compliance Services Limited' },
+  { slug: 'recycling-lives', name: 'Recycling Lives Compliance Services Ltd' },
   { slug: 'erp-uk', name: 'ERP UK Ltd' },
   { slug: 'valpak', name: 'Valpak Ltd' }
 ]
 
+// In full for the filters, short for the table (GOV.UK allows short months in tables)
 const QUARTERS = ['January to March', 'April to June', 'July to September', 'October to December']
+const QUARTERS_SHORT = ['Jan to Mar', 'Apr to Jun', 'Jul to Sep', 'Oct to Dec']
 
 // Jen's statuses, and their tag colours
 const STATUSES = {
@@ -38,7 +40,8 @@ const LATEST = {
 const LATEST_YEAR = 2026
 const LATEST_QUARTER = 3
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const NBSP = '\u00a0' // a space that doesn't break, so a date stays on one line
 
 function addDays (iso, days) {
   const d = new Date(iso + 'T12:00:00Z')
@@ -46,9 +49,10 @@ function addDays (iso, days) {
   return d.toISOString().slice(0, 10)
 }
 
-function longDate (iso) {
+// "23 Oct 2026", on one line
+function shortDate (iso) {
   const [y, m, d] = iso.split('-').map(Number)
-  return d + ' ' + MONTHS[m - 1] + ' ' + y
+  return d + NBSP + MONTHS[m - 1] + NBSP + y
 }
 
 // Every submission, before any filtering
@@ -74,12 +78,12 @@ function all () {
           schemeSlug: scheme.slug,
           year: String(year),
           quarter: String(quarter),
-          quarterText: QUARTERS[quarter - 1] + ' ' + year,
+          quarterText: QUARTERS_SHORT[quarter - 1] + NBSP + year,
           quarterSort: year + '-' + quarter,
-          submittedText: longDate(submitted),
+          submittedText: shortDate(submitted),
           submittedSort: submitted,
           // Once it's accepted, nothing is due
-          dueText: open ? longDate(due) : '',
+          dueText: open ? shortDate(due) : '',
           dueSort: open ? due : '',
           overdue: open && due < TODAY,
           status,

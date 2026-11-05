@@ -11,6 +11,8 @@
  *   - screenshots get their border from a class (app-change-screenshot in
  *     app/assets/sass/application.scss), not inline styles
  *   - the Bug tag is orange, not red
+ *   - a new page (no before screenshot) shows just the screenshot, without
+ *     "Before" and "After"
  *   - run it with: npm run changes
  *   - screenshots: for each page, one pair at 1020 pixels wide (desktop) and
  *     one at 320 pixels wide, from the top of the page to the end of the content
@@ -157,6 +159,13 @@ records.forEach(function (r) {
   ;(r.beforeAfter || []).forEach(function (pair) {
     const before = imageSrc(pair.before)
     const after = imageSrc(pair.after)
+    // No before (a new page): just the screenshot, with no "Before" and "After"
+    if (!before) {
+      body += '<h2 class="govuk-heading-m">' + esc(pair.label) + '</h2>\n<div class="govuk-grid-row">\n<div class="govuk-grid-column-two-thirds">\n' +
+        (after ? '<img src="' + after + '" alt="' + esc(pair.label) + '" class="app-change-screenshot">\n' : '<p class="govuk-body">No screenshot</p>\n') +
+        '</div>\n</div>\n'
+      return
+    }
     body += '<h2 class="govuk-heading-m">' + esc(pair.label) + '</h2>\n<div class="govuk-grid-row">\n'
     ;[['Before', before], ['After', after]].forEach(function (side) {
       body += '<div class="govuk-grid-column-one-half">\n<h3 class="govuk-heading-s">' + side[0] + '</h3>\n' +

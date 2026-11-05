@@ -49,16 +49,22 @@
   {% set summary = words.summaryStartForFilteredSubmissions + " " + parts | join(", ") %}
 {% endif %}
 
+
+{# Table text is 16px, as large tables of data allow and as the regulator toolkit does,
+   so the columns stay steady when the filters change #}
+{% set small = "govuk-!-font-size-16" %}
+{% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status | replace(" ", " ") }}</strong>{% endmacro %}
+{% macro due(row, words) %}{% if row.overdue %}<strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">{{ words.overdueTag }}</strong><br>{{ row.dueText }}{% elif row.dueText %}{{ row.dueText }}{% endif %}{% endmacro %}
+
 {% set tableRows = [] %}
 {% for row in rows %}
-  {% set dueHtml %}{% if row.overdue %}<strong class="govuk-tag govuk-tag--red">{{ words.overdueTag }}</strong><br>{{ words.beforeTheDueDateWhenOverdue }} {{ row.dueText }}{% elif row.dueText %}{{ row.dueText }}{% else %}<span class="govuk-visually-hidden">{{ words.nothingDue }}</span><span aria-hidden="true">—</span>{% endif %}{% endset %}
   {% set tableRows = (tableRows.push([
-    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', attributes: { "data-sort-value": row.scheme } },
-    { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort } },
-    { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort } },
-    { html: dueHtml, attributes: { "data-sort-value": row.dueSort or "9999" } },
-    { html: '<strong class="govuk-tag ' + row.statusClasses + '">' + row.status + '</strong>', attributes: { "data-sort-value": row.status } },
-    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>' }
+    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', attributes: { "data-sort-value": row.scheme }, classes: small },
+    { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
+    { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort }, classes: small },
+    { html: due(row, words), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
+    { html: statusTag(row), attributes: { "data-sort-value": row.status }, classes: small },
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small }
   ]), tableRows) %}
 {% endfor %}
 
@@ -68,40 +74,43 @@
 
     <h1 class="govuk-heading-l">{{ words.heading }}</h1>
 
+    {# The filters: GOV.UK selects, with the button to their right (underneath on a phone) #}
     <form method="get" action="/regulator/pom-submissions/all-submissions" novalidate>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-quarter">
-          {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel }, items: yearItems }) }}
+          {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         </div>
         <div class="govuk-grid-column-one-quarter">
-          {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel }, items: quarterItems }) }}
+          {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
         </div>
         <div class="govuk-grid-column-one-quarter">
-          {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel }, items: statusItems }) }}
+          {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
+        </div>
+        <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
+          {{ govukButton({ text: words.applyFiltersButton, classes: "govuk-button--secondary" }) }}
         </div>
       </div>
-      {{ govukButton({ text: words.applyFiltersButton, classes: "govuk-button--secondary" }) }}
     </form>
 
     <p class="govuk-body">{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}</p>
 
     {% if rows.length %}
-      {# Add-on: scrollable pane (see app/assets/sass/application.scss), so only the table scrolls sideways at small widths #}
-      <div class="app-scrollable-pane" tabindex="0" role="region" aria-label="{{ words.tableCaption }}">
-      {{ govukTable({
-        caption: words.tableCaption,
-        captionClasses: "govuk-visually-hidden",
-        attributes: { "data-module": "moj-sortable-table" },
-        head: [
-          { text: words.schemeColumn, attributes: { "aria-sort": "none" } },
-          { text: words.quarterColumn, attributes: { "aria-sort": "descending" } },
-          { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" } },
-          { text: words.dueColumn, attributes: { "aria-sort": "none" } },
-          { text: words.statusColumn, attributes: { "aria-sort": "none" } },
-          { html: '<span class="govuk-visually-hidden">' + (words.linkColumn | escape) + '</span>' }
-        ],
-        rows: tableRows
-      }) }}
+      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+        {{ govukTable({
+          caption: words.tableCaption,
+          captionClasses: "govuk-visually-hidden",
+          attributes: { "data-module": "moj-sortable-table" },
+          head: [
+            { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: "govuk-!-width-one-quarter " + small },
+            { text: words.quarterColumn, attributes: { "aria-sort": "descending" }, classes: small },
+            { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.dueColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.linkColumn, classes: small }
+          ],
+          rows: tableRows
+        }) }}
       </div>
     {% endif %}
 
