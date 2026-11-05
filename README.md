@@ -62,17 +62,70 @@ Every file that uses an add-on says so in a comment starting `Add-on:`.
 Search the repo for `Add-on:` to find them all. Designers can see them
 working on the Patterns page (`/patterns`).
 
-| Add-on | What it does | Where it lives | Added by | How to remove it |
-|---|---|---|---|---|
-| Words-only content files | Keeps each page's words in a simple file the content designer can edit without touching HTML. Pages get the words with `content("folder/page")`. Links in paragraphs: `[link text](address)` | `app/lib/content.js`, `app/content/`, one line in `app/filters.js` | Marie Moyles, October 2026 | Delete those, and type the words back into the pages that use them |
-| MOJ Frontend | Components from the MOJ Design System that the GOV.UK Design System doesn't have. We use the [sortable table](https://design-patterns.service.justice.gov.uk/components/sortable-table/) (`data-module="moj-sortable-table"`). Without JavaScript it's a normal GOV.UK table. It sorts in the browser, so it only sorts the rows on the page: don't use it with pagination | `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used in `app/views/regulators.html` | Marie Moyles, November 2026 | Remove the table's `data-module` and `aria-sort` attributes, then `npm uninstall @ministryofjustice/frontend` |
-| Record a change | A change log the business analyst and developers can read without the code: one record per interaction design change, with what changed and why, the pages it touched, and before and after screenshots. Same format as the regulator toolkit's, so records can move across. Changes to the prototype itself (menus, list pages, add-ons) and content changes aren't recorded. Screenshots: two pairs per page, desktop (1020 pixels wide, where GOV.UK pages stop getting wider) and 320 pixels wide (the WCAG reflow width, which is also 1280 pixels at 400% zoom), each from the top of the page to the end of the content | `scripts/build-changes.js` (and `npm run changes` in `package.json`), `app/data/changes/`, `app/assets/images/changes/`, `app/views/changes/`, the `app-change-screenshot` style in `app/assets/sass/application.scss` | Alex Colbeck (record-a-change); added by Marie Moyles, November 2026 | Delete those, and the What's changed link in `app/views/layouts/areas.html` |
-| Filters in a row | Puts filter dropdowns and their button side by side with a fixed gap, wrapping onto a new line when there isn't room, so they never squash into each other (a GOV.UK select won't go narrower than 11.5em). Full width, one under the other, on a phone | The `app-filters` style in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages | Marie Moyles, November 2026 | Remove the `app-filters` wrapper and the style: the dropdowns and button then stack, one under the other |
-| Wrapping names in a scrollable table | Lets one column (scheme names) wrap inside the MOJ scrollable pane, which otherwise stops every cell wrapping. Without it, a long scheme name made the table wider than a 1020px desktop, so it scrolled sideways on a normal screen. **Developers: build this, it's a design decision** | The `app-table-cell--wrap` style in `app/assets/sass/application.scss`, on the Scheme column of the placed on the market submissions pages | Marie Moyles, November 2026 | Remove the class from those cells and the style |
-| MOJ scrollable pane | Lets a wide table scroll sideways on its own at small widths and 400% zoom, so the page still reflows (WCAG 1.4.10). The regulator toolkit wraps its sortable tables in it too. It's an exact copy of the MOJ component from MOJ Frontend 12, because MOJ Frontend 10 doesn't have it, plus one fix so visually hidden text in a table can't make the page scroll | `app/assets/sass/vendor/_moj-scrollable-pane.scss`, two rules in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`) | Marie Moyles, November 2026 | Delete the copy and the fix, and use the real one when we can upgrade MOJ Frontend |
-| Defra internal branding | The Defra header, green service navigation, footer and Arial typeface for regulator (internal) pages, which can't use GOV.UK branding. Copied from Alex Colbeck's regulator prototype, so this work can move into Defra's shared regulator tooling. Two changes: two colour functions swapped for GOV.UK Frontend 6 (see the top of the Sass file), and footer links can take `attributes`, so the prototype-only "Content update" link opens in a new tab | `app/views/layouts/regulator.html`, `app/views/macros/defra-internal/`, `app/assets/sass/_defra-internal.scss`, `app/assets/sass/settings.scss`, two lines at the top of `app/assets/sass/application.scss` | Alex Colbeck; added by Marie Moyles, October 2026 | Delete those, and change regulator pages to extend `layouts/main.html` |
+They're in two groups: the ones that are part of the design, which
+developers should build, and the ones that only make the prototype work.
 
-### Words-only content files
+### Part of the design: developers, build these
+
+#### Defra internal branding
+
+- **What it does:** the Defra header, green service navigation, footer and Arial typeface for regulator (internal) pages, which can't use GOV.UK branding
+- **Why:** copied from Alex Colbeck's regulator prototype, so this work can move into Defra's shared regulator tooling. Two changes: two colour functions swapped for GOV.UK Frontend 6 (see the top of the Sass file), and footer links can take `attributes`, so the prototype-only "Content update" link opens in a new tab
+- **Where:** `app/views/layouts/regulator.html`, `app/views/macros/defra-internal/`, `app/assets/sass/_defra-internal.scss`, `app/assets/sass/settings.scss`, two lines at the top of `app/assets/sass/application.scss`
+- **Added by:** Alex Colbeck; added by Marie Moyles, October 2026
+- **To remove:** delete those, and change regulator pages to extend `layouts/main.html`
+
+#### MOJ Frontend (sortable table)
+
+- **What it does:** components from the MOJ Design System that the GOV.UK Design System doesn't have. We use the [sortable table](https://design-patterns.service.justice.gov.uk/components/sortable-table/) (`data-module="moj-sortable-table"`). Without JavaScript it's a normal GOV.UK table
+- **Watch out:** it sorts in the browser, so it only sorts the rows on the page. Don't use it with pagination
+- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (all submissions, version B) and on `app/views/regulators.html` (the list of prototypes, prototype only)
+- **Added by:** Marie Moyles, November 2026
+- **To remove:** remove the table's `data-module` and `aria-sort` attributes, then `npm uninstall @ministryofjustice/frontend`
+
+#### MOJ scrollable pane
+
+- **What it does:** lets a wide table scroll sideways on its own at small widths and 400% zoom, so the page still reflows (WCAG 1.4.10). The regulator toolkit wraps its sortable tables in it too
+- **Why it's a copy:** it's an exact copy of the MOJ component from MOJ Frontend 12, because MOJ Frontend 10 (the newest that works with this kit) doesn't have it. Plus one fix, so visually hidden text in a table can't make the page scroll
+- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
+- **Added by:** Marie Moyles, November 2026
+- **To remove:** delete the copy and the fix, and use the real one when we can upgrade MOJ Frontend
+
+#### Wrapping names in a scrollable table
+
+- **What it does:** lets one column (scheme names) wrap inside the MOJ scrollable pane, which otherwise stops every cell wrapping
+- **Why:** without it, a long scheme name made the table wider than a 1020px desktop, so it scrolled sideways on a normal screen. Web standards and fitting a desktop come first
+- **Where:** the `app-table-cell--wrap` style in `app/assets/sass/application.scss`, on the Scheme column of the placed on the market submissions pages
+- **Added by:** Marie Moyles, November 2026
+- **To remove:** remove the class from those cells and the style
+
+#### Filters in a row
+
+- **What it does:** puts filter dropdowns and their button side by side with a fixed 10px gap, wrapping onto a new line when there isn't room. The button lines up with the bottom of the dropdowns. Full width, one under the other, on a phone
+- **Why:** a GOV.UK select won't go narrower than 11.5em, so in grid columns they squashed into each other at some widths
+- **Where:** the `app-filters` style in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages
+- **Added by:** Marie Moyles, November 2026
+- **To remove:** remove the `app-filters` wrapper and the style: the dropdowns and button then stack, one under the other
+
+### Prototype only: developers, don't build these
+
+#### Words-only content files
+
+- **What it does:** keeps each page's words in a simple file the content designer can edit without touching HTML. Pages get the words with `content("folder/page")`. Links in paragraphs: `[link text](address)`
+- **Where:** `app/lib/content.js`, `app/content/`, one line in `app/filters.js`
+- **Added by:** Marie Moyles, October 2026
+- **To remove:** delete those, and type the words back into the pages that use them
+
+#### Record a change (What's changed)
+
+- **What it does:** a change log the business analyst and developers can read without the code: one record per interaction design change, with what changed and why, the pages it touched, and screenshots. Before and after only when there was a before. Same format as the regulator toolkit's, so records can move across
+- **Not recorded:** changes to the prototype itself (menus, list pages, add-ons) and content changes
+- **Screenshots:** desktop (1020 pixels wide, where GOV.UK pages stop getting wider) and 320 pixels wide (the WCAG reflow width, which is also 1280 pixels at 400% zoom), each from the top of the page to the end of the content
+- **Where:** `scripts/build-changes.js` (run it with `npm run changes`), `app/data/changes/`, `app/assets/images/changes/`, `app/views/changes/`, the `app-change-screenshot` style in `app/assets/sass/application.scss`
+- **Added by:** Alex Colbeck (record-a-change); added by Marie Moyles, November 2026
+- **To remove:** delete those, and the What's changed link in `app/views/layouts/areas.html`
+
+### More about the words-only content files
 
 Each page's words are in `app/content/<folder>/<page>.md`, as labels
 (lines starting `##`) with the words underneath:
