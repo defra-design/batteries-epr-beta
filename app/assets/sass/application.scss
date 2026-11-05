@@ -45,6 +45,13 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   align-items: flex-end;
   column-gap: govuk-spacing(6);
 
+  // The button's bottom edge is a 2px shadow outside the button, so its
+  // margin is 2px more than a form group's. Then it lines up exactly with
+  // the bottom of the dropdowns
+  .govuk-button {
+    @include govuk-responsive-margin(6, "bottom", $adjustment: 2px);
+  }
+
   @include govuk-media-query($until: tablet) {
     > * {
       flex-basis: 100%;

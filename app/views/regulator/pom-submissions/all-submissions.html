@@ -54,7 +54,7 @@
    so the columns stay steady when the filters change #}
 {% set small = "govuk-!-font-size-16" %}
 {% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status }}</strong>{% endmacro %}
-{% macro due(row, words) %}{% if row.overdue %}<strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">{{ words.overdueTag }}</strong><br>{{ row.dueText }}{% elif row.dueText %}{{ row.dueText }}{% endif %}{% endmacro %}
+{% macro due(row, words) %}{% if row.overdue %}<strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">{{ words.overdueTag }}</strong><span class="govuk-!-display-block govuk-!-margin-top-2">{{ row.dueText }}</span>{% elif row.dueText %}{{ row.dueText }}{% endif %}{% endmacro %}
 
 {% set tableRows = [] %}
 {% for row in rows %}
@@ -80,7 +80,7 @@
         {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
-        {{ govukButton({ text: words.applyFiltersButton, classes: "govuk-!-margin-bottom-6" }) }}
+        {{ govukButton({ text: words.applyFiltersButton }) }}
       </div>
     </form>
 
