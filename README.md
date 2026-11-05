@@ -25,7 +25,7 @@ Then open http://localhost:3000.
 | Branching between pages | `app/routes.js` |
 | Homepage | `app/views/index.html`: one section per area (Regulators, Compliance schemes, Treatment operators, Producers), each with a link to its page |
 | Area pages | `app/views/regulators.html` and so on: one sortable table of all the area's work, newest first. To add work, add it to the top of the list in the page |
-| Patterns | `app/views/patterns.html`: patterns, components and experiments we're trying out, and a link to Alex Colbeck's regulator prototype |
+| Patterns | `app/views/patterns.html`: patterns, components and experiments we're trying out, and a link to the regulator toolkit prototype, which we align with for regulator pages |
 | What's changed (change log) | `app/views/includes/changes.njk`: add each design change to the top. Shown at `/changes` |
 | Layout for the homepage, area pages, Patterns and What's changed (adds the menu: the service name, Patterns, What's changed) | `app/views/layouts/areas.html` |
 | Layout for regulator (internal) pages | `app/views/layouts/regulator.html` |

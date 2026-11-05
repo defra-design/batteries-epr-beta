@@ -14,7 +14,7 @@
     title:     the page name, descriptive enough on its own. It's the link
     href:      the page
     status:    Ideation, Validation, Refinement, Ready for dev, Test later or Discounted
-    ticket:    the Jira ticket, for example "EB-237"
+    ticket:    the Jira ticket, for example "EB-237". Leave it "" if it's not known yet: it shows "To confirm"
 #}
 
 {% set pageName = "Regulators" %}
@@ -29,12 +29,13 @@
   "Discounted": "govuk-tag--grey"
 } %}
 
+{# Version 3 (5 Nov 2026): ticket not known yet. Jen to confirm it, then add it below. #}
 {% set work = [
   {
     date: "5 Nov 2026", sortDate: "2026-11-05", version: 3,
     title: "Indicative obligation check, Jen's latest content",
     href: "/regulator/indicative-obligation/jens-content",
-    status: "Ideation", ticket: "EB-237"
+    status: "Ideation", ticket: ""
   },
   {
     date: "28 Oct 2026", sortDate: "2026-10-28", version: 2,
@@ -90,7 +91,7 @@
           <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.version }}</td>
           <td class="govuk-table__cell"><a href="{{ item.href }}" class="govuk-link">{{ item.title }}</a></td>
           <td class="govuk-table__cell"><strong class="govuk-tag {{ statusClasses[item.status] }}">{{ item.status }}</strong></td>
-          <td class="govuk-table__cell"><a href="https://eaflood.atlassian.net/browse/{{ item.ticket }}" class="govuk-link">{{ item.ticket }}</a></td>
+          <td class="govuk-table__cell">{% if item.ticket %}<a href="https://eaflood.atlassian.net/browse/{{ item.ticket }}" class="govuk-link">{{ item.ticket }}</a>{% else %}To confirm{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>

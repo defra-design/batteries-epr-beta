@@ -71,7 +71,7 @@ Average weight
 (9,800 + 9,500 + 9,300) ÷ 3 = 9,533 tonnes
 
 ## Obligation label
-Indicative obligation (45%)
+Indicative obligation
 
 ## Obligation sum
 9,533 × 45% = 4,290 tonnes
