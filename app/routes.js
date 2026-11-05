@@ -41,7 +41,7 @@ router.get('/regulator/pom-submissions/latest-quarter', (req, res) => {
   const quarter = pick(req.query.quarter, ['1', '2', '3', '4'], pom.LATEST_QUARTER)
   const rows = pom.all()
     .filter(row => row.year === year && row.quarter === quarter)
-    .sort(pom.byDue)
+    .sort(pom.byScheme)
     .map(row => linksFor(row, req.originalUrl))
   res.render('regulator/pom-submissions/latest-quarter', {
     pom, rows, filters: { year, quarter }, quarterText: pom.QUARTERS[quarter - 1] + ' ' + year

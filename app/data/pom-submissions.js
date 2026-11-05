@@ -102,6 +102,11 @@ function byDue (a, b) {
   return a.scheme.localeCompare(b.scheme)
 }
 
+// Alphabetical by scheme, so each scheme is always in the same place
+function byScheme (a, b) {
+  return a.scheme.localeCompare(b.scheme)
+}
+
 // Newest quarter first, then soonest due
 function byQuarterThenDue (a, b) {
   return b.quarterSort.localeCompare(a.quarterSort) || byDue(a, b)
@@ -116,5 +121,6 @@ module.exports = {
   LATEST_QUARTER: String(LATEST_QUARTER),
   all,
   byDue,
+  byScheme,
   byQuarterThenDue
 }
