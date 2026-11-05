@@ -33,3 +33,21 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
 .moj-scrollable-pane {
   position: relative;
 }
+
+// Add-on: filters in a row. The dropdowns and the button sit side by side with
+// a fixed gap, and wrap onto a new line when there isn't room, so they never
+// squash into each other (a GOV.UK select won't go narrower than 11.5em).
+// The button lines up with the bottom of the dropdowns. On a phone, each one
+// is full width, one under the other. Used on the PoM submissions pages.
+.app-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: govuk-spacing(6);
+
+  @include govuk-media-query($until: tablet) {
+    > * {
+      flex-basis: 100%;
+    }
+  }
+}

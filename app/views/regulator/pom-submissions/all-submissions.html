@@ -74,21 +74,13 @@
 
     <h1 class="govuk-heading-l">{{ words.heading }}</h1>
 
-    {# The filters: GOV.UK selects, with the button to their right (underneath on a phone) #}
+    {# The filters: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
     <form method="get" action="/regulator/pom-submissions/all-submissions" novalidate>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-quarter">
-          {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
-        </div>
-        <div class="govuk-grid-column-one-quarter">
-          {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
-        </div>
-        <div class="govuk-grid-column-one-quarter">
-          {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
-        </div>
-        <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
-          {{ govukButton({ text: words.applyFiltersButton }) }}
-        </div>
+      <div class="app-filters">
+        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
+        {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
+        {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
+        {{ govukButton({ text: words.applyFiltersButton, classes: "govuk-!-margin-bottom-6" }) }}
       </div>
     </form>
 
