@@ -61,8 +61,8 @@ Action
 ## View submission link
 View submission
 
-## Not due (only screen readers hear this, in an empty Due cell)
-Not due
+## Not applicable (in the Due column, once a submission is accepted)
+Not applicable
 
 ## Overdue tag
 Overdue
