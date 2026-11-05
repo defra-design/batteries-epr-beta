@@ -59,7 +59,7 @@
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
-    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', attributes: { "data-sort-value": row.scheme }, classes: small },
+    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
     { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
     { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort }, classes: small },
     { html: due(row, words), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
@@ -87,14 +87,15 @@
     <p class="govuk-body">{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}</p>
 
     {% if rows.length %}
-      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths #}
+      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
+         The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
           attributes: { "data-module": "moj-sortable-table" },
           head: [
-            { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
             { text: words.quarterColumn, attributes: { "aria-sort": "descending" }, classes: small },
             { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.dueColumn, attributes: { "aria-sort": "none" }, classes: small },

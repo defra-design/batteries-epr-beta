@@ -26,6 +26,18 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
 // Add-on: the MOJ scrollable pane, copied from MOJ Frontend 12 (see the file)
 @import "vendor/moj-scrollable-pane";
 
+// Add-on: let one column wrap inside the MOJ scrollable pane.
+// WHY: the MOJ scrollable pane stops every table cell wrapping. With a long
+// name ("Recycling Lives Compliance Services Ltd") the table was wider than a
+// 1020px desktop, so it scrolled sideways on a normal screen. Letting the name
+// column wrap means the table fits a desktop, and the pane only scrolls on
+// small screens and at high zoom. Dates, tags and links still don't wrap.
+// USE: add this class to the header and cells of a column of names.
+// FOR DEVELOPERS: build this. It's a design decision, not a prototype shortcut.
+.moj-scrollable-pane .app-table-cell--wrap {
+  white-space: normal;
+}
+
 // Add-on: one fix to the MOJ scrollable pane. Visually hidden text inside the
 // table (for example "View submission (Valpak Ltd)") is positioned absolutely,
 // so without this it escapes the pane and makes the whole page scroll sideways

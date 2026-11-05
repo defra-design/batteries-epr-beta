@@ -36,7 +36,7 @@
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
-    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', classes: small },
+    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', classes: small + " app-table-cell--wrap" },
     { text: row.submittedText, classes: small },
     { html: due(row, words), classes: small },
     { html: statusTag(row), classes: small },
@@ -60,13 +60,14 @@
     </form>
 
     {% if rows.length %}
-      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths #}
+      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
+         The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
         {{ govukTable({
           caption: words.tableCaption + ", " + quarterText,
           captionClasses: "govuk-visually-hidden",
           head: [
-            { text: words.schemeColumn, classes: small },
+            { text: words.schemeColumn, classes: small + " app-table-cell--wrap" },
             { text: words.dateSubmittedColumn, classes: small },
             { text: words.dueColumn, classes: small },
             { text: words.statusColumn, classes: small },
