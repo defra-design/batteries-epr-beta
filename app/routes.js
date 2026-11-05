@@ -30,8 +30,8 @@ function pick (value, allowed, fallback) {
 
 function linksFor (row, back) {
   const backParam = '&back=' + encodeURIComponent(back)
-  row.schemeHref = '/regulator/not-built?page=scheme-details&scheme=' + row.schemeSlug + backParam
-  row.submissionHref = '/regulator/not-built?page=submission&scheme=' + row.schemeSlug + backParam
+  row.schemeHref = '/regulator/not-built?' + backParam.slice(1)
+  row.submissionHref = '/regulator/not-built?' + backParam.slice(1)
   return row
 }
 
@@ -66,11 +66,8 @@ router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
 
 // A holding page for links to pages we haven't built yet
 router.get('/regulator/not-built', (req, res) => {
-  const scheme = pom.SCHEMES.find(s => s.slug === req.query.scheme)
   const back = String(req.query.back || '')
   res.render('regulator/not-built', {
-    page: req.query.page === 'submission' ? 'submission' : 'scheme-details',
-    schemeName: scheme ? scheme.name : '',
     // Only go back to a page in this prototype
     backHref: /^\/(?![/\\])/.test(back) ? back : '/regulators'
   })

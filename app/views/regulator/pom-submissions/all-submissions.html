@@ -53,7 +53,7 @@
 {# Table text is 16px, as large tables of data allow and as the regulator toolkit does,
    so the columns stay steady when the filters change #}
 {% set small = "govuk-!-font-size-16" %}
-{% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status | replace(" ", " ") }}</strong>{% endmacro %}
+{% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status }}</strong>{% endmacro %}
 {% macro due(row, words) %}{% if row.overdue %}<strong class="govuk-tag govuk-tag--red govuk-!-font-size-16">{{ words.overdueTag }}</strong><br>{{ row.dueText }}{% elif row.dueText %}{{ row.dueText }}{% endif %}{% endmacro %}
 
 {% set tableRows = [] %}
@@ -87,7 +87,7 @@
           {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
         </div>
         <div class="govuk-grid-column-one-quarter govuk-!-padding-top-6">
-          {{ govukButton({ text: words.applyFiltersButton, classes: "govuk-button--secondary" }) }}
+          {{ govukButton({ text: words.applyFiltersButton }) }}
         </div>
       </div>
     </form>
@@ -102,7 +102,7 @@
           captionClasses: "govuk-visually-hidden",
           attributes: { "data-module": "moj-sortable-table" },
           head: [
-            { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: "govuk-!-width-one-quarter " + small },
+            { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.quarterColumn, attributes: { "aria-sort": "descending" }, classes: small },
             { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.dueColumn, attributes: { "aria-sort": "none" }, classes: small },

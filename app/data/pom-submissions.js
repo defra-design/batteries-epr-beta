@@ -41,7 +41,6 @@ const LATEST_YEAR = 2026
 const LATEST_QUARTER = 3
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-const NBSP = '\u00a0' // a space that doesn't break, so a date stays on one line
 
 function addDays (iso, days) {
   const d = new Date(iso + 'T12:00:00Z')
@@ -49,10 +48,10 @@ function addDays (iso, days) {
   return d.toISOString().slice(0, 10)
 }
 
-// "23 Oct 2026", on one line
+// "23 Oct 2026" (the table is in a scrollable pane, so cells don't wrap)
 function shortDate (iso) {
   const [y, m, d] = iso.split('-').map(Number)
-  return d + NBSP + MONTHS[m - 1] + NBSP + y
+  return d + ' ' + MONTHS[m - 1] + ' ' + y
 }
 
 // Every submission, before any filtering
@@ -78,7 +77,7 @@ function all () {
           schemeSlug: scheme.slug,
           year: String(year),
           quarter: String(quarter),
-          quarterText: QUARTERS_SHORT[quarter - 1] + NBSP + year,
+          quarterText: QUARTERS_SHORT[quarter - 1] + ' ' + year,
           quarterSort: year + '-' + quarter,
           submittedText: shortDate(submitted),
           submittedSort: submitted,
