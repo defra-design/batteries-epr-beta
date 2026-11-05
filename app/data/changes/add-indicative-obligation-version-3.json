@@ -11,8 +11,12 @@
   ],
   "beforeAfter": [
     {
-      "label": "Indicative obligation check, version 3",
-      "after": "changes/add-indicative-obligation-version-3/after--indicative-obligation-check-version-3.png"
+      "label": "Desktop (1020 pixels wide)",
+      "after": "changes/add-indicative-obligation-version-3/after--1020-pixels.png"
+    },
+    {
+      "label": "320 pixels wide",
+      "after": "changes/add-indicative-obligation-version-3/after--320-pixels.png"
     }
   ]
 }

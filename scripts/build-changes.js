@@ -12,6 +12,8 @@
  *     app/assets/sass/application.scss), not inline styles
  *   - the Bug tag is orange, not red
  *   - run it with: npm run changes
+ *   - screenshots: for each page, one pair at 1020 pixels wide (desktop) and
+ *     one at 320 pixels wide, from the top of the page to the end of the content
  *
  * build-pages.js — turn change records into pages the GOV.UK Prototype Kit
  * serves by itself, with no routes:
