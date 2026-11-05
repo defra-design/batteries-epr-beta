@@ -1,20 +1,60 @@
 {% extends "layouts/areas.html" %}
 
 {#
-  The Regulators area: every piece of regulator work in the prototype, in plain HTML.
+  The Regulators area: every piece of regulator work in the prototype, in one table, newest first.
 
-  Latest work: newest first. Previous versions: versions we've parked or decided against.
-  Each item, in this order:
-    the name (a link to the page), with a tag next to it for where it's up to: Ideation (govuk-tag--light-blue), Validation
-      (govuk-tag--yellow), Refinement (govuk-tag--pink), Ready for dev
-      (govuk-tag--orange), Test later (govuk-tag--purple), Discounted (govuk-tag--grey)
-    the date and version
-    what it is, with the Jira ticket in brackets
-  Put a section break (hr) between items in the same list.
+  Add-on: MOJ Frontend (sortable table). The table has data-module="moj-sortable-table",
+  so people can sort it by any column. Without JavaScript it's a normal GOV.UK table,
+  in the order below. See the README, "Add-ons".
+
+  To add work: add it to the top of "work" below. Each item:
+    date:      "5 Nov 2026" (months shortened)
+    sortDate:  "2026-11-05" (so the date column sorts properly)
+    version:   1, 2, 3...
+    title:     the page name, descriptive enough on its own. It's the link
+    href:      the page
+    status:    Ideation, Validation, Refinement, Ready for dev, Test later or Discounted
+    ticket:    the Jira ticket, for example "EB-237"
 #}
 
 {% set pageName = "Regulators" %}
 {% set area = "regulators" %}
+
+{% set statusClasses = {
+  "Ideation": "govuk-tag--light-blue",
+  "Validation": "govuk-tag--yellow",
+  "Refinement": "govuk-tag--pink",
+  "Ready for dev": "govuk-tag--orange",
+  "Test later": "govuk-tag--purple",
+  "Discounted": "govuk-tag--grey"
+} %}
+
+{% set work = [
+  {
+    date: "5 Nov 2026", sortDate: "2026-11-05", version: 3,
+    title: "Indicative obligation check, Jen's latest content",
+    href: "/regulator/indicative-obligation/jens-content",
+    status: "Ideation", ticket: "EB-237"
+  },
+  {
+    date: "28 Oct 2026", sortDate: "2026-10-28", version: 2,
+    title: "Indicative obligation check, without chemistry",
+    href: "/regulator/indicative-obligation/without-chemistry",
+    status: "Ready for dev", ticket: "EB-237"
+  },
+  {
+    date: "27 Oct 2026", sortDate: "2026-10-27", version: 1,
+    title: "Indicative obligation check, with chemistry",
+    href: "/regulator/indicative-obligation/option-a-table",
+    status: "Test later", ticket: "EB-237"
+  },
+  {
+    date: "27 Oct 2026", sortDate: "2026-10-27", version: 1,
+    title: "Indicative obligation check, summary lists",
+    href: "/regulator/indicative-obligation/option-b-summary-list",
+    status: "Discounted", ticket: "EB-237"
+  }
+] %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -26,25 +66,35 @@
 
     <p class="govuk-body">The Environment Agency, the devolved regulators (SEPA, NRW and NIEA) and OPSS. They register, approve, monitor and enforce, and review placed on the market returns.</p>
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">Latest work</h2>
+  </div>
+</div>
 
-    <p class="govuk-body govuk-!-margin-bottom-1"><a href="/regulator/indicative-obligation/without-chemistry" class="govuk-link">Indicative obligation check</a> <strong class="govuk-tag govuk-tag--orange govuk-!-margin-left-2">Ready for dev</strong></p>
-    <p class="govuk-body govuk-!-margin-bottom-1">28 October 2026, version 2</p>
-    <p class="govuk-body">Check a compliance scheme's obligation matches NPWD (EB-237).</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-8">Previous versions</h2>
-
-    <p class="govuk-body">Versions we've parked or decided against.</p>
-
-    <p class="govuk-body govuk-!-margin-bottom-1"><a href="/regulator/indicative-obligation/option-a-table" class="govuk-link">Indicative obligation check, with chemistry</a> <strong class="govuk-tag govuk-tag--purple govuk-!-margin-left-2">Test later</strong></p>
-    <p class="govuk-body govuk-!-margin-bottom-1">27 October 2026, version 1</p>
-    <p class="govuk-body">To test with the placed on the market journey (EB-237).</p>
-
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-    <p class="govuk-body govuk-!-margin-bottom-1"><a href="/regulator/indicative-obligation/option-b-summary-list" class="govuk-link">Indicative obligation check, summary lists</a> <strong class="govuk-tag govuk-tag--grey govuk-!-margin-left-2">Discounted</strong></p>
-    <p class="govuk-body govuk-!-margin-bottom-1">27 October 2026, version 1</p>
-    <p class="govuk-body">The team chose tables instead (EB-237).</p>
+    <table class="govuk-table" data-module="moj-sortable-table">
+      <caption class="govuk-table__caption govuk-table__caption--m">Regulator prototypes</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header" aria-sort="descending">Date</th>
+          <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">Version</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Page</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Status</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Ticket</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for item in work %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell" data-sort-value="{{ item.sortDate }}">{{ item.date }}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.version }}</td>
+          <td class="govuk-table__cell"><a href="{{ item.href }}" class="govuk-link">{{ item.title }}</a></td>
+          <td class="govuk-table__cell"><strong class="govuk-tag {{ statusClasses[item.status] }}">{{ item.status }}</strong></td>
+          <td class="govuk-table__cell"><a href="https://eaflood.atlassian.net/browse/{{ item.ticket }}" class="govuk-link">{{ item.ticket }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
     <p class="govuk-body govuk-!-margin-top-6"><a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype#persona-regulator" class="govuk-link" rel="noreferrer noopener" target="_blank">Alpha prototype: regulator (opens in new tab)</a></p>
 

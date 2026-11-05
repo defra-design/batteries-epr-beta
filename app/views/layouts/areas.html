@@ -1,9 +1,11 @@
 {#
   Layout for the prototype's own list pages: the homepage, one page per area
-  (Regulators, Compliance schemes, Treatment operators, Producers) and the
-  change log (What's changed).
+  (Regulators, Compliance schemes, Treatment operators, Producers), Patterns
+  and the change log (What's changed).
 
-  It adds these as a menu in the GOV.UK service navigation. These pages are
+  It adds a menu to the GOV.UK service navigation: the service name (the
+  homepage), Patterns and What's changed. The area pages are linked from the
+  homepage, not the menu. These pages are
   for the team, not part of the design, so the design pages don't use it.
 
   Use it in a page with:
@@ -20,10 +22,7 @@
     serviceName: serviceName,
     serviceUrl: "/",
     navigation: [
-      { href: "/regulators", text: "Regulators", active: area == "regulators" },
-      { href: "/compliance-schemes", text: "Compliance schemes", active: area == "compliance-schemes" },
-      { href: "/treatment-operators", text: "Treatment operators", active: area == "treatment-operators" },
-      { href: "/producers", text: "Producers", active: area == "producers" },
+      { href: "/patterns", text: "Patterns", active: area == "patterns" },
       { href: "/changes", text: "What's changed", active: area == "changes" }
     ]
   }) }}

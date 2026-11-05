@@ -2,13 +2,8 @@
 
 {#
   The prototype's homepage: one section per area, in plain HTML.
-  Each area: its name (h2), Internal or External tag, what it is, then its
-  latest work: one link, with the date and version underneath.
-
-  Keeping it up to date: when an area has newer work, change its "latest"
-  below to match the top of "Latest work" on the area's page.
-
-  Each area also has its own page listing its work (for example app/views/regulators.html).
+  Each area: its name (h2), Internal or External tag, what it is, then a link
+  to the area's page, which lists all its work (for example app/views/regulators.html).
 #}
 
 {% set pageName = "Home" %}
@@ -19,30 +14,32 @@
     tag: "Internal",
     tagClasses: "govuk-tag--green",
     description: "The Environment Agency, the devolved regulators (SEPA, NRW and NIEA) and OPSS. They register, approve, monitor and enforce, and review placed on the market returns.",
-    latest: {
-      title: "Indicative obligation check",
-      href: "/regulator/indicative-obligation/without-chemistry",
-      date: "28 October 2026",
-      version: "2"
-    }
+    href: "/regulators",
+    linkText: "Regulator prototypes"
   },
   {
     name: "Compliance schemes",
     tag: "External",
     tagClasses: "",
-    description: "Battery compliance schemes, acting for large producers. They register their members, report placed on the market data each quarter, by CSV or web form, and get evidence of recycling."
+    description: "Battery compliance schemes, acting for large producers. They register their members, report placed on the market data each quarter, by CSV or web form, and get evidence of recycling.",
+    href: "/compliance-schemes",
+    linkText: "Compliance scheme prototypes"
   },
   {
     name: "Treatment operators",
     tag: "External",
     tagClasses: "",
-    description: "ABTOs, ABEs and ATFs. They treat, export or dismantle batteries, and issue evidence notes for what they recycle."
+    description: "ABTOs, ABEs and ATFs. They treat, export or dismantle batteries, and issue evidence notes for what they recycle.",
+    href: "/treatment-operators",
+    linkText: "Treatment operator prototypes"
   },
   {
     name: "Producers",
     tag: "External",
     tagClasses: "",
-    description: "Businesses that place batteries on the UK market. Small producers register directly. Large producers join a compliance scheme, which reports for them."
+    description: "Businesses that place batteries on the UK market. Small producers register directly. Large producers join a compliance scheme, which reports for them.",
+    href: "/producers",
+    linkText: "Producer prototypes"
   }
 ] %}
 
@@ -50,20 +47,17 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-xl">Batteries EPR prototypes</h1>
+    <h1 class="govuk-heading-xl">Batteries EPR beta prototypes</h1>
 
-    <p class="govuk-body-l">The prototypes for the Batteries EPR service, in private beta.</p>
+    <p class="govuk-body-l">Prototypes for the Batteries EPR private beta.</p>
+
+    <p class="govuk-body">Looking for the alpha? See the <a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype" class="govuk-link" rel="noreferrer noopener" target="_blank">alpha prototype (opens in new tab)</a>.</p>
 
     {% for area in areas %}
       <h2 class="govuk-heading-l govuk-!-margin-top-8 govuk-!-margin-bottom-3">{{ area.name }}</h2>
       <p class="govuk-body"><strong class="govuk-tag {{ area.tagClasses }}">{{ area.tag }}</strong></p>
       <p class="govuk-body">{{ area.description }}</p>
-
-      {% if area.latest %}
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Latest work</h3>
-        <p class="govuk-body govuk-!-margin-bottom-1"><a href="{{ area.latest.href }}" class="govuk-link">{{ area.latest.title }}</a></p>
-        <p class="govuk-body">{{ area.latest.date }}, version {{ area.latest.version }}</p>
-      {% endif %}
+      <p class="govuk-body"><a href="{{ area.href }}" class="govuk-link">{{ area.linkText }}</a></p>
     {% endfor %}
 
   </div>

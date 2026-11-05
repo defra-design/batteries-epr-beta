@@ -1,5 +1,5 @@
 //
-// Words-only content files: an add-on to the GOV.UK Prototype Kit.
+// Add-on: words-only content files, an add-on to the GOV.UK Prototype Kit.
 //
 // Why: the content designer edits the words for a page without touching
 // the page's HTML, so they can't break the layout or the components.

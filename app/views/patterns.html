@@ -1,0 +1,75 @@
+{% extends "layouts/areas.html" %}
+
+{#
+  Patterns: components and patterns we're trying out, and experiments.
+  Anything here from outside the GOV.UK Design System is also listed in the README, "Add-ons".
+#}
+
+{% set pageName = "Patterns" %}
+{% set area = "patterns" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">Patterns</h1>
+
+    <p class="govuk-body-l">Patterns, components and experiments we're trying out for Batteries EPR.</p>
+
+    <p class="govuk-body">Everything here is an experiment. Anything we agree on goes to Alex Colbeck's regulator prototype, so other EPR services can use it too.</p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-8">Alex's regulator prototype</h2>
+
+    <p class="govuk-body">Defra's shared regulator tooling, from Packaging EPR. Ask Marie or Alex for the password.</p>
+
+    <p class="govuk-body"><a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/" class="govuk-link" rel="noreferrer noopener" target="_blank">Alex's regulator prototype (opens in new tab)</a></p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-8">From outside the GOV.UK Design System</h2>
+
+    <p class="govuk-body">We use these because the GOV.UK Design System doesn't have what we need yet.</p>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {{ govukTable({
+      caption: "From outside the GOV.UK Design System",
+      captionClasses: "govuk-visually-hidden",
+      firstCellIsHeader: true,
+      head: [
+        { text: "Component" },
+        { text: "From" },
+        { text: "Where we use it" },
+        { text: "Status" }
+      ],
+      rows: [
+        [
+          { html: '<a href="https://design-patterns.service.justice.gov.uk/components/sortable-table/" class="govuk-link" rel="noreferrer noopener" target="_blank">Sortable table (opens in new tab)</a>' },
+          { text: "MOJ Design System" },
+          { html: '<a href="/regulators" class="govuk-link">Regulators</a> (the list of prototypes)' },
+          { html: '<strong class="govuk-tag govuk-tag--light-blue">Testing</strong>' }
+        ],
+        [
+          { text: "Defra internal header, service navigation and footer" },
+          { text: "Alex's regulator prototype" },
+          { text: "Every regulator page" },
+          { html: '<strong class="govuk-tag govuk-tag--green">In use</strong>' }
+        ]
+      ]
+    }) }}
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-8">Experiments</h2>
+
+    <p class="govuk-body">None yet.</p>
+
+  </div>
+</div>
+{% endblock %}
