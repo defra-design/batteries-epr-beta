@@ -43,7 +43,7 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  column-gap: govuk-spacing(6);
+  column-gap: govuk-spacing(2); // 10px
 
   // The button's bottom edge is a 2px shadow outside the button, so its
   // margin is 2px more than a form group's. Then it lines up exactly with
