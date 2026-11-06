@@ -61,8 +61,8 @@ Action
 ## View submission link
 View submission
 
-## Not applicable (in the Due column, once a submission is accepted)
+## Not applicable (only screen readers hear this, in the Review by column once a submission is accepted)
 Not applicable
 
-## Overdue tag
+## Overdue (a red tag in version A, bold text in version B)
 Overdue

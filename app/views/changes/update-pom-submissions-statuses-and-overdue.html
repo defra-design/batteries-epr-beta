@@ -1,0 +1,80 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Update statuses, overdue and empty cells on the placed on the market submissions pages" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">6 November 2026</span>
+<h1 class="govuk-heading-l">Update statuses, overdue and empty cells on the placed on the market submissions pages</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+<p class="govuk-body">Jen updated the statuses, and we're trying two ways of showing that a return is overdue.</p>
+<p class="govuk-body"><strong>Statuses</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>To review, Under review, Query raised, Response received, Accepted and Escalated, in the table and the status filter (version B)</li><li>New tag colours, because two of the old ones don't exist in GOV.UK Frontend 6, so To review and In progress looked the same. See the <a href="https://design-system.service.gov.uk/components/tag/" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK tag component (opens in new tab)</a></li><li>No red status tags: red is kept for Overdue</li></ul>
+<p class="govuk-body"><strong>Overdue: two versions to compare</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Version A (latest quarter): a red Overdue tag above the review by date. The Design System uses a red tag for urgent things</li><li>Version B (all submissions): Overdue in bold black text above the date</li><li>We didn't use red text: in GOV.UK services red text means an error. See the <a href="https://design-system.service.gov.uk/components/error-message/" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK error message component (opens in new tab)</a></li></ul>
+<p class="govuk-body"><strong>Empty cells</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Once a return is accepted there's nothing to review, so the Review by cell is empty on screen. Screen readers hear &quot;Not applicable&quot;, as the regulator toolkit does, instead of &quot;blank&quot;</li></ul>
+<p class="govuk-body"><strong>Kept as they are</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Short months in the table (&quot;Jul to Sep 2026&quot;), in full in the filters. The <a href="https://www.gov.uk/guidance/style-guide/a-to-z-of-gov-uk-style#dates" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK style guide (opens in new tab)</a> allows short months in tables when space is tight</li></ul>
+<p class="govuk-body"><strong>Next</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Late submissions: we'll show these on the submission page as a flag, for example &quot;Submitted 3 days late&quot;, not in this table</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/latest-quarter">Version A: latest quarter</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/all-submissions">Version B: all submissions</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Version A, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/before--version-a-1020-pixels.png" alt="Before: Version A, desktop (1020 pixels wide)" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/after--version-a-1020-pixels.png" alt="After: Version A, desktop (1020 pixels wide)" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Version A, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/before--version-a-320-pixels.png" alt="Before: Version A, 320 pixels wide" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/after--version-a-320-pixels.png" alt="After: Version A, 320 pixels wide" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Version B, desktop (1020 pixels wide), top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/before--version-b-1020-pixels.png" alt="Before: Version B, desktop (1020 pixels wide), top of the page" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/after--version-b-1020-pixels.png" alt="After: Version B, desktop (1020 pixels wide), top of the page" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Version B, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/before--version-b-320-pixels.png" alt="Before: Version B, 320 pixels wide" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-pom-submissions-statuses-and-overdue/after--version-b-320-pixels.png" alt="After: Version B, 320 pixels wide" class="app-change-screenshot">
+</div>
+</div>
+
+{% endblock %}

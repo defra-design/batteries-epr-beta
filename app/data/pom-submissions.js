@@ -4,7 +4,7 @@
 //
 // The 4 real compliance schemes, and one submission per scheme per quarter
 // from January to March 2024 to July to September 2026. Everything is
-// "Accepted" except the latest quarter. "Today" is fixed at 5 November 2026,
+// "Accepted" except the latest quarter and one escalated return. "Today" is fixed at 5 November 2026,
 // so what's overdue doesn't change as the days go by.
 //
 
@@ -21,21 +21,29 @@ const SCHEMES = [
 const QUARTERS = ['January to March', 'April to June', 'July to September', 'October to December']
 const QUARTERS_SHORT = ['Jan to Mar', 'Apr to Jun', 'Jul to Sep', 'Oct to Dec']
 
-// Jen's statuses, and their tag colours
+// Jen's statuses (6 November 2026), and their tag colours. Only colours that
+// exist in GOV.UK Frontend 6: the standard tag is blue. No red: red is for
+// the Overdue tag in version A
 const STATUSES = {
-  'To review': 'govuk-tag--blue',
-  'In progress': 'govuk-tag--light-blue',
+  'To review': '',
+  'Under review': 'govuk-tag--teal',
   'Query raised': 'govuk-tag--yellow',
-  'Review response': 'govuk-tag--purple',
-  Accepted: 'govuk-tag--green'
+  'Response received': 'govuk-tag--purple',
+  Accepted: 'govuk-tag--green',
+  Escalated: 'govuk-tag--orange'
 }
 
 // The latest quarter (July to September 2026): a mix of statuses
 const LATEST = {
-  'recycling-lives': { submitted: '2026-10-23', status: 'Review response' },
-  'erp-uk': { submitted: '2026-10-29', status: 'In progress' },
+  'recycling-lives': { submitted: '2026-10-23', status: 'Response received' },
+  'erp-uk': { submitted: '2026-10-29', status: 'Under review' },
   batteryback: { submitted: '2026-11-02', status: 'To review' },
   valpak: { submitted: '2026-10-16', status: 'Accepted' }
+}
+
+// Earlier submissions that aren't accepted yet (everything else is Accepted)
+const OPEN_EARLIER = {
+  '2026-2-erp-uk': 'Escalated'
 }
 const LATEST_YEAR = 2026
 const LATEST_QUARTER = 3
@@ -68,7 +76,7 @@ function all () {
           // Each quarter's returns come in during the month after it ends
           const quarterEnd = new Date(Date.UTC(year, quarter * 3, 0)).toISOString().slice(0, 10)
           submitted = addDays(quarterEnd, 9 + i * 4)
-          status = 'Accepted'
+          status = OPEN_EARLIER[year + '-' + quarter + '-' + scheme.slug] || 'Accepted'
         }
         const due = addDays(submitted, 10)
         const open = status !== 'Accepted'

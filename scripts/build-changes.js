@@ -107,10 +107,11 @@ function longDate (iso) {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''))
   return m ? Number(m[3]) + ' ' + MONTHS[Number(m[2]) - 1] + ' ' + m[1] : esc(iso)
 }
-const TYPES = { bug: ['Bug', 'orange'], fix: ['Fix', 'blue'], change: ['Change', 'yellow'], new: ['New', 'green'] }
+// Tag colours from GOV.UK Frontend 6. Fix is the standard (blue) tag
+const TYPES = { bug: ['Bug', 'orange'], fix: ['Fix', ''], change: ['Change', 'yellow'], new: ['New', 'green'] }
 function tags (r) {
   const t = Object.prototype.hasOwnProperty.call(TYPES, r.type) ? TYPES[r.type] : null
-  let html = t ? '<strong class="govuk-tag govuk-tag--' + t[1] + '">' + t[0] + '</strong>' : ''
+  let html = t ? '<strong class="govuk-tag' + (t[1] ? ' govuk-tag--' + t[1] : '') + '">' + t[0] + '</strong>' : ''
   ;(r.categories || []).forEach(function (c) { html += ' <strong class="govuk-tag govuk-tag--grey">' + esc(c.charAt(0).toUpperCase() + c.slice(1)) + '</strong>' })
   return html
 }
