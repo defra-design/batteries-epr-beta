@@ -50,7 +50,7 @@ Quarter
 Submitted
 
 ## Due column
-Due
+Review by
 
 ## Status column
 Status
