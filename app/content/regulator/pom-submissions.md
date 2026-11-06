@@ -5,7 +5,7 @@ The scheme names, dates and statuses are dummy data: ask Marie to change those.
 Done? Select Commit changes. It's live in about 5 minutes.
 
 ## Heading
-Placed on the market submissions
+Submissions of batteries placed on the market
 
 ## Year label
 Year
