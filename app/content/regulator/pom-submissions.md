@@ -23,7 +23,7 @@ All
 Apply filters
 
 ## Summary for all submissions (version B)
-Showing all submissions from 2024 to 2026
+All submissions from 2024 to 2026
 
 ## Summary start for filtered submissions (version B)
 Showing
