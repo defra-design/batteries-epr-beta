@@ -9,16 +9,16 @@
   Top to bottom:
   - Back to the brief list, on this submission's quarter (from app/routes.js)
   - Submission details, with the status tag in the list
+  - Organisation (see below), then the files
   - Submitted by has the person's email as a link
   - One files table: the flags are written out against the file they're in
     (no reasons: the full version adds those), and the file name opens the
     file, in the same tab for now (they can download it from there)
-  - The scheme's organisation details in a details component named after the
-    scheme, view only, with emails as links and the people who can submit in
-    the list (everyone, however many)
-  - A link to the scheme's members, below it
-  - View producer figures: the main call to action, straight after the files.
-    The organisation details and members come after it: they're needed less
+  - Organisation: a short summary list (name, and members with View members),
+    then the organisation details in a details component straight under it,
+    view only, with emails as links and the people who can submit (everyone,
+    however many)
+  - View producer figures: the main call to action, last
   "Admin", not "Super user" (Jen's word)
 
   The data: app/data/pom-submission-details.js (dummy).
@@ -105,6 +105,20 @@
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
 
+    {# The organisation: name and members (another page), then its details,
+       opening in place, straight under the list. Not inside it: a summary
+       list inside a summary list is awkward for screen readers #}
+    <h2 class="govuk-heading-m">{{ words.organisationHeading }}</h2>
+    {{ govukSummaryList({ rows: [
+      { key: { text: words.name }, value: { text: org.name } },
+      {
+        key: { text: words.members },
+        value: { text: org.members },
+        actions: { items: [{ href: notBuiltHref, text: words.viewMembersLink }] }
+      }
+    ] }) }}
+    {{ govukDetails({ summaryText: s.scheme + " " + words.schemeDetails, html: schemeHtml }) }}
+
   </div>
 </div>
 
@@ -135,10 +149,6 @@
   <div class="govuk-grid-column-two-thirds">
 
     {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
-
-    {{ govukDetails({ summaryText: s.scheme + " " + words.schemeDetails, html: schemeHtml }) }}
-
-    <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ s.scheme }} {{ words.membersLink }}</a></p>
 
   </div>
 </div>

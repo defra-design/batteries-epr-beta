@@ -82,8 +82,17 @@ Appropriate person
 ## People who can submit
 People who can submit
 
-## Members link (after the scheme name, for example "Valpak Ltd members")
-members
+## Organisation heading
+Organisation
+
+## Name (the scheme's name, in the Organisation list)
+Name
+
+## Members
+Members
+
+## View members link
+View members
 
 ## View producer figures button
 View producer figures
