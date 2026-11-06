@@ -49,24 +49,6 @@ tonnes
 ## Producers in the file
 Producers in the file
 
-## Flags heading
-Flags to check
-
-## Flags table caption (only screen readers hear this)
-Flags to check in this submission
-
-## Flag column
-Flag
-
-## Producer column
-Producer
-
-## Reason column
-Scheme's reason
-
-## No flags
-There are no flags on this submission.
-
 ## Files heading
 Files
 
@@ -76,20 +58,17 @@ Files in this submission
 ## File name column
 File name
 
-## Submitted by column
-Submitted by
-
 ## Flags column
 Flags
 
-## Date uploaded column
-Date uploaded
+## No flags (only screen readers hear this, in the Flags column)
+No flags
 
-## Action column
-Action
+## Submitted column (when the file was uploaded)
+Submitted
 
-## View file link
-View file
+## Opens in new tab (after the file name)
+(opens in new tab)
 
 ## View producer figures button
 View producer figures

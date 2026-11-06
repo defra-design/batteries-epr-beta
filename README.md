@@ -88,7 +88,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** lets a wide table scroll sideways on its own at small widths and 400% zoom, so the page still reflows (WCAG 1.4.10). The regulator toolkit wraps its sortable tables in it too
 - **Why it's a copy:** it's an exact copy of the MOJ component from MOJ Frontend 12, because MOJ Frontend 10 (the newest that works with this kit) doesn't have it. Plus one fix, so visually hidden text in a table can't make the page scroll
-- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages, the files table on the full submission page, and the Regulators list (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
+- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages, the files tables on the submission pages, the people tables on organisation details, and the Regulators list (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** delete the copy and the fix, and use the real one when we can upgrade MOJ Frontend
 

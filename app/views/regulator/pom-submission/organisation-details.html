@@ -9,9 +9,11 @@
   - Change links (the check answers pattern), so we can ask the business
     whether regulators can change these. Prototype only: they go to the
     "not built yet" page
+  - Emails are links
   - People who can submit: the appropriate person and anyone with delegated
-    authority. Everyone else is in a details component, so a scheme with
-    14 users doesn't make a long page
+    authority, without dates (if their authority has ended, they're not on
+    the list). Users who can't submit are in a details component, so a scheme
+    with 14 users doesn't make a long page
   - "Super user", not "Admin" (Rich's word)
   - Not here, as agreed: conditions of approval, approved and expires,
     account manager, approval number (it's the BCS number)
@@ -41,8 +43,8 @@
   [words.registeredOfficeAddress, { html: addressHtml }],
   [words.companiesHouseNumber, { text: org.companiesHouseNumber }],
   [words.bcsNumber, { text: org.bcsNumber }],
-  [words.appropriatePerson, { html: (org.appropriatePerson.name | escape) + "<br>" + (org.appropriatePerson.email | escape) }],
-  [words.superUser, { html: (org.superUser.name | escape) + "<br>" + (org.superUser.email | escape) }]
+  [words.appropriatePerson, { html: (org.appropriatePerson.name | escape) + '<br><a href="mailto:' + org.appropriatePerson.email + '" class="govuk-link">' + org.appropriatePerson.email + '</a>' }],
+  [words.superUser, { html: (org.superUser.name | escape) + '<br><a href="mailto:' + org.superUser.email + '" class="govuk-link">' + org.superUser.email + '</a>' }]
 ] %}
   {% set rows = (rows.push({
     key: { text: row[0] },
@@ -55,14 +57,14 @@
 {% for p in org.canSubmit %}
   {% set peopleRows = (peopleRows.push([
     { text: p.name },
-    { text: words.appropriatePerson if p.role == "appropriatePerson" else (words.delegatedAuthority + " " + org.authorityFrom + " " + words.to + " " + org.authorityTo) }
+    { html: '<a href="mailto:' + p.email + '" class="govuk-link">' + p.email + '</a>' }
   ]), peopleRows) %}
 {% endfor %}
 {% set otherRows = [] %}
 {% for p in org.otherUsers %}
   {% set otherRows = (otherRows.push([
     { text: p.name },
-    { text: words.superUser if p.role == "superUser" else words.user }
+    { html: '<a href="mailto:' + p.email + '" class="govuk-link">' + p.email + '</a>' }
   ]), otherRows) %}
 {% endfor %}
 
@@ -77,23 +79,28 @@
 
     <h2 class="govuk-heading-m">{{ words.peopleWhoCanSubmitHeading }}</h2>
     <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
-    {{ govukTable({
-      caption: words.peopleTableCaption,
-      captionClasses: "govuk-visually-hidden",
-      head: [{ text: words.nameColumn }, { text: words.authorityColumn }],
-      rows: peopleRows
-    }) }}
+    {# Add-on: MOJ scrollable pane, so long emails don't make the page scroll sideways on a phone #}
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.peopleTableCaption }}">
+      {{ govukTable({
+        caption: words.peopleTableCaption,
+        captionClasses: "govuk-visually-hidden",
+        head: [{ text: words.nameColumn }, { text: words.emailColumn }],
+        rows: peopleRows
+      }) }}
+    </div>
 
     {% if otherRows.length %}
       {% set otherHtml %}
-        {{ govukTable({
-          caption: words.otherUsers,
-          captionClasses: "govuk-visually-hidden",
-          head: [{ text: words.nameColumn }, { text: words.roleColumn }],
-          rows: otherRows
-        }) }}
+        <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.usersWhoCanTSubmit }}">
+          {{ govukTable({
+            caption: words.usersWhoCanTSubmit,
+            captionClasses: "govuk-visually-hidden",
+            head: [{ text: words.nameColumn }, { text: words.emailColumn }],
+            rows: otherRows
+          }) }}
+        </div>
       {% endset %}
-      {{ govukDetails({ summaryText: words.otherUsers + " (" + otherRows.length + ")", html: otherHtml }) }}
+      {{ govukDetails({ summaryText: words.usersWhoCanTSubmit + " (" + otherRows.length + ")", html: otherHtml }) }}
     {% endif %}
 
     <h2 class="govuk-heading-m">{{ words.membersHeading }}</h2>

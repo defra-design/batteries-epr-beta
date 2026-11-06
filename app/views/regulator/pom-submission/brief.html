@@ -9,8 +9,10 @@
   Top to bottom:
   - Back to the brief list, on this submission's quarter (from app/routes.js)
   - Submission details, with the status tag in the list
-  - One files table: the flags are written out against the file they're in,
-    and View opens the file in a new tab (they can download it from there)
+  - Submitted by has the person's email as a link
+  - One files table: the flags are written out against the file they're in
+    (no reasons: the full version adds those), and the file name opens the
+    file in a new tab (they can download it from there)
   - The scheme's organisation details in a details component named after the
     scheme, view only, with emails as links and the people who can submit in
     the list (everyone, however many)
@@ -51,7 +53,7 @@
 {% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
 {% set detailRows = (detailRows.concat([
   { key: { text: words.status }, value: { html: statusHtml } },
-  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser } },
+  { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
@@ -62,10 +64,9 @@
 {% for f in s.files %}
   {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li>{{ flag.title }}: {{ flag.producer }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
   {% set fileRows = (fileRows.push([
-    { text: f.name, classes: small + " app-table-cell--wrap" },
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (f.name | escape) + ' ' + (words.opensInNewTab | escape) + '</a>', classes: small + " app-table-cell--wrap" },
     { html: flagsHtml, classes: small + " app-table-cell--wrap" },
-    { text: f.dateText, classes: small },
-    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> ' + (f.name | escape) + '</span> ' + (words.opensInNewTab | escape) + '</a>', classes: small + " govuk-!-text-align-right" }
+    { text: f.dateText, classes: small }
   ]), fileRows) %}
 {% endfor %}
 
@@ -121,8 +122,7 @@
         head: [
           { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
           { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
-          { text: words.submittedColumn, classes: small },
-          { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
+          { text: words.submittedColumn, classes: small }
         ],
         rows: fileRows
       }) }}

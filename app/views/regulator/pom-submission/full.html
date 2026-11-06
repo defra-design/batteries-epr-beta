@@ -11,12 +11,13 @@
   - The status tag is in the submission details, as in the brief version
   - "Super user", not "Admin" (Rich's word)
 
-  Order: submission details, flags (a table: flag, producer, the scheme's
-  reason), files (so they can open what was uploaded), then View producer
-  figures and the links.
+  Order: submission details (Submitted by has the person's email as a link),
+  one files table with the flags written out against the file they're in and
+  the scheme's reason under each (the file name opens the file in a new tab),
+  then View producer figures and the links.
 
-  Add-on: MOJ scrollable pane round the flags and files tables, and long text
-  wraps (app-table-cell--wrap), so only the tables scroll at small widths. See the README.
+  Add-on: MOJ scrollable pane round the files table, and long text wraps
+  (app-table-cell--wrap), so only the table scrolls at small widths. See the README.
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/pom-submission-full.md
@@ -49,32 +50,24 @@
 {% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
 {% set detailRows = (detailRows.concat([
   { key: { text: words.status }, value: { html: statusHtml } },
-  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser } },
+  { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
   { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
   { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
   { key: { text: words.producersInTheFile }, value: { text: s.producers } }
 ])) %}
 
-{# Flags: one row each #}
+{# Files: one row per file, newest first. The file name opens the file in a new tab.
+   Flags sit with the file they're in: the flag and producer in bold, the
+   scheme's reason underneath (the brief version leaves the reason out).
+   Table text is 16px, as on the lists of submissions #}
 {% set small = "govuk-!-font-size-16" %}
-{% set flagRows = [] %}
-{% for flag in s.flags %}
-  {% set flagRows = (flagRows.push([
-    { text: flag.title, classes: small + " app-table-cell--wrap" },
-    { text: flag.producer, classes: small + " app-table-cell--wrap" },
-    { text: flag.reason, classes: small + " app-table-cell--wrap" }
-  ]), flagRows) %}
-{% endfor %}
-
-{# Files: every file uploaded for this quarter, newest first #}
 {% set fileRows = [] %}
 {% for f in s.files %}
+  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}: {{ flag.producer }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
   {% set fileRows = (fileRows.push([
-    { text: f.name, classes: small + " app-table-cell--wrap" },
-    { text: f.submittedBy, classes: small },
-    { text: f.flags, classes: small + " govuk-table__cell--numeric" },
-    { text: f.dateText, classes: small },
-    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (words.viewFileLink | escape) + '<span class="govuk-visually-hidden"> (' + (f.name | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (f.name | escape) + ' ' + (words.opensInNewTab | escape) + '</a>', classes: small + " app-table-cell--wrap" },
+    { html: flagsHtml, classes: small + " app-table-cell--wrap" },
+    { text: f.dateText, classes: small }
   ]), fileRows) %}
 {% endfor %}
 
@@ -91,27 +84,9 @@
   </div>
 </div>
 
-{# Flags, then the files, full width so the tables have room #}
+{# The files and their flags, full width so the table has room #}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-
-    <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
-    {% if s.flags.length %}
-      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsTableCaption }}">
-        {{ govukTable({
-          caption: words.flagsTableCaption,
-          captionClasses: "govuk-visually-hidden",
-          head: [
-            { text: words.flagColumn, classes: small + " app-table-cell--wrap" },
-            { text: words.producerColumn, classes: small + " app-table-cell--wrap" },
-            { text: words.reasonColumn, classes: small + " app-table-cell--wrap" }
-          ],
-          rows: flagRows
-        }) }}
-      </div>
-    {% else %}
-      <p class="govuk-body">{{ words.noFlags }}</p>
-    {% endif %}
 
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
@@ -120,10 +95,8 @@
         captionClasses: "govuk-visually-hidden",
         head: [
           { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
-          { text: words.submittedByColumn, classes: small },
-          { text: words.flagsColumn, classes: small + " govuk-table__header--numeric" },
-          { text: words.dateUploadedColumn, classes: small },
-          { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
+          { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
+          { text: words.submittedColumn, classes: small }
         ],
         rows: fileRows
       }) }}

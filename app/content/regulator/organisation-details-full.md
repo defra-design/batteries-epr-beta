@@ -40,26 +40,14 @@ The appropriate person and anyone with delegated authority.
 ## Name column
 Name
 
-## Authority column
-Authority
-
-## Delegated authority (before the dates)
-Delegated authority
-
-## To (between the dates)
-to
+## Email column
+Email
 
 ## People table caption (only screen readers hear this)
 People who can submit returns
 
-## Other users (the details link, before the number)
-Other users
-
-## Role column
-Role
-
-## User (role)
-User
+## Users who can't submit (the details link, before the number)
+Users who can't submit
 
 ## Members heading
 Members

@@ -61,13 +61,7 @@ No flags
 ## Submitted column (when the file was uploaded)
 Submitted
 
-## Action column
-Action
-
-## View link
-View
-
-## Opens in new tab (after the View link)
+## Opens in new tab (after the file name)
 (opens in new tab)
 
 ## Scheme details (after the scheme name, for example "Valpak Ltd organisation details")
