@@ -1,4 +1,4 @@
-Page: one placed on the market submission, brief version (EB-325). One page, with the scheme's details in a details component. You get here from "View submission" on the brief list of submissions.
+Page: one placed on the market submission, brief version (EB-325). One page, with the scheme's organisation details in a details component. You get here from "View submission" on the brief list of submissions.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The scheme, people, dates and figures are dummy data: ask Marie to change those.
@@ -58,8 +58,8 @@ Flags
 ## No flags (only screen readers hear this, in the Flags column)
 No flags
 
-## Date uploaded column
-Date uploaded
+## Submitted column (when the file was uploaded)
+Submitted
 
 ## Action column
 Action
@@ -70,8 +70,8 @@ View
 ## Opens in new tab (after the View link)
 (opens in new tab)
 
-## Scheme details (after the scheme name, for example "Valpak Ltd details")
-details
+## Scheme details (after the scheme name, for example "Valpak Ltd organisation details")
+organisation details
 
 ## Registered name
 Registered name
@@ -88,11 +88,11 @@ BCS number
 ## Appropriate person
 Appropriate person
 
-## View members link
-View members
-
 ## People who can submit
 People who can submit
+
+## Members link (after the scheme name, for example "Valpak Ltd members")
+members
 
 ## View producer figures button
 View producer figures

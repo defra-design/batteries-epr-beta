@@ -11,8 +11,10 @@
   - Submission details, with the status tag in the list
   - One files table: the flags are written out against the file they're in,
     and View opens the file in a new tab (they can download it from there)
-  - The scheme's details in a details component named after the scheme,
-    view only, with the people who can submit in a details component inside it
+  - The scheme's organisation details in a details component named after the
+    scheme, view only, with emails as links and the people who can submit in
+    the list (everyone, however many)
+  - A link to the scheme's members, below it
   - View producer figures: the main call to action, last on the page
   "Admin", not "Super user" (Jen's word)
 
@@ -52,22 +54,25 @@
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
-{# Files: one row per file, newest first, with its flags written out #}
+{# Files: one row per file, newest first, with its flags written out.
+   Table text is 16px, as on the lists of submissions #}
+{% set small = "govuk-!-font-size-16" %}
 {% set fileRows = [] %}
 {% for f in s.files %}
-  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li>{{ flag.title }}: {{ flag.producer }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
+  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li>{{ flag.title }}: {{ flag.producer }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
   {% set fileRows = (fileRows.push([
-    { text: f.name, classes: "app-table-cell--wrap" },
-    { html: flagsHtml, classes: "app-table-cell--wrap" },
-    { text: f.dateText },
-    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> ' + (f.name | escape) + '</span> ' + (words.opensInNewTab | escape) + '</a>', classes: "govuk-!-text-align-right" }
+    { text: f.name, classes: small + " app-table-cell--wrap" },
+    { html: flagsHtml, classes: small + " app-table-cell--wrap" },
+    { text: f.dateText, classes: small },
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> ' + (f.name | escape) + '</span> ' + (words.opensInNewTab | escape) + '</a>', classes: small + " govuk-!-text-align-right" }
   ]), fileRows) %}
 {% endfor %}
 
 {% block content %}
 
-{# The scheme's details, view only #}
+{# The scheme's organisation details, view only. Emails are links #}
 {% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
+{% macro personHtml(p) %}{{ p.name }}<br><a href="mailto:{{ p.email }}" class="govuk-link">{{ p.email }}</a>{% endmacro %}
 {% set peopleHtml %}
   <ul class="govuk-list">
     {% for p in org.canSubmit %}
@@ -82,12 +87,11 @@
       { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
       { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
       { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
-      { key: { text: words.appropriatePerson }, value: { html: (org.appropriatePerson.name | escape) + "<br>" + (org.appropriatePerson.email | escape) } },
-      { key: { text: words.superUser }, value: { html: (org.superUser.name | escape) + "<br>" + (org.superUser.email | escape) } }
+      { key: { text: words.appropriatePerson }, value: { html: personHtml(org.appropriatePerson) } },
+      { key: { text: words.superUser }, value: { html: personHtml(org.superUser) } },
+      { key: { text: words.peopleWhoCanSubmit }, value: { html: peopleHtml } }
     ]
   }) }}
-  {{ govukDetails({ summaryText: words.peopleWhoCanSubmit + " (" + org.canSubmit.length + ")", html: peopleHtml }) }}
-  <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
 {% endset %}
 
 <div class="govuk-grid-row">
@@ -114,10 +118,10 @@
         caption: words.filesTableCaption,
         captionClasses: "govuk-visually-hidden",
         head: [
-          { text: words.fileNameColumn, classes: "app-table-cell--wrap" },
-          { text: words.flagsColumn, classes: "app-table-cell--wrap" },
-          { text: words.dateUploadedColumn },
-          { text: words.actionColumn, classes: "govuk-!-text-align-right" }
+          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
+          { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
+          { text: words.submittedColumn, classes: small },
+          { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
         ],
         rows: fileRows
       }) }}
@@ -130,6 +134,8 @@
   <div class="govuk-grid-column-two-thirds">
 
     {{ govukDetails({ summaryText: s.scheme + " " + words.schemeDetails, html: schemeHtml }) }}
+
+    <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ s.scheme }} {{ words.membersLink }}</a></p>
 
     {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
 
