@@ -12,9 +12,9 @@
     person who submitted it as a link
   - Organisation: the name with View details (page 2), and members with View
     members
-  - One files table: the flags are written out against the file they're in
-    (no reasons: the full version adds those). The file name opens the file,
-    in the same tab for now
+  - Files: one GOV.UK summary card per file, with the file name as the title
+    and View to open it (same tab for now). Flags in bold with the producer,
+    the scheme's reason underneath, then when it was submitted
   - View producer figures: the main call to action, last
   "Admin", not "Super user" (Jen's word)
 
@@ -54,19 +54,6 @@
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
-{# Files: one row per file, newest first, with its flags written out.
-   Table text is 16px, as on the lists of submissions #}
-{% set small = "govuk-!-font-size-16" %}
-{% set fileRows = [] %}
-{% for f in s.files %}
-  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li>{{ flag.title }}: {{ flag.producer }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
-  {% set fileRows = (fileRows.push([
-    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (f.name | escape) + '</a>', classes: small + " app-table-cell--wrap" },
-    { html: flagsHtml, classes: small + " app-table-cell--wrap" },
-    { text: f.dateText, classes: small }
-  ]), fileRows) %}
-{% endfor %}
-
 {% block content %}
 
 <div class="govuk-grid-row">
@@ -96,31 +83,26 @@
   </div>
 </div>
 
-{# The files table is full width, so the flags have room #}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-
-    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
-    {# Add-on: MOJ scrollable pane, so only the table scrolls sideways at small widths.
-       File names and flags wrap (add-on: app-table-cell--wrap). See the README #}
-    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
-      {{ govukTable({
-        caption: words.filesTableCaption,
-        captionClasses: "govuk-visually-hidden",
-        head: [
-          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
-          { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
-          { text: words.submittedColumn, classes: small }
-        ],
-        rows: fileRows
-      }) }}
-    </div>
-
-  </div>
-</div>
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+
+    {# Files: one summary card per file, newest first. The file name is the
+       card's title, and View opens the file (in the same tab for now).
+       Flags: each one in bold with the producer, the scheme's reason under it #}
+    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
+    {% for f in s.files %}
+      {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li><strong>{{ flag.title }}: {{ flag.producer }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
+      {{ govukSummaryList({
+        card: {
+          title: { text: f.name, headingLevel: 3 },
+          actions: { items: [{ href: notBuiltHref, text: words.viewLink, visuallyHiddenText: f.name }] }
+        },
+        rows: [
+          { key: { text: words.flags }, value: { html: flagsHtml } },
+          { key: { text: words.submitted }, value: { text: f.dateText } }
+        ]
+      }) }}
+    {% endfor %}
 
     {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
 

@@ -43,20 +43,14 @@ View earlier versions
 ## Files heading
 Files
 
-## Files table caption (only screen readers hear this)
-Files in this submission
+## View link (on each file, opens it)
+View
 
-## File name column
-File name
-
-## Flags column
+## Flags (on each file)
 Flags
 
-## No flags (only screen readers hear this, in the Flags column)
+## No flags (on a file with no flags)
 No flags
-
-## Submitted column (when the file was uploaded)
-Submitted
 
 ## Organisation heading
 Organisation
