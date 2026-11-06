@@ -100,14 +100,6 @@ developers should build, and the ones that only make the prototype work.
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the class from those cells and the style
 
-#### Table column lined up with a summary list
-
-- **What it does:** makes a table's first column 30% wide, the same as a summary list's labels, so the table's second column lines up with the answers in the summary list above. From tablet up only
-- **Why:** on the full submission page, the flags line up with the submission details above them, which is easier to scan
-- **Where:** the `app-table-header--summary-key` style in `app/assets/sass/application.scss`, on the File name header of the full submission page
-- **Added by:** Marie Moyles, November 2026
-- **To remove:** remove the class and the style: the columns then size to their content
-
 #### Filters in a row
 
 - **What it does:** puts filter dropdowns and their button side by side with a fixed 10px gap, wrapping onto a new line when there isn't room. The button lines up with the bottom of the dropdowns. Full width, one under the other, on a phone

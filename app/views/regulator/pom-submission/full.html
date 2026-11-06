@@ -16,12 +16,11 @@
   the scheme's reason under each (the file name opens the file, in the same tab for now),
   then View producer figures. The organisation (details on page 2, and
   members) is a short summary list after the submission details, with View links.
-  Everything is full width, so the labels fit on one line.
+  The summary lists are two-thirds width, as in the brief version.
 
   Add-on: MOJ scrollable pane round the files table, and long text wraps
   (app-table-cell--wrap), so only the table scrolls at small widths.
-  Add-on: the file name column is 30% wide (app-table-header--summary-key), so
-  the flags line up with the submission details above. See the README.
+  See the README.
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/pom-submission-full.md
@@ -76,10 +75,8 @@
 {% endfor %}
 
 {% block content %}
-{# Full width, so the summary lists' labels fit on one line and line up
-   with the files table below. No extra styles: it's the GOV.UK grid #}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">{{ s.scheme }}</span>
     <h1 class="govuk-heading-l">{{ heading }}</h1>
@@ -102,13 +99,21 @@
       }
     ] }) }}
 
+  </div>
+</div>
+
+{# The files table is full width, so the flags have room #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
       {{ govukTable({
         caption: words.filesTableCaption,
         captionClasses: "govuk-visually-hidden",
         head: [
-          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap app-table-header--summary-key" },
+          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
           { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
           { text: words.submittedColumn, classes: small }
         ],
