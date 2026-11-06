@@ -14,7 +14,9 @@
   Order: submission details (Submitted by has the person's email as a link),
   one files table with the flags written out against the file they're in and
   the scheme's reason under each (the file name opens the file, in the same tab for now),
-  then View producer figures and the links.
+  then View producer figures. The organisation (details on page 2, and
+  members) is a short summary list after the submission details, with View links.
+  Everything is full width, so the labels fit on one line.
 
   Add-on: MOJ scrollable pane round the files table, and long text wraps
   (app-table-cell--wrap), so only the table scrolls at small widths. See the README.
@@ -72,8 +74,10 @@
 {% endfor %}
 
 {% block content %}
+{# Full width, so the summary lists' labels fit on one line and line up
+   with the files table below. No extra styles: it's the GOV.UK grid #}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
 
     <span class="govuk-caption-l">{{ s.scheme }}</span>
     <h1 class="govuk-heading-l">{{ heading }}</h1>
@@ -81,12 +85,20 @@
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
 
-  </div>
-</div>
-
-{# The files and their flags, full width so the table has room #}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+    {# The organisation: its details (page 2) and members, near the top but after the submission #}
+    <h2 class="govuk-heading-m">{{ words.organisationHeading }}</h2>
+    {{ govukSummaryList({ rows: [
+      {
+        key: { text: words.organisation },
+        value: { text: org.name },
+        actions: { items: [{ href: organisationHref, text: words.viewDetailsLink, visuallyHiddenText: words.organisationDetailsHiddenText }] }
+      },
+      {
+        key: { text: words.members },
+        value: { text: org.members },
+        actions: { items: [{ href: notBuiltHref, text: words.viewMembersLink, visuallyHiddenText: words.membersHiddenText }] }
+      }
+    ] }) }}
 
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
@@ -109,11 +121,6 @@
   <div class="govuk-grid-column-two-thirds">
 
     {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
-
-    <ul class="govuk-list">
-      <li><a href="{{ organisationHref }}" class="govuk-link">{{ words.viewOrganisationDetailsLink }}</a></li>
-      <li><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></li>
-    </ul>
 
   </div>
 </div>

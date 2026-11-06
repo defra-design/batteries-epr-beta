@@ -70,8 +70,23 @@ Submitted
 ## View producer figures button
 View producer figures
 
-## View organisation details link
-View organisation details
+## Organisation heading
+Organisation
+
+## Organisation (the label for the scheme's name)
+Name
+
+## View details link
+View details
+
+## Organisation details hidden text (only screen readers hear this, after View details)
+organisation details
+
+## Members
+Members
 
 ## View members link
-View members
+View
+
+## Members hidden text (only screen readers hear this, after View)
+members
