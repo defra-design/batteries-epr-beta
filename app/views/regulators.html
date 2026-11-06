@@ -3,6 +3,9 @@
 {#
   The Regulators area: every piece of regulator work in the prototype, in one table, newest first.
 
+  Add-on: MOJ scrollable pane, so only the table scrolls sideways at small widths, not the page.
+  The Page column wraps (app-table-cell--wrap), so the table fits a desktop.
+
   Add-on: MOJ Frontend (sortable table). The table has data-module="moj-sortable-table",
   so people can sort it by any column. Without JavaScript it's a normal GOV.UK table,
   in the order below. See the README, "Add-ons".
@@ -85,13 +88,14 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="Regulator prototypes">
     <table class="govuk-table" data-module="moj-sortable-table">
       <caption class="govuk-table__caption govuk-table__caption--m">Regulator prototypes</caption>
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header" aria-sort="descending">Date</th>
           <th scope="col" class="govuk-table__header govuk-table__header--numeric" aria-sort="none">Version</th>
-          <th scope="col" class="govuk-table__header" aria-sort="none">Page</th>
+          <th scope="col" class="govuk-table__header app-table-cell--wrap" aria-sort="none">Page</th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Status</th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Ticket</th>
         </tr>
@@ -101,13 +105,14 @@
         <tr class="govuk-table__row">
           <td class="govuk-table__cell" data-sort-value="{{ item.sortDate }}">{{ item.date }}</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.version }}</td>
-          <td class="govuk-table__cell"><a href="{{ item.href }}" class="govuk-link">{{ item.title }}</a></td>
+          <td class="govuk-table__cell app-table-cell--wrap"><a href="{{ item.href }}" class="govuk-link">{{ item.title }}</a></td>
           <td class="govuk-table__cell"><strong class="govuk-tag {{ statusClasses[item.status] }}">{{ item.status }}</strong></td>
           <td class="govuk-table__cell">{% if item.ticket %}<a href="https://eaflood.atlassian.net/browse/{{ item.ticket }}" class="govuk-link">{{ item.ticket }}</a>{% else %}To confirm{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+    </div>
 
     <p class="govuk-body govuk-!-margin-top-6"><a href="https://batteries-epr-prototype-d620a1dd9fba.herokuapp.com/prototype#persona-regulator" class="govuk-link" rel="noreferrer noopener" target="_blank">Alpha prototype: regulator (opens in new tab)</a></p>
 

@@ -29,6 +29,7 @@ Then open http://localhost:3000.
 | What's changed (change log) | One record per interaction design change in `app/data/changes/`, screenshots in `app/assets/images/changes/`. Run `npm run changes` to build the pages in `app/views/changes/` (don't edit those by hand). Shown at `/changes`. Content changes aren't recorded: they're in GitHub's history for `app/content/` |
 | Layout for the homepage, area pages, Patterns and What's changed (adds the menu: the service name, Patterns, What's changed) | `app/views/layouts/areas.html` |
 | Layout for regulator (internal) pages | `app/views/layouts/regulator.html` |
+| Beta banner and Welsh language navigation (every regulator page) | `app/views/layouts/regulator.html`, words in `app/content/regulator/header.md`. Both are standard GOV.UK components, not add-ons: the [phase banner](https://design-system.service.gov.uk/components/phase-banner/) and [language navigation](https://design-system.service.gov.uk/components/language-navigation/) (GOV.UK Frontend 6.5 or later). For now, Cymraeg and the feedback link go to a "not built yet" page |
 | Service name | `app/config.json` |
 
 ## Updating the content
@@ -87,7 +88,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** lets a wide table scroll sideways on its own at small widths and 400% zoom, so the page still reflows (WCAG 1.4.10). The regulator toolkit wraps its sortable tables in it too
 - **Why it's a copy:** it's an exact copy of the MOJ component from MOJ Frontend 12, because MOJ Frontend 10 (the newest that works with this kit) doesn't have it. Plus one fix, so visually hidden text in a table can't make the page scroll
-- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
+- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages and the Regulators list (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** delete the copy and the fix, and use the real one when we can upgrade MOJ Frontend
 
@@ -95,7 +96,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** lets one column (scheme names) wrap inside the MOJ scrollable pane, which otherwise stops every cell wrapping
 - **Why:** without it, a long scheme name made the table wider than a 1020px desktop, so it scrolled sideways on a normal screen. Web standards and fitting a desktop come first
-- **Where:** the `app-table-cell--wrap` style in `app/assets/sass/application.scss`, on the Scheme column of the placed on the market submissions pages
+- **Where:** the `app-table-cell--wrap` style in `app/assets/sass/application.scss`, on the Scheme column of the placed on the market submissions pages, and the Page column of the Regulators list
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the class from those cells and the style
 
@@ -119,6 +120,7 @@ developers should build, and the ones that only make the prototype work.
 #### Record a change (What's changed)
 
 - **What it does:** a change log the business analyst and developers can read without the code: one record per interaction design change, with what changed and why, the pages it touched, and screenshots. Before and after only when there was a before. Same format as the regulator toolkit's, so records can move across
+- **Links:** in a record's "why", type `[link text](https://...)`. It opens in a new tab, and "(opens in new tab)" is added for you
 - **Not recorded:** changes to the prototype itself (menus, list pages, add-ons) and content changes
 - **Screenshots:** desktop (1020 pixels wide, where GOV.UK pages stop getting wider) and 320 pixels wide (the WCAG reflow width, which is also 1280 pixels at 400% zoom), each from the top of the page to the end of the content
 - **Where:** `scripts/build-changes.js` (run it with `npm run changes`), `app/data/changes/`, `app/assets/images/changes/`, `app/views/changes/`, the `app-change-screenshot` style in `app/assets/sass/application.scss`
