@@ -45,10 +45,10 @@
 
 {# Submission details #}
 {% set detailRows = [
-  { key: { text: words.submitted }, value: { text: s.submittedText } }
+  { key: { text: words.submitted }, value: { text: s.submittedLong } }
 ] %}
 {% if s.open %}
-  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{{ s.dueText }}{% else %}{{ s.dueText }} ({{ s.daysLeft }} {% if s.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}){% endif %}{% endset %}
+  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{{ s.dueLong }}{% else %}{{ s.dueLong }} ({{ s.daysLeft }} {% if s.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}){% endif %}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
 {% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
@@ -61,13 +61,13 @@
 ])) %}
 
 {# Files: one row per file, newest first. The file name opens the file in a new tab.
-   Flags sit with the file they're in: the flag and producer in bold, the
-   scheme's reason underneath (the brief version leaves the reason out).
+   Flags sit with the file they're in: what the flag is in bold, then the
+   scheme's reason, which names the producer (the brief version leaves the reason out).
    Table text is 16px, as on the lists of submissions #}
 {% set small = "govuk-!-font-size-16" %}
 {% set fileRows = [] %}
 {% for f in s.files %}
-  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}: {{ flag.producer }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
+  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
   {% set fileRows = (fileRows.push([
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (f.name | escape) + '</a>', classes: small + " app-table-cell--wrap" },
     { html: flagsHtml, classes: small + " app-table-cell--wrap" },

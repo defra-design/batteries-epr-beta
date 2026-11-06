@@ -16,6 +16,12 @@ function shortDate (iso) {
   // Non-breaking spaces, so a date never splits over two lines in a table
   return d + '\u00a0' + MONTHS[m - 1] + '\u00a0' + y
 }
+// "2 November 2026", for summary lists, where there's room for the full month
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+function longDate (iso) {
+  const [y, m, d] = iso.split('-').map(Number)
+  return d + ' ' + MONTHS_LONG[m - 1] + ' ' + y
+}
 function addDays (iso, days) {
   const d = new Date(iso + 'T12:00:00Z')
   d.setUTCDate(d.getUTCDate() + days)
@@ -143,9 +149,9 @@ function submission (slug, year, quarter) {
   const submittedBy = org.superUser
   const flags = open
     ? [
-        { title: 'Estimated figure', producer: PRODUCERS[0], reason: 'The producer is waiting for figures from its supplier, so this quarter is an estimate.' },
-        { title: 'Big change since last quarter', producer: PRODUCERS[1], reason: 'The producer started selling a new range of batteries in August.' },
-        { title: 'Same tonnage as last quarter', producer: PRODUCERS[2], reason: 'The producer has checked and sold the same amount.' }
+        { title: 'Estimated figure', producer: PRODUCERS[0], reason: PRODUCERS[0] + ' is waiting for figures from its supplier, so this quarter is an estimate.' },
+        { title: 'Big change since last quarter', producer: PRODUCERS[1], reason: PRODUCERS[1] + ' started selling a new range of batteries in August.' },
+        { title: 'Same tonnage as last quarter', producer: PRODUCERS[2], reason: PRODUCERS[2] + ' has checked and sold the same amount.' }
       ]
     : []
   const fileBase = 'pom-' + slug + '-' + year + '-q' + quarter
@@ -153,14 +159,16 @@ function submission (slug, year, quarter) {
   for (let v = versions; v >= 1; v--) {
     const date = v === versions ? row.submittedSort : addDays(row.submittedSort, -8)
     const fileFlags = v === versions ? flags : []
-    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: fileFlags.length, flagList: fileFlags, dateText: shortDate(date) })
+    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: fileFlags.length, flagList: fileFlags, dateText: shortDate(date), dateLong: longDate(date) })
     if (v === versions) {
-      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, flagList: [], dateText: shortDate(date) })
+      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, flagList: [], dateText: shortDate(date), dateLong: longDate(date) })
     }
   }
   return {
     ...row,
     yearQuarterFull: pom.QUARTERS[quarter - 1] + ' ' + year,
+    submittedLong: longDate(row.submittedSort),
+    dueLong: row.dueSort ? longDate(row.dueSort) : '',
     open,
     daysLeft: open && !row.overdue ? daysBetween(TODAY, row.dueSort) : null,
     version: versions,

@@ -13,8 +13,8 @@
   - Organisation: the name with View details (page 2), and members with View
     members
   - Files: one GOV.UK summary card per file, with the file name as the title
-    and View to open it (same tab for now). Flags in bold with the producer,
-    the scheme's reason underneath, then when it was submitted
+    and View to open it (same tab for now). Flags: what it is in bold, then
+    the scheme's reason, which names the producer, then when it was submitted
   - View producer figures: the main call to action, last
   "Admin", not "Super user" (Jen's word)
 
@@ -40,10 +40,10 @@
 
 {# Submission details: submitted, review by, status, submitted by, version #}
 {% set detailRows = [
-  { key: { text: words.submitted }, value: { text: s.submittedText } }
+  { key: { text: words.submitted }, value: { text: s.submittedLong } }
 ] %}
 {% if s.open %}
-  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% endif %}{{ s.dueText }}{% endset %}
+  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% endif %}{{ s.dueLong }}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
 {% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
@@ -88,10 +88,10 @@
 
     {# Files: one summary card per file, newest first. The file name is the
        card's title, and View opens the file (in the same tab for now).
-       Flags: each one in bold with the producer, the scheme's reason under it #}
+       Flags: what it is in bold, then the scheme's reason, which names the producer #}
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     {% for f in s.files %}
-      {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li><strong>{{ flag.title }}: {{ flag.producer }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
+      {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li><strong>{{ flag.title }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
       {{ govukSummaryList({
         card: {
           title: { text: f.name, headingLevel: 3 },
@@ -99,7 +99,7 @@
         },
         rows: [
           { key: { text: words.flags }, value: { html: flagsHtml } },
-          { key: { text: words.submitted }, value: { text: f.dateText } }
+          { key: { text: words.submitted }, value: { text: f.dateLong } }
         ]
       }) }}
     {% endfor %}
