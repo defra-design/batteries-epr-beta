@@ -8,7 +8,7 @@
   You get here from "View submission" on the full list (EB-324).
 
   - Back goes to the full list (from app/routes.js)
-  - The status tag sits under the heading
+  - The status tag is in the submission details, as in the brief version
   - "Super user", not "Admin" (Rich's word)
 
   Add-on: MOJ scrollable pane round the files table, and the file name wraps
@@ -42,9 +42,10 @@
   {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{{ s.dueText }}{% else %}{{ s.dueText }} ({{ s.daysLeft }} {% if s.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}){% endif %}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
-{% set submittedByHtml %}{{ s.submittedBy.name }}, {{ words.superUser }}<br>{{ words.delegatedAuthority }} {{ org.authorityFrom }} {{ words.to }} {{ org.authorityTo }}{% endset %}
+{% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
 {% set detailRows = (detailRows.concat([
-  { key: { text: words.submittedBy }, value: { html: submittedByHtml } },
+  { key: { text: words.status }, value: { html: statusHtml } },
+  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser } },
   { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
   { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
   { key: { text: words.producersInTheFile }, value: { text: s.producers } }
@@ -68,8 +69,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">{{ s.scheme }}</span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-4">{{ heading }}</h1>
-    <p class="govuk-body"><span class="govuk-visually-hidden">{{ words.status }} </span><strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong></p>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
 
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}

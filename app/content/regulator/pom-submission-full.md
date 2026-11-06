@@ -10,8 +10,8 @@ Back
 ## Heading (after the quarter, for example "July to September 2026 submission")
 submission
 
-## Status (only screen readers hear this, before the status tag)
-Status:
+## Status
+Status
 
 ## Submission details heading
 Submission details
@@ -36,12 +36,6 @@ Submitted by
 
 ## Super user (the top of the scheme's account)
 Super user
-
-## Delegated authority (before the dates)
-Delegated authority
-
-## To (between the dates)
-to
 
 ## BCS number
 BCS number
