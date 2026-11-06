@@ -13,7 +13,7 @@
 
   Order: submission details (Submitted by has the person's email as a link),
   one files table with the flags written out against the file they're in and
-  the scheme's reason under each (the file name opens the file in a new tab),
+  the scheme's reason under each (the file name opens the file, in the same tab for now),
   then View producer figures and the links.
 
   Add-on: MOJ scrollable pane round the files table, and long text wraps
@@ -65,7 +65,7 @@
 {% for f in s.files %}
   {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}: {{ flag.producer }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
   {% set fileRows = (fileRows.push([
-    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (f.name | escape) + ' ' + (words.opensInNewTab | escape) + '</a>', classes: small + " app-table-cell--wrap" },
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (f.name | escape) + '</a>', classes: small + " app-table-cell--wrap" },
     { html: flagsHtml, classes: small + " app-table-cell--wrap" },
     { text: f.dateText, classes: small }
   ]), fileRows) %}

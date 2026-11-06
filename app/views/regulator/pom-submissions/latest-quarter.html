@@ -7,7 +7,7 @@
   A plain GOV.UK table: only ever 4 rows (one per scheme), in alphabetical order by scheme,
   so each scheme is always in the same place (Marie, 5 November: Jen had suggested due date order).
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
-  Scheme names aren't links (6 November): "View submission" opens one page with
+  Scheme names aren't links (6 November): "View" opens one page with
   everything (EB-325, brief version), so two links in a row don't go to the same place.
   Action is right aligned.
   The words: app/content/regulator/pom-submissions-brief.md
@@ -49,7 +49,7 @@
     { text: row.submittedText, classes: small },
     { html: due(row, words), classes: small },
     { html: statusTag(row), classes: small },
-    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
 {% endfor %}
 

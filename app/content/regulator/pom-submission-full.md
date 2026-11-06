@@ -67,9 +67,6 @@ No flags
 ## Submitted column (when the file was uploaded)
 Submitted
 
-## Opens in new tab (after the file name)
-(opens in new tab)
-
 ## View producer figures button
 View producer figures
 
