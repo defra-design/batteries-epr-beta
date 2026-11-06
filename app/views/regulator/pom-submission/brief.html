@@ -1,16 +1,20 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  EB-325: one placed on the market (PoM) submission, brief version. 6 November 2026.
-  One page. Marie and Jen's version: the submission first, and the scheme's
-  organisation details in an accordion, closed, for when they're needed.
-  You get here from "View submission" on the brief list (EB-324).
+  EB-325: one placed on the market (PoM) submission, brief version.
+  6 November 2026, updated after Marie's first look the same day.
+  One page. Marie and Jen's version. You get here from "View submission"
+  on the brief list (EB-324).
 
-  - Back goes to the brief list, on this submission's quarter (from app/routes.js)
-  - The status tag sits under the heading
-  - Flags: a count, not written out (the full version writes them out)
-  - Organisation details are view only (the full version tries Change links)
-  - "Admin", not "Super user" (Jen's word)
+  Top to bottom:
+  - Back to the brief list, on this submission's quarter (from app/routes.js)
+  - Submission details, with the status tag in the list
+  - One files table: the flags are written out against the file they're in,
+    and View opens the file in a new tab (they can download it from there)
+  - The scheme's details in a details component named after the scheme,
+    view only, with the people who can submit in a details component inside it
+  - View producer figures: the main call to action, last on the page
+  "Admin", not "Super user" (Jen's word)
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/pom-submission-brief.md
@@ -32,7 +36,7 @@
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
 {% endblock %}
 
-{# Submission details #}
+{# Submission details: submitted, review by, status, submitted by, version #}
 {% set detailRows = [
   { key: { text: words.submitted }, value: { text: s.submittedText } }
 ] %}
@@ -40,16 +44,38 @@
   {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% endif %}{{ s.dueText }}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
-{% set detailRows = (detailRows.push(
-  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser + ", " + words.delegatedAuthority } }
-), detailRows) %}
+{% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
 {% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
-{% set detailRows = (detailRows.push({ key: { text: words.version }, value: { html: versionHtml } }), detailRows) %}
+{% set detailRows = (detailRows.concat([
+  { key: { text: words.status }, value: { html: statusHtml } },
+  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser + ", " + words.delegatedAuthority } },
+  { key: { text: words.version }, value: { html: versionHtml } }
+])) %}
+
+{# Files: one row per file, newest first, with its flags written out #}
+{% set fileRows = [] %}
+{% for f in s.files %}
+  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li>{{ flag.title }}: {{ flag.producer }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
+  {% set fileRows = (fileRows.push([
+    { text: f.name, classes: "app-table-cell--wrap" },
+    { html: flagsHtml, classes: "app-table-cell--wrap" },
+    { text: f.dateText },
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link" target="_blank" rel="noreferrer noopener">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> ' + (f.name | escape) + '</span> ' + (words.opensInNewTab | escape) + '</a>', classes: "govuk-!-text-align-right" }
+  ]), fileRows) %}
+{% endfor %}
 
 {% block content %}
-{# Organisation details, in the accordion: view only #}
+
+{# The scheme's details, view only #}
 {% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
-{% set organisationHtml %}
+{% set peopleHtml %}
+  <ul class="govuk-list">
+    {% for p in org.canSubmit %}
+      <li>{{ p.name }}, {% if p.role == "appropriatePerson" %}{{ words.appropriatePerson | lower }}{% else %}{{ words.delegatedAuthority }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+{% endset %}
+{% set schemeHtml %}
   {{ govukSummaryList({
     rows: [
       { key: { text: words.registeredName }, value: { text: org.registeredName } },
@@ -60,53 +86,52 @@
       { key: { text: words.superUser }, value: { html: (org.superUser.name | escape) + "<br>" + (org.superUser.email | escape) } }
     ]
   }) }}
+  {{ govukDetails({ summaryText: words.peopleWhoCanSubmit + " (" + org.canSubmit.length + ")", html: peopleHtml }) }}
   <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
-{% endset %}
-
-{# People who can submit, in the accordion. Everyone else is in a details component #}
-{% set peopleHtml %}
-  <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
-  <ul class="govuk-list">
-    {% for p in org.canSubmit %}
-      <li>{{ p.name }}, {% if p.role == "appropriatePerson" %}{{ words.appropriatePerson | lower }}{% else %}{{ words.delegatedAuthority }}{% endif %}</li>
-    {% endfor %}
-  </ul>
-  {% if org.otherUsers.length %}
-    {% set otherHtml %}
-      <ul class="govuk-list">
-        {% for p in org.otherUsers %}<li>{{ p.name }}</li>{% endfor %}
-      </ul>
-    {% endset %}
-    {{ govukDetails({ summaryText: words.otherUsers + " (" + org.otherUsers.length + ")", html: otherHtml }) }}
-  {% endif %}
 {% endset %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">{{ s.scheme }}</span>
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-4">{{ heading }}</h1>
-    <p class="govuk-body"><span class="govuk-visually-hidden">{{ words.status }} </span><strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong></p>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
 
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
 
-    {% if s.flags.length %}
-      <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ s.flags.length }} {% if s.flags.length == 1 %}{{ words.oneFlagToCheck }}{% else %}{{ words.flagsToCheck }}{% endif %}</a></p>
-    {% else %}
-      <p class="govuk-body">{{ words.noFlags }}</p>
-    {% endif %}
+  </div>
+</div>
+
+{# The files table is full width, so the flags have room #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
+    {# Add-on: MOJ scrollable pane, so only the table scrolls sideways at small widths.
+       File names and flags wrap (add-on: app-table-cell--wrap). See the README #}
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
+      {{ govukTable({
+        caption: words.filesTableCaption,
+        captionClasses: "govuk-visually-hidden",
+        head: [
+          { text: words.fileNameColumn, classes: "app-table-cell--wrap" },
+          { text: words.flagsColumn, classes: "app-table-cell--wrap" },
+          { text: words.dateUploadedColumn },
+          { text: words.actionColumn, classes: "govuk-!-text-align-right" }
+        ],
+        rows: fileRows
+      }) }}
+    </div>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {{ govukDetails({ summaryText: s.scheme + " " + words.schemeDetails, html: schemeHtml }) }}
 
     {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
-
-    {{ govukAccordion({
-      id: "scheme",
-      headingLevel: 2,
-      items: [
-        { heading: { text: words.organisationDetailsSection }, content: { html: organisationHtml } },
-        { heading: { text: words.peopleWhoCanSubmitSection }, content: { html: peopleHtml } }
-      ]
-    }) }}
 
   </div>
 </div>

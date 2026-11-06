@@ -151,9 +151,10 @@ function submission (slug, year, quarter) {
   const files = []
   for (let v = versions; v >= 1; v--) {
     const date = v === versions ? row.submittedSort : addDays(row.submittedSort, -8)
-    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: v === versions ? flags.length : 0, dateText: shortDate(date) })
+    const fileFlags = v === versions ? flags : []
+    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: fileFlags.length, flagList: fileFlags, dateText: shortDate(date) })
     if (v === versions) {
-      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, dateText: shortDate(date) })
+      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, flagList: [], dateText: shortDate(date) })
     }
   }
   return {
