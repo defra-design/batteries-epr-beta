@@ -67,7 +67,7 @@ router.get('/regulator/pom-submissions/latest-quarter', (req, res) => {
 })
 
 // Full version: everything (3 years). Lands on all years, quarters and statuses.
-// Scheme names go to the scheme's organisation details, "View submission" to the submission.
+// Scheme names aren't links: "View" opens the submission, which links to the organisation.
 router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
   const year = pick(req.query.year, ['all', ...pom.YEARS], 'all')
   const quarter = pick(req.query.quarter, ['all', '1', '2', '3', '4'], 'all')
@@ -77,11 +77,7 @@ router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
       (quarter === 'all' || row.quarter === quarter) &&
       (status === 'all' || row.status === status))
     .sort(pom.byQuarterThenDue)
-    .map(row => ({
-      ...row,
-      schemeHref: '/regulator/pom-submissions/full/' + row.schemeSlug + '/organisation-details',
-      submissionHref: fullUrl(row)
-    }))
+    .map(row => ({ ...row, submissionHref: fullUrl(row) }))
   res.render('regulator/pom-submissions/all-submissions', {
     pom, rows, filters: { year, quarter, status }
   })
@@ -89,8 +85,9 @@ router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
 
 // -----------------------------------------------------------------------------
 // EB-325: one submission and the scheme's organisation details (6 November 2026)
-// Brief version: one page, organisation details in an accordion.
-// Full version: 2 pages, the submission and the organisation details.
+// Each version has 2 pages: the submission, then the organisation details.
+// Brief: the organisation details are view only, with just the people who can submit.
+// Full: the organisation details have Change links, and list every user.
 // Each back link goes to the page before it in the journey, worked out from
 // the address (no browser history, so it works without JavaScript too).
 // -----------------------------------------------------------------------------
@@ -104,13 +101,25 @@ function fullUrl (row) {
   return '/regulator/pom-submissions/full/' + row.schemeSlug + '/' + row.year + '/' + row.quarter
 }
 
-// Brief: back to the brief list, on this submission's quarter
+// Brief, page 1: back to the brief list, on this submission's quarter
 router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter', (req, res, next) => {
   const submission = details.submission(req.params.scheme, req.params.year, req.params.quarter)
   if (!submission) return next()
   res.render('regulator/pom-submission/brief', {
     submission,
     backHref: '/regulator/pom-submissions/latest-quarter?year=' + submission.year + '&quarter=' + submission.quarter,
+    organisationHref: req.path.replace(/\/$/, '') + '/organisation-details',
+    notBuiltHref: notBuilt(req.originalUrl)
+  })
+})
+
+// Brief, page 2: back to that submission
+router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
+  const organisation = details.organisation(req.params.scheme)
+  if (!organisation || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  res.render('regulator/pom-submission/organisation-details-brief', {
+    organisation,
+    backHref: briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }),
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
@@ -127,7 +136,7 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter', (req, res, 
   })
 })
 
-// Full, page 2, from a submission: back to that submission
+// Full, page 2: back to that submission
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
   const organisation = details.organisation(req.params.scheme)
   if (!organisation || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
@@ -138,16 +147,6 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-
   })
 })
 
-// Full, page 2, from a scheme name on the full list: back to the full list
-router.get('/regulator/pom-submissions/full/:scheme/organisation-details', (req, res, next) => {
-  const organisation = details.organisation(req.params.scheme)
-  if (!organisation) return next()
-  res.render('regulator/pom-submission/organisation-details', {
-    organisation,
-    backHref: '/regulator/pom-submissions/all-submissions',
-    notBuiltHref: notBuilt(req.originalUrl)
-  })
-})
 
 // A holding page for links to pages we haven't built yet
 router.get('/regulator/not-built', (req, res) => {

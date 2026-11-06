@@ -1,7 +1,7 @@
 {# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
 {% extends "layouts/areas.html" %}
 
-{% set pageName = "Add the placed on the market submission page, in brief and full versions" %}
+{% set pageName = "Add the placed on the market submission and organisation details pages, in brief and full versions" %}
 {% set area = "changes" %}
 
 {% block beforeContent %}
@@ -12,37 +12,50 @@
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
 <span class="govuk-caption-l">6 November 2026</span>
-<h1 class="govuk-heading-l">Add the placed on the market submission page, in brief and full versions</h1>
+<h1 class="govuk-heading-l">Add the placed on the market submission and organisation details pages, in brief and full versions</h1>
 <p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
-<p class="govuk-body">Regulators need to see one scheme's submission for a quarter, who submitted it and whether they could, and the scheme's details if they need them. There are two versions for the team to look at and say what we can build. We'd rather test one.</p>
-<p class="govuk-body"><strong>Brief version: 1 page (Marie and Jen)</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Submission details: submitted, review by, status (the tag is in the list), who submitted it and their role (&quot;Tom Fielding, Admin&quot;), and the version (&quot;2 of 2&quot;, with a link to earlier versions)</li><li>One files table, full width, in 16px text and the MOJ scrollable pane: the file name (it opens the file: in the same tab for now, as &quot;(opens in new tab)&quot; made the names too long), the flags written out against the file they're in, and submitted (the same word as the list). Who submitted is in the details above, so it's not in the table</li><li>Organisation, after the submission details, as in the full version: a short list (the name, and members with View members), then the organisation details in a details component straight under it, opening in place. Not inside the list: a summary list inside a summary list is awkward for screen readers</li><li>The organisation details are view only, with emails as links and the people who can submit, everyone, however many</li><li>Then the files, then View producer figures, last</li><li>&quot;Admin&quot; for the top of the scheme's account</li><li>From &quot;View&quot; on the brief list. Scheme names on that list aren't links any more, so two links in a row don't go to the same place</li></ul>
-<p class="govuk-body"><strong>Full version: 2 pages (Rich)</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Page 1, the submission: details with the status in the list and Rich's extras (days left, BCS number, tonnage and producers in the file). Then a short Organisation list (the name, with View details, and members, with View members), so the organisation is near the top but after the submission. Then the same files table as the brief version, plus the scheme's reason under each flag, then View producer figures. All full width, so the labels fit on one line, and the flags line up with the answers in the summary lists above</li><li>Page 2, organisation details: Change links, so we can ask the business whether regulators can change them. The people who can submit, with their emails (if someone's authority has ended, they're not on the list). Other users, who can't submit, are in a details component</li><li>&quot;Super user&quot; for the top of the scheme's account</li><li>From &quot;View submission&quot; (page 1) or a scheme name (page 2) on the full list</li></ul>
+<p class="govuk-body">Regulators need to see one scheme's submission for a quarter, who submitted it, and the scheme's details if they need them. There are two versions for the team to look at and say what we can build. We'd rather test one. Each version has 2 pages: the submission, then the organisation details.</p>
 <p class="govuk-body"><strong>Both versions</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>The scheme name as a caption, and the status tag in the submission details</li><li>Submitted by shows the name and role, and their email as a link. All emails are links</li><li>On the Regulators list, the titles start FULL or BRIEF, so it's easy to see which is which</li><li>Back goes to the page before in the journey, worked out from the address, so it works without JavaScript</li><li>One label for the scheme's number, &quot;BCS number&quot;. No approval number: it's the same number</li><li>Left out, as agreed: conditions of approval, approved and expires, and account manager</li><li>The Action column is right aligned on both lists</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>From &quot;View&quot; on the list of submissions. Scheme names on the lists aren't links: the submission links to the organisation</li><li>The scheme name as a caption, and the status tag in the submission details</li><li>Submitted by: the name and role, with their email as a link. All emails are links</li><li>Organisation, after the submission details: the name with View details (page 2), and members with View members</li><li>One files table, full width, in 16px text and the MOJ scrollable pane: the file name (it opens the file, in the same tab for now, as &quot;(opens in new tab)&quot; made the names too long), the flags written out against the file they're in, and submitted</li><li>View producer figures last: it's the main thing to do next</li><li>Back goes to the page before in the journey, worked out from the address, so it works without JavaScript</li><li>One label for the scheme's number, &quot;BCS number&quot;. No approval number: it's the same number</li><li>Dates never split over two lines in a table</li><li>Left out, as agreed: conditions of approval, approved and expires, and account manager</li><li>On the Regulators list, the titles start FULL or BRIEF, so it's easy to see which is which</li></ul>
+<p class="govuk-body"><strong>Brief version (Marie and Jen)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Submission details: submitted, review by, status, submitted by and the version (&quot;2 of 2&quot;, with a link to earlier versions)</li><li>Flags without the scheme's reason</li><li>Organisation details are view only: no Change links</li><li>People who can submit: just the people not already shown (the appropriate person and admin can always submit), each with their email and &quot;delegated authority&quot;. No list of other users</li><li>&quot;Admin&quot; for the top of the scheme's account</li></ul>
+<p class="govuk-body"><strong>Full version (Rich)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Submission details with Rich's extras: days left, BCS number, tonnage and producers in the file</li><li>The scheme's reason under each flag</li><li>Everything full width, so the labels fit on one line, and the flags line up with the answers in the summary lists above</li><li>Organisation details have Change links, so we can ask the business whether regulators can change them. People who can submit with their emails (if someone's authority has ended, they're not on the list), and other users in a details component</li><li>&quot;Super user&quot; for the top of the scheme's account</li></ul>
 <p class="govuk-body"><strong>Questions</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>Can regulators change organisation details? (the full version's Change links)</li><li>Who can submit: more to discuss. A return from someone without authority shouldn't get through at all, so that's for the developers, not the page</li></ul>
 <p class="govuk-body"><strong>Prototype only</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Dates never split over two lines in a table (non-breaking spaces, not a style)</li><li>People, addresses, numbers and figures are made up</li><li>Links to pages we haven't built go to a &quot;not built yet&quot; page</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>People, addresses, numbers and figures are made up</li><li>Links to pages we haven't built go to a &quot;not built yet&quot; page</li></ul>
 <h2 class="govuk-heading-m">Pages</h2>
 <ul class="govuk-list">
-<li><a class="govuk-link" href="/regulator/pom-submissions/brief/recycling-lives/2026/3">Brief version (1 page)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/brief/recycling-lives/2026/3">Brief version, page 1: the submission</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/brief/recycling-lives/2026/3/organisation-details">Brief version, page 2: organisation details</a></li>
 <li><a class="govuk-link" href="/regulator/pom-submissions/full/recycling-lives/2026/3">Full version, page 1: the submission</a></li>
 <li><a class="govuk-link" href="/regulator/pom-submissions/full/recycling-lives/2026/3/organisation-details">Full version, page 2: organisation details</a></li>
 </ul>
 </div>
 </div>
-<h2 class="govuk-heading-m">Brief version, desktop (1020 pixels wide), details open</h2>
+<h2 class="govuk-heading-m">Brief version, page 1, desktop (1020 pixels wide)</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--brief-1020-pixels.png" alt="Brief version, desktop (1020 pixels wide), details open" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-1020-pixels.png" alt="Brief version, page 1, desktop (1020 pixels wide)" class="app-change-screenshot">
 </div>
 </div>
-<h2 class="govuk-heading-m">Brief version, 320 pixels wide</h2>
+<h2 class="govuk-heading-m">Brief version, page 1, 320 pixels wide</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--brief-320-pixels.png" alt="Brief version, 320 pixels wide" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-320-pixels.png" alt="Brief version, page 1, 320 pixels wide" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Brief version, page 2, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-organisation-details-1020-pixels.png" alt="Brief version, page 2, desktop (1020 pixels wide)" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Brief version, page 2, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-organisation-details-320-pixels.png" alt="Brief version, page 2, 320 pixels wide" class="app-change-screenshot">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, page 1, desktop (1020 pixels wide)</h2>

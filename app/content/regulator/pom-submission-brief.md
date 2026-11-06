@@ -1,4 +1,4 @@
-Page: one placed on the market submission, brief version (EB-325). One page, with the scheme's organisation details in a details component. You get here from "View submission" on the brief list of submissions.
+Page: one placed on the market submission, brief version (EB-325). The first of 2 pages: this one, then Organisation details. You get here from "View" on the brief list of submissions.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The scheme, people, dates and figures are dummy data: ask Marie to change those.
@@ -31,9 +31,6 @@ Submitted by
 ## Super user (the top of the scheme's account)
 Admin
 
-## Delegated authority (in People who can submit)
-delegated authority
-
 ## Version
 Version
 
@@ -61,32 +58,17 @@ No flags
 ## Submitted column (when the file was uploaded)
 Submitted
 
-## Scheme details (after the scheme name, for example "Valpak Ltd organisation details")
-organisation details
-
-## Registered name
-Registered name
-
-## Registered office address
-Registered office address
-
-## Companies House number
-Companies House number
-
-## BCS number
-BCS number
-
-## Appropriate person
-Appropriate person
-
-## People who can submit
-People who can submit
-
 ## Organisation heading
 Organisation
 
 ## Name (the scheme's name, in the Organisation list)
 Name
+
+## View details link
+View details
+
+## Organisation details hidden text (only screen readers hear this, after View details)
+organisation details
 
 ## Members
 Members

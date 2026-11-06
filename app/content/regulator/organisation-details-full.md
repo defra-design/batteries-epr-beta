@@ -1,4 +1,4 @@
-Page: a scheme's organisation details, full version (EB-325). The second of 2 pages. You get here from the submission ("View organisation details") or from a scheme name on the full list of submissions.
+Page: a scheme's organisation details, full version (EB-325). The second of 2 pages. You get here from "View details" on a submission.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The scheme, people and numbers are dummy data: ask Marie to change those.

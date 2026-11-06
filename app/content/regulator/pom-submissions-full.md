@@ -58,8 +58,8 @@ Status
 ## Link column
 Action
 
-## View submission link
-View submission
+## View link (opens the submission: the scheme name and quarter are added for screen readers)
+View
 
 ## Not applicable (only screen readers hear this, in the Review by column once a submission is accepted)
 Not applicable

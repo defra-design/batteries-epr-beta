@@ -12,8 +12,8 @@
   Without JavaScript it's a normal table, newest quarter first.
 
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
-  Scheme names go to the scheme's organisation details and "View submission"
-  to the submission (EB-325, full version: 2 pages). Action is right aligned.
+  Scheme names aren't links: "View" opens the submission (EB-325, full
+  version), which links to the organisation. Action is right aligned.
   The words: app/content/regulator/pom-submissions-full.md
 #}
 
@@ -67,12 +67,12 @@
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
-    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
+    { text: row.scheme, attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
     { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
     { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort }, classes: small },
     { html: due(row, words), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
     { html: statusTag(row), attributes: { "data-sort-value": row.status }, classes: small },
-    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
 {% endfor %}
 

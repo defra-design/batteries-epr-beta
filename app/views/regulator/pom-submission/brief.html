@@ -2,22 +2,19 @@
 
 {#
   EB-325: one placed on the market (PoM) submission, brief version.
-  6 November 2026, updated after Marie's first look the same day.
-  One page. Marie and Jen's version. You get here from "View submission"
-  on the brief list (EB-324).
+  6 November 2026. Page 1 of 2: this page, then Organisation details
+  (organisation-details-brief.html). Marie and Jen's version.
+  You get here from "View" on the brief list (EB-324).
 
   Top to bottom:
   - Back to the brief list, on this submission's quarter (from app/routes.js)
-  - Submission details, with the status tag in the list
-  - Organisation (see below), then the files
-  - Submitted by has the person's email as a link
+  - Submission details, with the status tag in the list, and the email of the
+    person who submitted it as a link
+  - Organisation: the name with View details (page 2), and members with View
+    members
   - One files table: the flags are written out against the file they're in
-    (no reasons: the full version adds those), and the file name opens the
-    file, in the same tab for now (they can download it from there)
-  - Organisation: a short summary list (name, and members with View members),
-    then the organisation details in a details component straight under it,
-    view only, with emails as links and the people who can submit (everyone,
-    however many)
+    (no reasons: the full version adds those). The file name opens the file,
+    in the same tab for now
   - View producer figures: the main call to action, last
   "Admin", not "Super user" (Jen's word)
 
@@ -72,30 +69,6 @@
 
 {% block content %}
 
-{# The scheme's organisation details, view only. Emails are links #}
-{% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
-{% macro personHtml(p) %}{{ p.name }}<br><a href="mailto:{{ p.email }}" class="govuk-link">{{ p.email }}</a>{% endmacro %}
-{% set peopleHtml %}
-  <ul class="govuk-list">
-    {% for p in org.canSubmit %}
-      <li>{{ p.name }}, {% if p.role == "appropriatePerson" %}{{ words.appropriatePerson | lower }}{% else %}{{ words.delegatedAuthority }}{% endif %}</li>
-    {% endfor %}
-  </ul>
-{% endset %}
-{% set schemeHtml %}
-  {{ govukSummaryList({
-    rows: [
-      { key: { text: words.registeredName }, value: { text: org.registeredName } },
-      { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
-      { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
-      { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
-      { key: { text: words.appropriatePerson }, value: { html: personHtml(org.appropriatePerson) } },
-      { key: { text: words.superUser }, value: { html: personHtml(org.superUser) } },
-      { key: { text: words.peopleWhoCanSubmit }, value: { html: peopleHtml } }
-    ]
-  }) }}
-{% endset %}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
@@ -105,19 +78,20 @@
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
 
-    {# The organisation: name and members (another page), then its details,
-       opening in place, straight under the list. Not inside it: a summary
-       list inside a summary list is awkward for screen readers #}
+    {# The organisation: its details and members are on other pages #}
     <h2 class="govuk-heading-m">{{ words.organisationHeading }}</h2>
     {{ govukSummaryList({ rows: [
-      { key: { text: words.name }, value: { text: org.name } },
+      {
+        key: { text: words.name },
+        value: { text: org.name },
+        actions: { items: [{ href: organisationHref, text: words.viewDetailsLink, visuallyHiddenText: words.organisationDetailsHiddenText }] }
+      },
       {
         key: { text: words.members },
         value: { text: org.members },
         actions: { items: [{ href: notBuiltHref, text: words.viewMembersLink }] }
       }
     ] }) }}
-    {{ govukDetails({ summaryText: s.scheme + " " + words.schemeDetails, html: schemeHtml }) }}
 
   </div>
 </div>
