@@ -13,6 +13,8 @@
  *   - the Bug tag is orange, not red
  *   - a new page (no before screenshot) shows just the screenshot, without
  *     "Before" and "After"
+ *   - links in the "why": [link text](https://...) opens in a new tab, with
+ *     "(opens in new tab)" added to the link text, as GOV.UK asks
  *   - run it with: npm run changes
  *   - screenshots: for each page, one pair at 1020 pixels wide (desktop) and
  *     one at 320 pixels wide, from the top of the page to the end of the content
@@ -67,8 +69,10 @@ function esc (s) {
 }
 function inline (s) {
   return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Links: [text](https://...) only, so a typo can't become a broken or unsafe link
+    .replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g, '<a href="$2" class="govuk-link" rel="noreferrer noopener" target="_blank">$1 (opens in new tab)</a>')
 }
-// The "why" is short Markdown: paragraphs, **bold**, `code` and "- " bullets,
+// The "why" is short Markdown: paragraphs, **bold**, `code`, [links](https://...) and "- " bullets,
 // nested with two spaces
 function markdown (text) {
   const out = []
@@ -96,7 +100,7 @@ function markdown (text) {
 }
 function summary (text) {
   const first = String(text || '').split(/\n\s*\n/)[0] || ''
-  return first.replace(/\*\*(.+?)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1').replace(/^\s*- /gm, '').replace(/\s+/g, ' ').trim()
+  return first.replace(/\*\*(.+?)\*\*/g, '$1').replace(/`([^`]+)`/g, '$1').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/^\s*- /gm, '').replace(/\s+/g, ' ').trim()
 }
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 function longDate (iso) {
