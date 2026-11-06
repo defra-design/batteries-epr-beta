@@ -56,10 +56,11 @@ function addDays (iso, days) {
   return d.toISOString().slice(0, 10)
 }
 
-// "23 Oct 2026" (the table is in a scrollable pane, so cells don't wrap)
+// "23 Oct 2026"
 function shortDate (iso) {
   const [y, m, d] = iso.split('-').map(Number)
-  return d + ' ' + MONTHS[m - 1] + ' ' + y
+  // Non-breaking spaces, so a date never splits over two lines in a table
+  return d + '\u00a0' + MONTHS[m - 1] + '\u00a0' + y
 }
 
 // Every submission, before any filtering

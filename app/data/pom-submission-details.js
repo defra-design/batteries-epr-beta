@@ -13,7 +13,8 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 function shortDate (iso) {
   const [y, m, d] = iso.split('-').map(Number)
-  return d + ' ' + MONTHS[m - 1] + ' ' + y
+  // Non-breaking spaces, so a date never splits over two lines in a table
+  return d + '\u00a0' + MONTHS[m - 1] + '\u00a0' + y
 }
 function addDays (iso, days) {
   const d = new Date(iso + 'T12:00:00Z')

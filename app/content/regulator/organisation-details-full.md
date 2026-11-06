@@ -46,8 +46,8 @@ Email
 ## People table caption (only screen readers hear this)
 People who can submit returns
 
-## Users who can't submit (the details link, before the number)
-Users who can't submit
+## Other users (the details link, before the number: users who can't submit)
+Other users
 
 ## Members heading
 Members

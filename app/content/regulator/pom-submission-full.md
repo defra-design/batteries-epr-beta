@@ -76,8 +76,11 @@ Organisation
 ## Organisation (the label for the scheme's name)
 Name
 
-## View organisation details link
-View organisation details
+## View details link
+View details
+
+## Organisation details hidden text (only screen readers hear this, after View details)
+organisation details
 
 ## Members
 Members

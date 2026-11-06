@@ -12,7 +12,7 @@
   - Emails are links
   - People who can submit: the appropriate person and anyone with delegated
     authority, without dates (if their authority has ended, they're not on
-    the list). Users who can't submit are in a details component, so a scheme
+    the list). Other users (who can't submit) are in a details component, so a scheme
     with 14 users doesn't make a long page
   - "Super user", not "Admin" (Rich's word)
   - Not here, as agreed: conditions of approval, approved and expires,
@@ -91,16 +91,16 @@
 
     {% if otherRows.length %}
       {% set otherHtml %}
-        <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.usersWhoCanTSubmit }}">
+        <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.otherUsers }}">
           {{ govukTable({
-            caption: words.usersWhoCanTSubmit,
+            caption: words.otherUsers,
             captionClasses: "govuk-visually-hidden",
             head: [{ text: words.nameColumn }, { text: words.emailColumn }],
             rows: otherRows
           }) }}
         </div>
       {% endset %}
-      {{ govukDetails({ summaryText: words.usersWhoCanTSubmit + " (" + otherRows.length + ")", html: otherHtml }) }}
+      {{ govukDetails({ summaryText: words.otherUsers + " (" + otherRows.length + ")", html: otherHtml }) }}
     {% endif %}
 
     <h2 class="govuk-heading-m">{{ words.membersHeading }}</h2>
