@@ -64,5 +64,5 @@ View submission
 ## Not applicable (only screen readers hear this, in the Review by column once a submission is accepted)
 Not applicable
 
-## Overdue (a red tag in version A, bold text in version B)
+## Overdue (bold text above the review by date)
 Overdue

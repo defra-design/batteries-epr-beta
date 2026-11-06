@@ -22,8 +22,8 @@ const QUARTERS = ['January to March', 'April to June', 'July to September', 'Oct
 const QUARTERS_SHORT = ['Jan to Mar', 'Apr to Jun', 'Jul to Sep', 'Oct to Dec']
 
 // Jen's statuses (6 November 2026), and their tag colours. Only colours that
-// exist in GOV.UK Frontend 6: the standard tag is blue. No red: red is for
-// the Overdue tag in version A
+// exist in GOV.UK Frontend 6: the standard tag is blue. No red: in GOV.UK
+// services red means an error
 const STATUSES = {
   'To review': '',
   'Under review': 'govuk-tag--teal',
