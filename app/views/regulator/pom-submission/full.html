@@ -19,7 +19,9 @@
   Everything is full width, so the labels fit on one line.
 
   Add-on: MOJ scrollable pane round the files table, and long text wraps
-  (app-table-cell--wrap), so only the table scrolls at small widths. See the README.
+  (app-table-cell--wrap), so only the table scrolls at small widths.
+  Add-on: the file name column is 30% wide (app-table-header--summary-key), so
+  the flags line up with the submission details above. See the README.
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/pom-submission-full.md
@@ -91,12 +93,12 @@
       {
         key: { text: words.organisation },
         value: { text: org.name },
-        actions: { items: [{ href: organisationHref, text: words.viewDetailsLink, visuallyHiddenText: words.organisationDetailsHiddenText }] }
+        actions: { items: [{ href: organisationHref, text: words.viewOrganisationDetailsLink }] }
       },
       {
         key: { text: words.members },
         value: { text: org.members },
-        actions: { items: [{ href: notBuiltHref, text: words.viewMembersLink, visuallyHiddenText: words.membersHiddenText }] }
+        actions: { items: [{ href: notBuiltHref, text: words.viewMembersLink }] }
       }
     ] }) }}
 
@@ -106,7 +108,7 @@
         caption: words.filesTableCaption,
         captionClasses: "govuk-visually-hidden",
         head: [
-          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
+          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap app-table-header--summary-key" },
           { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
           { text: words.submittedColumn, classes: small }
         ],

@@ -38,6 +38,21 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   white-space: normal;
 }
 
+// Add-on: a table's first column the same width as a summary list's labels
+// (30%), so the table's second column lines up with the summary list's answers
+// above it. From tablet up only: below that, summary lists stack.
+// WHY: on the full submission page, the flags line up with the submission
+// details above them, which is easier to scan.
+// USE: add this class to the first column's header in the table.
+// FOR DEVELOPERS: build this. It's a design decision, not a prototype shortcut.
+.app-table-header--summary-key {
+  @include govuk-media-query($from: tablet) {
+    // The summary list's labels are 30% wide plus 20px of padding, which is
+    // about 32% at desktop width. (calc() doesn't work on table cell widths.)
+    width: 32%;
+  }
+}
+
 // Add-on: one fix to the MOJ scrollable pane. Visually hidden text inside the
 // table (for example "View submission (Valpak Ltd)") is positioned absolutely,
 // so without this it escapes the pane and makes the whole page scroll sideways
