@@ -1,0 +1,104 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-325: a scheme's organisation details, full version. 6 November 2026.
+  Page 2 of 2. You get here from "View organisation details" on a submission,
+  or from a scheme name on the full list (EB-324). Back goes to whichever
+  page is before it in the journey, from the address (app/routes.js).
+
+  - Change links (the check answers pattern), so we can ask the business
+    whether regulators can change these. Prototype only: they go to the
+    "not built yet" page
+  - People who can submit: the appropriate person and anyone with delegated
+    authority. Everyone else is in a details component, so a scheme with
+    14 users doesn't make a long page
+  - "Super user", not "Admin" (Rich's word)
+  - Not here, as agreed: conditions of approval, approved and expires,
+    account manager, approval number (it's the BCS number)
+
+  The data: app/data/pom-submission-details.js (dummy).
+  The words: app/content/regulator/organisation-details-full.md
+#}
+
+{% set wordsFile = "regulator/organisation-details-full" %}
+{% set words = content(wordsFile) %}
+{% set org = organisation %}
+
+{% set pageName = words.heading + ", " + org.name + " (full version)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+
+{% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
+{% set rows = [] %}
+{% for row in [
+  [words.registeredName, { text: org.registeredName }],
+  [words.registeredOfficeAddress, { html: addressHtml }],
+  [words.companiesHouseNumber, { text: org.companiesHouseNumber }],
+  [words.bcsNumber, { text: org.bcsNumber }],
+  [words.appropriatePerson, { html: (org.appropriatePerson.name | escape) + "<br>" + (org.appropriatePerson.email | escape) }],
+  [words.superUser, { html: (org.superUser.name | escape) + "<br>" + (org.superUser.email | escape) }]
+] %}
+  {% set rows = (rows.push({
+    key: { text: row[0] },
+    value: row[1],
+    actions: { items: [{ href: notBuiltHref, text: words.changeLink, visuallyHiddenText: row[0] | lower }] }
+  }), rows) %}
+{% endfor %}
+
+{% set peopleRows = [] %}
+{% for p in org.canSubmit %}
+  {% set peopleRows = (peopleRows.push([
+    { text: p.name },
+    { text: words.appropriatePerson if p.role == "appropriatePerson" else (words.delegatedAuthority + " " + org.authorityFrom + " " + words.to + " " + org.authorityTo) }
+  ]), peopleRows) %}
+{% endfor %}
+{% set otherRows = [] %}
+{% for p in org.otherUsers %}
+  {% set otherRows = (otherRows.push([
+    { text: p.name },
+    { text: words.superUser if p.role == "superUser" else words.user }
+  ]), otherRows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    {{ govukSummaryList({ rows: rows }) }}
+
+    <h2 class="govuk-heading-m">{{ words.peopleWhoCanSubmitHeading }}</h2>
+    <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
+    {{ govukTable({
+      caption: words.peopleTableCaption,
+      captionClasses: "govuk-visually-hidden",
+      head: [{ text: words.nameColumn }, { text: words.authorityColumn }],
+      rows: peopleRows
+    }) }}
+
+    {% if otherRows.length %}
+      {% set otherHtml %}
+        {{ govukTable({
+          caption: words.otherUsers,
+          captionClasses: "govuk-visually-hidden",
+          head: [{ text: words.nameColumn }, { text: words.roleColumn }],
+          rows: otherRows
+        }) }}
+      {% endset %}
+      {{ govukDetails({ summaryText: words.otherUsers + " (" + otherRows.length + ")", html: otherHtml }) }}
+    {% endif %}
+
+    <h2 class="govuk-heading-m">{{ words.membersHeading }}</h2>
+    <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
+
+  </div>
+</div>
+{% endblock %}

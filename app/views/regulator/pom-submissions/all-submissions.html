@@ -1,7 +1,7 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  EB-324: placed on the market (PoM) submissions, version B: everything.
+  EB-324: placed on the market (PoM) submissions, full version: everything.
   5 November 2026. Lands on all years (2024 to 2026), all quarters and all
   statuses, to find out whether regulators want to see everything, then filter.
   Year, quarter and status filters, and a summary line of what's showing.
@@ -12,13 +12,15 @@
   Without JavaScript it's a normal table, newest quarter first.
 
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
-  The words: app/content/regulator/pom-submissions.md
+  Scheme names go to the scheme's organisation details and "View submission"
+  to the submission (EB-325, full version: 2 pages). Action is right aligned.
+  The words: app/content/regulator/pom-submissions-full.md
 #}
 
-{% set wordsFile = "regulator/pom-submissions" %}
+{% set wordsFile = "regulator/pom-submissions-full" %}
 {% set words = content(wordsFile) %}
 
-{% set pageName = words.heading + " (version B)" %}
+{% set pageName = words.heading + " (full version)" %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -70,7 +72,7 @@
     { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort }, classes: small },
     { html: due(row, words), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
     { html: statusTag(row), attributes: { "data-sort-value": row.status }, classes: small },
-    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small }
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
 {% endfor %}
 
@@ -106,7 +108,7 @@
             { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.dueColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.linkColumn, classes: small }
+            { text: words.linkColumn, classes: small + " govuk-!-text-align-right" }
           ],
           rows: tableRows
         }) }}

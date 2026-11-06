@@ -1,19 +1,22 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  EB-324: placed on the market (PoM) submissions, version A: one quarter at a time.
+  EB-324: placed on the market (PoM) submissions, brief version: one quarter at a time.
   5 November 2026. Lands on the latest quarter with submissions (July to September 2026).
   Year and quarter filters, no status filter, no summary line (Jen). Short dates (23 Oct 2026).
   A plain GOV.UK table: only ever 4 rows (one per scheme), in alphabetical order by scheme,
   so each scheme is always in the same place (Marie, 5 November: Jen had suggested due date order).
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
-  The words: app/content/regulator/pom-submissions.md
+  Scheme names aren't links (6 November): "View submission" opens one page with
+  everything (EB-325, brief version), so two links in a row don't go to the same place.
+  Action is right aligned.
+  The words: app/content/regulator/pom-submissions-brief.md
 #}
 
-{% set wordsFile = "regulator/pom-submissions" %}
+{% set wordsFile = "regulator/pom-submissions-brief" %}
 {% set words = content(wordsFile) %}
 
-{% set pageName = words.heading + " (version A)" %}
+{% set pageName = words.heading + " (brief version)" %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -42,11 +45,11 @@
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
-    { html: '<a href="' + row.schemeHref + '" class="govuk-link">' + (row.scheme | escape) + '</a>', classes: small + " app-table-cell--wrap" },
+    { text: row.scheme, classes: small + " app-table-cell--wrap" },
     { text: row.submittedText, classes: small },
     { html: due(row, words), classes: small },
     { html: statusTag(row), classes: small },
-    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>', classes: small }
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewSubmissionLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
 {% endfor %}
 
@@ -77,7 +80,7 @@
             { text: words.dateSubmittedColumn, classes: small },
             { text: words.dueColumn, classes: small },
             { text: words.statusColumn, classes: small },
-            { text: words.linkColumn, classes: small }
+            { text: words.linkColumn, classes: small + " govuk-!-text-align-right" }
           ],
           rows: tableRows
         }) }}

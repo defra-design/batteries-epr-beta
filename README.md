@@ -80,7 +80,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** components from the MOJ Design System that the GOV.UK Design System doesn't have. We use the [sortable table](https://design-patterns.service.justice.gov.uk/components/sortable-table/) (`data-module="moj-sortable-table"`). Without JavaScript it's a normal GOV.UK table
 - **Watch out:** it sorts in the browser, so it only sorts the rows on the page. Don't use it with pagination
-- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (all submissions, version B) and on `app/views/regulators.html` (the list of prototypes, prototype only)
+- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (full version, all submissions) and on `app/views/regulators.html` (the list of prototypes, prototype only)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the table's `data-module` and `aria-sort` attributes, then `npm uninstall @ministryofjustice/frontend`
 
@@ -88,7 +88,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** lets a wide table scroll sideways on its own at small widths and 400% zoom, so the page still reflows (WCAG 1.4.10). The regulator toolkit wraps its sortable tables in it too
 - **Why it's a copy:** it's an exact copy of the MOJ component from MOJ Frontend 12, because MOJ Frontend 10 (the newest that works with this kit) doesn't have it. Plus one fix, so visually hidden text in a table can't make the page scroll
-- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages and the Regulators list (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
+- **Where:** `app/assets/sass/vendor/_moj-scrollable-pane.scss`, and the fix in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages, the files table on the full submission page, and the Regulators list (`moj-scrollable-pane`, with `role`, `tabindex` and `aria-label`)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** delete the copy and the fix, and use the real one when we can upgrade MOJ Frontend
 
@@ -96,7 +96,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** lets one column (scheme names) wrap inside the MOJ scrollable pane, which otherwise stops every cell wrapping
 - **Why:** without it, a long scheme name made the table wider than a 1020px desktop, so it scrolled sideways on a normal screen. Web standards and fitting a desktop come first
-- **Where:** the `app-table-cell--wrap` style in `app/assets/sass/application.scss`, on the Scheme column of the placed on the market submissions pages, and the Page column of the Regulators list
+- **Where:** the `app-table-cell--wrap` style in `app/assets/sass/application.scss`, on the Scheme column of the placed on the market submissions pages, the File name column on the full submission page, and the Page column of the Regulators list
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the class from those cells and the style
 

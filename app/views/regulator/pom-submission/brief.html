@@ -1,0 +1,113 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-325: one placed on the market (PoM) submission, brief version. 6 November 2026.
+  One page. Marie and Jen's version: the submission first, and the scheme's
+  organisation details in an accordion, closed, for when they're needed.
+  You get here from "View submission" on the brief list (EB-324).
+
+  - Back goes to the brief list, on this submission's quarter (from app/routes.js)
+  - The status tag sits under the heading
+  - Flags: a count, not written out (the full version writes them out)
+  - Organisation details are view only (the full version tries Change links)
+  - "Admin", not "Super user" (Jen's word)
+
+  The data: app/data/pom-submission-details.js (dummy).
+  The words: app/content/regulator/pom-submission-brief.md
+  Prototype only: links to pages we haven't built go to the "not built yet" page.
+#}
+
+{% set wordsFile = "regulator/pom-submission-brief" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+{% set org = s.organisation %}
+
+{% set heading = s.yearQuarterFull + " " + words.heading %}
+{% set pageName = heading + ", " + s.scheme + " (brief version)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{# Submission details #}
+{% set detailRows = [
+  { key: { text: words.submitted }, value: { text: s.submittedText } }
+] %}
+{% if s.open %}
+  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% endif %}{{ s.dueText }}{% endset %}
+  {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
+{% endif %}
+{% set detailRows = (detailRows.push(
+  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser + ", " + words.delegatedAuthority } }
+), detailRows) %}
+{% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
+{% set detailRows = (detailRows.push({ key: { text: words.version }, value: { html: versionHtml } }), detailRows) %}
+
+{% block content %}
+{# Organisation details, in the accordion: view only #}
+{% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
+{% set organisationHtml %}
+  {{ govukSummaryList({
+    rows: [
+      { key: { text: words.registeredName }, value: { text: org.registeredName } },
+      { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
+      { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
+      { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
+      { key: { text: words.appropriatePerson }, value: { html: (org.appropriatePerson.name | escape) + "<br>" + (org.appropriatePerson.email | escape) } },
+      { key: { text: words.superUser }, value: { html: (org.superUser.name | escape) + "<br>" + (org.superUser.email | escape) } }
+    ]
+  }) }}
+  <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
+{% endset %}
+
+{# People who can submit, in the accordion. Everyone else is in a details component #}
+{% set peopleHtml %}
+  <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
+  <ul class="govuk-list">
+    {% for p in org.canSubmit %}
+      <li>{{ p.name }}, {% if p.role == "appropriatePerson" %}{{ words.appropriatePerson | lower }}{% else %}{{ words.delegatedAuthority }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% if org.otherUsers.length %}
+    {% set otherHtml %}
+      <ul class="govuk-list">
+        {% for p in org.otherUsers %}<li>{{ p.name }}</li>{% endfor %}
+      </ul>
+    {% endset %}
+    {{ govukDetails({ summaryText: words.otherUsers + " (" + org.otherUsers.length + ")", html: otherHtml }) }}
+  {% endif %}
+{% endset %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ s.scheme }}</span>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-4">{{ heading }}</h1>
+    <p class="govuk-body"><span class="govuk-visually-hidden">{{ words.status }} </span><strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong></p>
+
+    <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
+    {{ govukSummaryList({ rows: detailRows }) }}
+
+    {% if s.flags.length %}
+      <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ s.flags.length }} {% if s.flags.length == 1 %}{{ words.oneFlagToCheck }}{% else %}{{ words.flagsToCheck }}{% endif %}</a></p>
+    {% else %}
+      <p class="govuk-body">{{ words.noFlags }}</p>
+    {% endif %}
+
+    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
+
+    {{ govukAccordion({
+      id: "scheme",
+      headingLevel: 2,
+      items: [
+        { heading: { text: words.organisationDetailsSection }, content: { html: organisationHtml } },
+        { heading: { text: words.peopleWhoCanSubmitSection }, content: { html: peopleHtml } }
+      ]
+    }) }}
+
+  </div>
+</div>
+{% endblock %}
