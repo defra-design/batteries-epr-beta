@@ -10,8 +10,20 @@ const router = govukPrototypeKit.requests.setupRouter()
 
 // Every page gets its own address as currentUrl, so the regulator layout can
 // send people back here from the "not built yet" page.
+//
+// Language: ?lang=cy in the address, as the live regulator service does.
+// Prototype only: this flips the language navigation (English or Cymraeg),
+// but the words stay in English. englishUrl and welshUrl are this page with
+// and without ?lang=cy, keeping anything else in the address (like filters).
 router.use((req, res, next) => {
   res.locals.currentUrl = req.originalUrl
+  const url = new URL(req.originalUrl, 'http://prototype')
+  url.searchParams.delete('lang')
+  const english = url.pathname + url.search
+  url.searchParams.set('lang', 'cy')
+  res.locals.englishUrl = english
+  res.locals.welshUrl = url.pathname + url.search
+  res.locals.lang = req.query.lang === 'cy' ? 'cy' : 'en'
   next()
 })
 

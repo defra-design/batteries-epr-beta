@@ -43,9 +43,10 @@
     - The phase banner sits straight under the service navigation.
     The words are in app/content/regulator/header.md.
 
-    Prototype only: Cymraeg and the feedback link go to the "not built yet"
-    page. Cymraeg adds ?lang=cy, which is how the live regulator service
-    chooses the language.
+    Prototype only: Cymraeg reloads the page with ?lang=cy (how the live
+    regulator service chooses the language) and English takes it away. That
+    flips which language is current, but the words stay in English, so the
+    page stays lang="en". The feedback link goes to the "not built yet" page.
   #}
   {% set headerWords = content("regulator/header") %}
   {% set backParam = "back=" + (currentUrl | urlencode) %}
@@ -54,8 +55,8 @@
     {{ govukLanguageNavigation({
       ariaLabel: headerWords.languageNavigationLabel,
       items: [
-        { text: headerWords.english, lang: "en", current: true },
-        { text: headerWords.welsh, lang: "cy", href: "/regulator/not-built?lang=cy&" + backParam }
+        { text: headerWords.english, lang: "en", href: englishUrl, current: lang == "en" },
+        { text: headerWords.welsh, lang: "cy", href: welshUrl, current: lang == "cy" }
       ]
     }) }}
   {% endset %}
