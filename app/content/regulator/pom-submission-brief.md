@@ -43,8 +43,11 @@ View earlier versions
 ## Files heading
 Files
 
-## View link (on each file, opens it)
-View
+## Open link (on each file)
+Open
+
+## Download link (on each file)
+Download
 
 ## Flags (on each file)
 Flags

@@ -13,8 +13,8 @@
   - Organisation: the name with View details (page 2), and members with View
     members
   - Files: one GOV.UK summary card per file, with the file name as the title
-    and View to open it (same tab for now). Flags: what it is in bold, then
-    the scheme's reason, which names the producer, then when it was submitted
+    with Open and Download. Flags: just the scheme's reason, which names
+    the producer, then when it was submitted
   - View producer figures: the main call to action, last
   "Admin", not "Super user" (Jen's word)
 
@@ -87,15 +87,19 @@
   <div class="govuk-grid-column-two-thirds">
 
     {# Files: one summary card per file, newest first. The file name is the
-       card's title, and View opens the file (in the same tab for now).
-       Flags: what it is in bold, then the scheme's reason, which names the producer #}
+       card's title, with Open and Download.
+       Flags: just the scheme's reason, which names the producer (the full
+       version also says what kind of flag it is) #}
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     {% for f in s.files %}
-      {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li><strong>{{ flag.title }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
+      {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
       {{ govukSummaryList({
         card: {
           title: { text: f.name, headingLevel: 3 },
-          actions: { items: [{ href: notBuiltHref, text: words.viewLink, visuallyHiddenText: f.name }] }
+          actions: { items: [
+            { href: notBuiltHref, text: words.openLink, visuallyHiddenText: f.name },
+            { href: notBuiltHref, text: words.downloadLink, visuallyHiddenText: f.name }
+          ] }
         },
         rows: [
           { key: { text: words.flags }, value: { html: flagsHtml } },
