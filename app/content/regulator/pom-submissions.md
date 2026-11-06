@@ -38,7 +38,7 @@ submission
 There are no submissions for this quarter yet.
 
 ## Table caption (only screen readers hear this)
-Placed on the market submissions
+Submissions of batteries placed on the market
 
 ## Scheme column
 Scheme
