@@ -31,7 +31,7 @@ Submitted by
 ## Super user (the top of the scheme's account)
 Admin
 
-## Delegated authority (after the person's role, in Submitted by)
+## Delegated authority (in People who can submit)
 delegated authority
 
 ## Version

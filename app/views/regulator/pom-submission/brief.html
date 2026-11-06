@@ -15,7 +15,8 @@
     scheme, view only, with emails as links and the people who can submit in
     the list (everyone, however many)
   - A link to the scheme's members, below it
-  - View producer figures: the main call to action, last on the page
+  - View producer figures: the main call to action, straight after the files.
+    The organisation details and members come after it: they're needed less
   "Admin", not "Super user" (Jen's word)
 
   The data: app/data/pom-submission-details.js (dummy).
@@ -50,7 +51,7 @@
 {% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
 {% set detailRows = (detailRows.concat([
   { key: { text: words.status }, value: { html: statusHtml } },
-  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser + ", " + words.delegatedAuthority } },
+  { key: { text: words.submittedBy }, value: { text: s.submittedBy.name + ", " + words.superUser } },
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
@@ -133,11 +134,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
+    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
+
     {{ govukDetails({ summaryText: s.scheme + " " + words.schemeDetails, html: schemeHtml }) }}
 
     <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ s.scheme }} {{ words.membersLink }}</a></p>
-
-    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
 
   </div>
 </div>
