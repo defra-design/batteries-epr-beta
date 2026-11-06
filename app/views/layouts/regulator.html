@@ -34,10 +34,49 @@
   {# Proof of concept: service name only, so no regulator name and no account menu #}
   {{ defraHeader({}) }}
 
+  {#
+    Phase banner and language navigation (6 November 2026).
+    Both are standard GOV.UK Frontend components, not add-ons:
+    - Language navigation (GOV.UK Frontend 6.5+, in trial) sits in the service
+      navigation's end slot, as GOV.UK advises when the whole service is in
+      English and Welsh.
+    - The phase banner sits straight under the service navigation.
+    The words are in app/content/regulator/header.md.
+
+    Prototype only: Cymraeg and the feedback link go to the "not built yet"
+    page. Cymraeg adds ?lang=cy, which is how the live regulator service
+    chooses the language.
+  #}
+  {% set headerWords = content("regulator/header") %}
+  {% set backParam = "back=" + (currentUrl | urlencode) %}
+
+  {% set languageNavigationHtml %}
+    {{ govukLanguageNavigation({
+      ariaLabel: headerWords.languageNavigationLabel,
+      items: [
+        { text: headerWords.english, lang: "en", current: true },
+        { text: headerWords.welsh, lang: "cy", href: "/regulator/not-built?lang=cy&" + backParam }
+      ]
+    }) }}
+  {% endset %}
+
   {{ govukServiceNavigation({
     serviceName: serviceName,
     serviceUrl: "/",
-    navigationId: "service-navigation"
+    navigationId: "service-navigation",
+    slots: {
+      end: { html: languageNavigationHtml, align: "inline" }
+    }
+  }) }}
+
+  {% set phaseBannerHtml %}
+    {{ headerWords.phaseBannerText }} <a class="govuk-link" href="/regulator/not-built?{{ backParam }}" target="_blank" rel="noreferrer noopener">{{ headerWords.feedbackLink }}</a>.
+  {% endset %}
+
+  {# The phase banner brings its own width container #}
+  {{ govukPhaseBanner({
+    tag: { text: headerWords.phaseTag },
+    html: phaseBannerHtml
   }) }}
 {% endblock %}
 

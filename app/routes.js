@@ -8,6 +8,13 @@ const router = govukPrototypeKit.requests.setupRouter()
 
 // Add your routes here
 
+// Every page gets its own address as currentUrl, so the regulator layout can
+// send people back here from the "not built yet" page.
+router.use((req, res, next) => {
+  res.locals.currentUrl = req.originalUrl
+  next()
+})
+
 // The indicative obligation check's overview page was replaced by the
 // Regulators page (30 October 2026). Old links go there instead.
 router.get('/regulator/indicative-obligation', (req, res) => {
