@@ -52,11 +52,17 @@ Producers in the file
 ## Flags heading
 Flags to check
 
-## Producer (before the producer's name)
-Producer:
+## Flags table caption (only screen readers hear this)
+Flags to check in this submission
 
-## Reason (before the scheme's reason)
-Scheme's reason:
+## Flag column
+Flag
+
+## Producer column
+Producer
+
+## Reason column
+Scheme's reason
 
 ## No flags
 There are no flags on this submission.

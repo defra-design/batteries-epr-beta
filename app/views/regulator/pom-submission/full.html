@@ -11,8 +11,12 @@
   - The status tag is in the submission details, as in the brief version
   - "Super user", not "Admin" (Rich's word)
 
-  Add-on: MOJ scrollable pane round the files table, and the file name wraps
-  (app-table-cell--wrap), so only the table scrolls at small widths. See the README.
+  Order: submission details, flags (a table: flag, producer, the scheme's
+  reason), files (so they can open what was uploaded), then View producer
+  figures and the links.
+
+  Add-on: MOJ scrollable pane round the flags and files tables, and long text
+  wraps (app-table-cell--wrap), so only the tables scroll at small widths. See the README.
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/pom-submission-full.md
@@ -51,8 +55,18 @@
   { key: { text: words.producersInTheFile }, value: { text: s.producers } }
 ])) %}
 
-{# Files: every file uploaded for this quarter, newest first #}
+{# Flags: one row each #}
 {% set small = "govuk-!-font-size-16" %}
+{% set flagRows = [] %}
+{% for flag in s.flags %}
+  {% set flagRows = (flagRows.push([
+    { text: flag.title, classes: small + " app-table-cell--wrap" },
+    { text: flag.producer, classes: small + " app-table-cell--wrap" },
+    { text: flag.reason, classes: small + " app-table-cell--wrap" }
+  ]), flagRows) %}
+{% endfor %}
+
+{# Files: every file uploaded for this quarter, newest first #}
 {% set fileRows = [] %}
 {% for f in s.files %}
   {% set fileRows = (fileRows.push([
@@ -74,30 +88,32 @@
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
 
+  </div>
+</div>
+
+{# Flags, then the files, full width so the tables have room #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
     <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
     {% if s.flags.length %}
-      {% for flag in s.flags %}
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{ flag.title }}</h3>
-        <p class="govuk-body govuk-!-margin-bottom-1">{{ words.producer }} {{ flag.producer }}</p>
-        <p class="govuk-body">{{ words.reason }} {{ flag.reason }}</p>
-      {% endfor %}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsTableCaption }}">
+        {{ govukTable({
+          caption: words.flagsTableCaption,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.flagColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.producerColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.reasonColumn, classes: small + " app-table-cell--wrap" }
+          ],
+          rows: flagRows
+        }) }}
+      </div>
     {% else %}
       <p class="govuk-body">{{ words.noFlags }}</p>
     {% endif %}
 
-    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
-
-    <ul class="govuk-list">
-      <li><a href="{{ organisationHref }}" class="govuk-link">{{ words.viewOrganisationDetailsLink }}</a></li>
-      <li><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></li>
-    </ul>
-
-  </div>
-</div>
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ words.filesHeading }}</h2>
+    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
       {{ govukTable({
         caption: words.filesTableCaption,
@@ -112,6 +128,21 @@
         rows: fileRows
       }) }}
     </div>
+
   </div>
 </div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
+
+    <ul class="govuk-list">
+      <li><a href="{{ organisationHref }}" class="govuk-link">{{ words.viewOrganisationDetailsLink }}</a></li>
+      <li><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></li>
+    </ul>
+
+  </div>
+</div>
+
 {% endblock %}
