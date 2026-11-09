@@ -1,0 +1,110 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-326: a scheme's members, full version. 9 November 2026.
+  You get here from "View members" on the full submission page or the full
+  organisation details. Back goes to whichever you came from (app/routes.js).
+
+  Schemes have 200 to 600 members (round 2 of alpha testing), so this
+  version has filters, from the MOJ "Filter a list" pattern:
+  - Member name or BPRN: free text, finds one member quickly
+  - Status: Current (the default, so former members don't pad the list),
+    Former or All
+  - Flags: All, or Outstanding flags only
+  - Apply filters: a plain form (GET) with a button, so it works without
+    JavaScript and the page doesn't reload while someone is choosing
+    (WCAG 3.2.2)
+  - A line saying what's shown, for example "Showing 3 of 587 members"
+  No pagination: filters cut the list down, and on one page the sortable
+  table sorts every row. If it's slow with real data, the fallback is
+  pagination with sorting done on the server.
+
+  Add-on: MOJ Frontend (sortable table), the MOJ scrollable pane, and the
+  filters in a row (app-filters). See the README.
+
+  The data: app/data/pom-submission-details.js (dummy).
+  The words: app/content/regulator/members-full.md
+#}
+
+{% set wordsFile = "regulator/members-full" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = words.heading + ", " + org.name + " (full version)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{% set statusItems = [
+  { value: "current", text: words.current, selected: filters.status == "current" },
+  { value: "former", text: words.former, selected: filters.status == "former" },
+  { value: "all", text: words.all, selected: filters.status == "all" }
+] %}
+{% set flagItems = [
+  { value: "all", text: words.all, selected: filters.flags == "all" },
+  { value: "outstanding", text: words.outstandingFlagsOnly, selected: filters.flags == "outstanding" }
+] %}
+
+{# Table text is 16px, as on the lists of submissions #}
+{% set small = "govuk-!-font-size-16" %}
+{% set rows = [] %}
+{% for m in members %}
+  {% set rows = (rows.push([
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (m.name | escape) + '</a>', attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
+    { text: m.bprn, classes: small },
+    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": (words.current if m.current else words.former) }, classes: small },
+    { text: m.flags, classes: small + " govuk-table__cell--numeric" },
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (words.viewSubmissionsLink | escape) + '<span class="govuk-visually-hidden"> (' + (m.name | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+    {{ words.intro | paragraphs }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {# The filters: GOV.UK input, selects and button in a row (add-on: app-filters, see application.scss) #}
+    <form method="get" action="{{ formAction }}" novalidate>
+      <div class="app-filters">
+        {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-input--width-20", spellcheck: false }) }}
+        {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
+        {{ govukSelect({ id: "flags", name: "flags", label: { text: words.flagsLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: flagItems }) }}
+        {{ govukButton({ text: words.applyFiltersButton }) }}
+      </div>
+    </form>
+
+    <p class="govuk-body">{{ words.showing }} {{ members.length }} {{ words.of }} {{ total }} {{ words.members }}</p>
+
+    {% if members.length %}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+        {{ govukTable({
+          caption: words.tableCaption,
+          captionClasses: "govuk-visually-hidden",
+          attributes: { "data-module": "moj-sortable-table" },
+          head: [
+            { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
+            { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.outstandingFlagsColumn, attributes: { "aria-sort": "none" }, classes: small + " govuk-table__header--numeric" },
+            { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
+          ],
+          rows: rows
+        }) }}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ words.noMembers }}</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

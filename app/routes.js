@@ -146,6 +146,37 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation
   membersPage(req, res, next, briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
 })
 
+// EB-326: members (full version), with filters. The filters are a plain
+// form (GET): they're read from the address, so they work without JavaScript
+function membersFullPage (req, res, next, backHref) {
+  const organisation = details.organisation(req.params.scheme)
+  const all = details.members(req.params.scheme, req.params.year, req.params.quarter)
+  if (!organisation || !all || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  const search = String(req.query.search || '').trim().slice(0, 100)
+  const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
+  const flags = pick(req.query.flags, ['all', 'outstanding'], 'all')
+  const term = search.toLowerCase()
+  const members = all.filter(m =>
+    (!term || m.name.toLowerCase().includes(term) || m.bprn.toLowerCase().includes(term)) &&
+    (status === 'all' || (status === 'current') === m.current) &&
+    (flags === 'all' || m.flags > 0))
+  res.render('regulator/pom-submission/members-full', {
+    org: organisation,
+    members,
+    total: all.length,
+    filters: { search, status, flags },
+    formAction: req.path,
+    backHref,
+    notBuiltHref: notBuilt(req.originalUrl)
+  })
+}
+router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/members', (req, res, next) => {
+  membersFullPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }))
+})
+router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-details/members', (req, res, next) => {
+  membersFullPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
+})
+
 // Full, page 1: back to the full list
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter', (req, res, next) => {
   const submission = details.submission(req.params.scheme, req.params.year, req.params.quarter)
@@ -154,6 +185,7 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter', (req, res, 
     submission,
     backHref: '/regulator/pom-submissions/all-submissions',
     organisationHref: req.path.replace(/\/$/, '') + '/organisation-details',
+    membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
@@ -165,6 +197,7 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-
   res.render('regulator/pom-submission/organisation-details', {
     organisation,
     backHref: fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }),
+    membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })

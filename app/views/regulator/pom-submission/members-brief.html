@@ -2,6 +2,8 @@
 
 {#
   EB-326: a scheme's members, brief version. 9 November 2026.
+  Brief: every member on one page, in a sortable table, no filters and no
+  pagination. The full version adds filters (members-full.html).
   You get here from "View members" on the brief submission page or the brief
   organisation details. Back goes to whichever of those you came from,
   worked out from the address (app/routes.js).
@@ -10,7 +12,7 @@
   - Scheme name as the caption, "Members" as the heading, one intro line (Jen)
   - A sortable table, alphabetical by member name:
     member name (links to their organisation details, not built yet),
-    BPRN, status (current or former member: keep former members for
+    BPRN, status as a tag (current in green, former in grey: easy to skim) (current or former member: keep former members for
     history, to check with Phil), outstanding flags (from this submission),
     and View submissions (not built yet)
   - Left out: producer size, date joined, Download CSV, View scheme record
@@ -43,7 +45,7 @@
   {% set rows = (rows.push([
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (m.name | escape) + '</a>', attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
-    { text: words.current if m.current else words.former, classes: small },
+    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": (words.current if m.current else words.former) }, classes: small },
     { text: m.flags, classes: small + " govuk-table__cell--numeric" },
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (words.viewSubmissionsLink | escape) + '<span class="govuk-visually-hidden"> (' + (m.name | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}

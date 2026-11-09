@@ -4,6 +4,8 @@
 //
 // The schemes are real, but every name, address, number and email here is
 // made up. Recycling Lives has 14 users, to show a long list.
+// Member counts are between 200 and 600: what regulators told us is realistic
+// in round 2 of alpha testing (David said 20 to 250 today, maybe 500 later).
 //
 
 const pom = require('./pom-submissions')
@@ -48,7 +50,7 @@ const SCHEMES = {
     address: ['1 Example Street', 'Leeds', 'LS1 1AA'],
     companiesHouseNumber: '01234561',
     bcsNumber: 'BCS 00121',
-    members: 12,
+    members: 214,
     tonnes: 18.4,
     people: [
       person('Priya Shah', 'appropriatePerson'),
@@ -62,7 +64,7 @@ const SCHEMES = {
     address: ['2 Example Road', 'Preston', 'PR1 2BB'],
     companiesHouseNumber: '01234562',
     bcsNumber: 'BCS 00122',
-    members: 31,
+    members: 583,
     tonnes: 27.6,
     people: [
       person('Michael Osei', 'superUser', true),
@@ -86,7 +88,7 @@ const SCHEMES = {
     address: ['3 Example Lane', 'London', 'SE1 3CC'],
     companiesHouseNumber: '01234563',
     bcsNumber: 'BCS 00123',
-    members: 24,
+    members: 347,
     tonnes: 22.9,
     people: [
       person('Sarah Mitchell', 'appropriatePerson'),
@@ -99,7 +101,7 @@ const SCHEMES = {
     address: ['4 Example Avenue', 'Stratford-upon-Avon', 'CV37 4DD'],
     companiesHouseNumber: '01234564',
     bcsNumber: 'BCS 00124',
-    members: 40,
+    members: 452,
     tonnes: 35.2,
     people: [
       person('Rachel Adams', 'appropriatePerson'),
@@ -184,32 +186,33 @@ function submission (slug, year, quarter) {
 
 // A scheme's members (producers): made-up names, made from these words so
 // every scheme gets its own list. Current members match the scheme's member
-// count; a couple of former members are kept for history.
+// count; a few former members are kept for history.
 const NAME_START = ['Acorn', 'Beacon', 'Bright', 'Cedar', 'Delta', 'Ember', 'Falcon', 'Granite', 'Harbour', 'Iris', 'Juniper', 'Kestrel', 'Lumen', 'Maple', 'Nova', 'Orchard', 'Pioneer', 'Quartz', 'Riverside', 'Summit', 'Thistle', 'Upland', 'Vale', 'Willow', 'Yarrow', 'Zenith']
+const NAME_MIDDLE = ['Valley', 'Bridge', 'Point', 'Field', 'Gate', 'Park', 'Hill', 'Cross', 'Green', 'Moor', 'Way', 'Works']
 const NAME_END = ['Batteries Ltd', 'Power Ltd', 'Energy Ltd', 'Cells Ltd', 'Electrical Ltd', 'Trading Ltd', 'Retail Ltd', 'Supplies Ltd']
+
+function memberName (i, offset) {
+  const n = i + offset
+  return NAME_START[n % 26] + ' ' + NAME_MIDDLE[Math.floor(n / 26) % 12] + ' ' + NAME_END[(Math.floor(n / 312) + n) % 8]
+}
 
 function members (slug, year, quarter) {
   const s = SCHEMES[slug]
   if (!s) return null
-  const offset = Object.keys(SCHEMES).indexOf(slug) * 7
+  const offset = Object.keys(SCHEMES).indexOf(slug) * 41
   const sub = submission(slug, year, quarter)
   // Flags in this submission, by producer
   const flagged = {}
   if (sub) sub.flags.forEach(f => { flagged[f.producer] = (flagged[f.producer] || 0) + 1 })
-  const list = []
   // The flagged producers are members too
-  PRODUCERS.forEach(name => list.push({ name, current: true }))
-  for (let i = 0; list.length < s.members; i++) {
-    const name = NAME_START[(i + offset) % NAME_START.length] + ' ' + NAME_END[(i * 3 + offset) % NAME_END.length]
-    if (!list.find(m => m.name === name)) list.push({ name, current: true })
-  }
-  list.push({ name: NAME_START[(offset + 5) % NAME_START.length] + ' Home Ltd', current: false })
-  list.push({ name: NAME_START[(offset + 11) % NAME_START.length] + ' Outdoor Ltd', current: false })
+  const list = PRODUCERS.map(name => ({ name, current: true }))
+  for (let i = 0; list.length < s.members; i++) list.push({ name: memberName(i, offset), current: true })
+  for (let i = 0; i < 4; i++) list.push({ name: memberName(1000 + i * 53, offset), current: false })
   return list
     .map((m, i) => ({
       ...m,
       // Made-up registration numbers: the real format is to check
-      bprn: 'BPRN' + String(10000 + (offset + 1) * 1000 + i * 37).padStart(6, '0'),
+      bprn: 'BPRN' + String(100000 + (offset + 1) * 1000 + i * 37).padStart(6, '0'),
       flags: flagged[m.name] || 0
     }))
     .sort((a, b) => a.name.localeCompare(b.name))

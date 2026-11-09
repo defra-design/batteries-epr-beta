@@ -80,7 +80,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** components from the MOJ Design System that the GOV.UK Design System doesn't have. We use the [sortable table](https://design-patterns.service.justice.gov.uk/components/sortable-table/) (`data-module="moj-sortable-table"`). Without JavaScript it's a normal GOV.UK table
 - **Watch out:** it sorts in the browser, so it only sorts the rows on the page. Don't use it with pagination
-- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (full version, all submissions), the members page (brief version) and on `app/views/regulators.html` (the list of prototypes, prototype only)
+- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (full version, all submissions), the members pages and on `app/views/regulators.html` (the list of prototypes, prototype only)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the table's `data-module` and `aria-sort` attributes, then `npm uninstall @ministryofjustice/frontend`
 
@@ -104,7 +104,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** puts filter dropdowns and their button side by side with a fixed 10px gap, wrapping onto a new line when there isn't room. The button lines up with the bottom of the dropdowns. Full width, one under the other, on a phone
 - **Why:** a GOV.UK select won't go narrower than 11.5em, so in grid columns they squashed into each other at some widths
-- **Where:** the `app-filters` style in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages
+- **Where:** the `app-filters` style in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages and the members page (full version)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the `app-filters` wrapper and the style: the dropdowns and button then stack, one under the other
 
