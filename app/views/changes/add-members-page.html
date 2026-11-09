@@ -14,11 +14,11 @@
 <span class="govuk-caption-l">9 November 2026</span>
 <h1 class="govuk-heading-l">Add the members page, in brief and full versions</h1>
 <p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
-<p class="govuk-body">Regulators need to see who the members of a scheme are. This is the members list only: each producer's figures by chemistry and category look like they're part of EB-366 (checking a submission), to confirm with Mak.</p>
+<p class="govuk-body">Regulators need to see who the members of a scheme are. This is the members list only: each producer's figures by chemistry and category look like they're part of EB-366 (checking a submission), to be confirmed.</p>
 <p class="govuk-body"><strong>How many members to design for</strong></p>
-<p class="govuk-body">Between 200 and 600. Regulators told us this is realistic in round 2 of alpha testing (participants 1 and 2). David said 20 to 250 today, maybe 500 later, so 200 to 600 covers both. The dummy schemes have between 214 and 583 current members.</p>
+<p class="govuk-body">Between 200 and 600. Regulators told us this is realistic in round 2 of alpha testing (participants 1 and 2). The business said 20 to 250 today, maybe 500 later, so 200 to 600 covers both. The dummy schemes have between 214 and 583 current members.</p>
 <p class="govuk-body"><strong>Both versions</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>The scheme name as a caption, &quot;Members&quot; as the heading, and an intro line from Jen (to write: &quot;Intro text...&quot; for now)</li><li>A sortable table (MOJ sortable table), alphabetical by member, in 16px text and the MOJ scrollable pane: member (a link to their organisation details), BPRN, status, outstanding flags in this submission, and View submissions</li><li>Status as a tag, current in green and former in grey, so it's easy to skim down a long list. The word is there too, so it doesn't rely on colour</li><li>From &quot;View members&quot; on the submission or the organisation details. Back goes to whichever you came from</li><li>Left out, as agreed with Jen: producer size (only large producers join schemes), date joined, Download CSV, View scheme record</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>The scheme name as a caption, &quot;Members&quot; as the heading, and an intro line (to be written: &quot;Intro text...&quot; for now)</li><li>A sortable table (MOJ sortable table), alphabetical by member, in 16px text and the MOJ scrollable pane: member (a link to their organisation details), BPRN, status, outstanding flags in this submission, and View submissions</li><li>Status as a tag, current in green and former in grey, so it's easy to skim down a long list. The word is there too, so it doesn't rely on colour</li><li>From &quot;View members&quot; on the submission or the organisation details. Back goes to whichever you came from</li><li>Left out, as agreed with content design: producer size (only large producers join schemes), date joined, Download CSV, View scheme record</li></ul>
 <p class="govuk-body"><strong>Brief version: everything on one page</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>Every member, current and former, with no filters</li><li>Simple, but finding one producer among 600 means scrolling or using the browser's find. Research will tell us if that's good enough</li></ul>
 <p class="govuk-body"><strong>Full version: filters</strong></p>
@@ -26,7 +26,7 @@
 <p class="govuk-body"><strong>Why there's no pagination</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>The <a href="https://design-system.service.gov.uk/components/pagination" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK pagination guidance (opens in new tab)</a> says to only split a list into pages if it makes the service faster or easier to use: when one page would be slow to load, or when most people only need the first page. 600 short rows load quickly, and regulators need the whole list, not just the first page</li><li>Sorting and pagination don't work together in the browser: the MOJ sortable table would only sort the rows on the page you're on, which would be wrong. On one page, sorting covers every member</li><li>The full version's filters cut the list down, so people don't have to scroll through hundreds of rows</li><li>If the real data is slow, the fallback is pagination with sorting done on the server (column headers as links that reload the page in the new order, which also works without JavaScript). GOV.UK says filters and sorting must then apply to the whole list, not just one page</li></ul>
 <p class="govuk-body"><strong>Prototype only</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Member names and BPRNs are made up, and the real BPRN format is to check with Phil. Whether we keep former members is also to check with Phil</li><li>Member names and View submissions go to a &quot;not built yet&quot; page</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>Member names and BPRNs are made up, and the real BPRN format is to be confirmed. Whether we keep former members is also to be confirmed</li><li>Member names and View submissions go to a &quot;not built yet&quot; page</li></ul>
 <h2 class="govuk-heading-m">Pages</h2>
 <ul class="govuk-list">
 <li><a class="govuk-link" href="/regulator/pom-submissions/brief/recycling-lives/2026/3/members">Brief version (all on one page)</a></li>
@@ -37,31 +37,31 @@
 <h2 class="govuk-heading-m">Brief version, desktop (1020 pixels wide), top of the page</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-members-page/after--members-brief-1020-pixels.png" alt="Brief version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot">
+<img src="/public/images/changes/add-members-page/after--members-brief-1020-pixels.png" alt="Brief version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Brief version, 320 pixels wide, top of the page</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-members-page/after--members-brief-320-pixels.png" alt="Brief version, 320 pixels wide, top of the page" class="app-change-screenshot">
+<img src="/public/images/changes/add-members-page/after--members-brief-320-pixels.png" alt="Brief version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, desktop (1020 pixels wide), top of the page</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-members-page/after--members-full-1020-pixels.png" alt="Full version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot">
+<img src="/public/images/changes/add-members-page/after--members-full-1020-pixels.png" alt="Full version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, filtered, desktop (1020 pixels wide)</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-members-page/after--members-full-filtered-1020-pixels.png" alt="Full version, filtered, desktop (1020 pixels wide)" class="app-change-screenshot">
+<img src="/public/images/changes/add-members-page/after--members-full-filtered-1020-pixels.png" alt="Full version, filtered, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, 320 pixels wide, top of the page</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-members-page/after--members-full-320-pixels.png" alt="Full version, 320 pixels wide, top of the page" class="app-change-screenshot">
+<img src="/public/images/changes/add-members-page/after--members-full-320-pixels.png" alt="Full version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
 </div>
 </div>
 

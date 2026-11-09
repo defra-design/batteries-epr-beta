@@ -15,6 +15,7 @@
  *     "Before" and "After"
  *   - links in the "why": [link text](https://...) opens in a new tab, with
  *     "(opens in new tab)" added to the link text, as GOV.UK asks
+ *   - screenshots show at half size, so phone and desktop are at the same scale
  *   - run it with: npm run changes
  *   - screenshots: for each page, one pair at 1020 pixels wide (desktop) and
  *     one at 320 pixels wide, from the top of the page to the end of the content
@@ -71,6 +72,13 @@ function inline (s) {
   return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>')
     // Links: [text](https://...) only, so a typo can't become a broken or unsafe link
     .replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g, '<a href="$2" class="govuk-link" rel="noreferrer noopener" target="_blank">$1 (opens in new tab)</a>')
+}
+// Screenshots show at half their size, so a 320 pixel phone screenshot and a
+// 1020 pixel desktop one are at the same scale. The size comes from the file
+// name, for example after--version-a-320-pixels.png shows 160 pixels wide
+function screenshotWidth (src) {
+  const m = /-(\d+)-pixels\.png$/.exec(String(src))
+  return m ? ' width="' + Math.round(Number(m[1]) / 2) + '"' : ''
 }
 // The "why" is short Markdown: paragraphs, **bold**, `code`, [links](https://...) and "- " bullets,
 // nested with two spaces
@@ -167,14 +175,14 @@ records.forEach(function (r) {
     // No before (a new page): just the screenshot, with no "Before" and "After"
     if (!before) {
       body += '<h2 class="govuk-heading-m">' + esc(pair.label) + '</h2>\n<div class="govuk-grid-row">\n<div class="govuk-grid-column-two-thirds">\n' +
-        (after ? '<img src="' + after + '" alt="' + esc(pair.label) + '" class="app-change-screenshot">\n' : '<p class="govuk-body">No screenshot</p>\n') +
+        (after ? '<img src="' + after + '" alt="' + esc(pair.label) + '" class="app-change-screenshot"' + screenshotWidth(after) + '>\n' : '<p class="govuk-body">No screenshot</p>\n') +
         '</div>\n</div>\n'
       return
     }
     body += '<h2 class="govuk-heading-m">' + esc(pair.label) + '</h2>\n<div class="govuk-grid-row">\n'
     ;[['Before', before], ['After', after]].forEach(function (side) {
       body += '<div class="govuk-grid-column-one-half">\n<h3 class="govuk-heading-s">' + side[0] + '</h3>\n' +
-        (side[1] ? '<img src="' + side[1] + '" alt="' + side[0] + ': ' + esc(pair.label) + '" class="app-change-screenshot">\n'
+        (side[1] ? '<img src="' + side[1] + '" alt="' + side[0] + ': ' + esc(pair.label) + '" class="app-change-screenshot"' + screenshotWidth(side[1]) + '>\n'
           : '<p class="govuk-body">' + (side[0] === 'Before' ? 'No before: this is new' : 'No screenshot') + '</p>\n') + '</div>\n'
     })
     body += '</div>\n'

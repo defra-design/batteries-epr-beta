@@ -17,10 +17,10 @@
 <p class="govuk-body">Regulators need to see one scheme's submission for a quarter, who submitted it, and the scheme's details if they need them. There are two versions for the team to look at and say what we can build. We'd rather test one. Each version has 2 pages: the submission, then the organisation details.</p>
 <p class="govuk-body"><strong>Both versions</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>From &quot;View&quot; on the list of submissions. Scheme names on the lists aren't links: the submission links to the organisation</li><li>The scheme name as a caption, and the status tag in the submission details</li><li>Submitted by: the name and role, with their email as a link. All emails are links</li><li>Organisation, after the submission details: the name with View details (page 2), and members with View members</li><li>Files, then View producer figures last: it's the main thing to do next</li><li>Back goes to the page before in the journey, worked out from the address, so it works without JavaScript</li><li>One label for the scheme's number, &quot;BCS number&quot;. No approval number: it's the same number</li><li>Flags: the scheme's reason names the producer (&quot;Brightcell Ltd is waiting for figures from its supplier&quot;), so nothing is said twice</li><li>Dates in full in summary lists and cards (&quot;23 October 2026&quot;), where there's room. Short months only in tables, which never split over two lines</li><li>Left out, as agreed: conditions of approval, approved and expires, and account manager</li><li>On the Regulators list, the titles start FULL or BRIEF, so it's easy to see which is which</li></ul>
-<p class="govuk-body"><strong>Brief version (Marie and Jen)</strong></p>
+<p class="govuk-body"><strong>Brief version (interaction and content design)</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>Submission details: submitted, review by, status, submitted by and the version (&quot;2 of 2&quot;, with a link to earlier versions)</li><li>Files as GOV.UK summary cards, one per file: the file name as the title, with Open and Download, then the flags (just the scheme's reason, which names the producer) and when it was submitted. Cards stack up clearly when there are several files</li><li>Organisation details are view only: no Change links</li><li>People who can submit: just the people not already shown (the appropriate person and admin can always submit), each with their email and &quot;delegated authority&quot;. No list of other users</li><li>&quot;Admin&quot; for the top of the scheme's account</li></ul>
-<p class="govuk-body"><strong>Full version (Rich)</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Submission details with Rich's extras: days left, BCS number, tonnage and producers in the file</li><li>Files in one table, full width, in 16px text and the MOJ scrollable pane: the file name (it opens the file, in the same tab for now), the flags (what the flag is in bold, then the scheme's reason), and submitted</li><li>Organisation details have Change links, so we can ask the business whether regulators can change them. People who can submit with their emails (if someone's authority has ended, they're not on the list), and other users in a details component</li><li>&quot;Super user&quot; for the top of the scheme's account</li></ul>
+<p class="govuk-body"><strong>Full version (service design)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Submission details with the service design extras: days left, BCS number, tonnage and producers in the file</li><li>Files in one table, full width, in 16px text and the MOJ scrollable pane: the file name (it opens the file, in the same tab for now), the flags (what the flag is in bold, then the scheme's reason), and submitted</li><li>Organisation details have Change links, so we can ask the business whether regulators can change them. People who can submit with their emails (if someone's authority has ended, they're not on the list), and other users in a details component</li><li>&quot;Super user&quot; for the top of the scheme's account</li></ul>
 <p class="govuk-body"><strong>Questions</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>Can regulators change organisation details? (the full version's Change links)</li><li>Who can submit: more to discuss. A return from someone without authority shouldn't get through at all, so that's for the developers, not the page</li></ul>
 <p class="govuk-body"><strong>Prototype only</strong></p>
@@ -37,49 +37,49 @@
 <h2 class="govuk-heading-m">Brief version, page 1, desktop (1020 pixels wide)</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--brief-1020-pixels.png" alt="Brief version, page 1, desktop (1020 pixels wide)" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-1020-pixels.png" alt="Brief version, page 1, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Brief version, page 1, 320 pixels wide</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--brief-320-pixels.png" alt="Brief version, page 1, 320 pixels wide" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-320-pixels.png" alt="Brief version, page 1, 320 pixels wide" class="app-change-screenshot" width="160">
 </div>
 </div>
 <h2 class="govuk-heading-m">Brief version, page 2, desktop (1020 pixels wide)</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--brief-organisation-details-1020-pixels.png" alt="Brief version, page 2, desktop (1020 pixels wide)" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-organisation-details-1020-pixels.png" alt="Brief version, page 2, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Brief version, page 2, 320 pixels wide</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--brief-organisation-details-320-pixels.png" alt="Brief version, page 2, 320 pixels wide" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--brief-organisation-details-320-pixels.png" alt="Brief version, page 2, 320 pixels wide" class="app-change-screenshot" width="160">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, page 1, desktop (1020 pixels wide)</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--full-submission-1020-pixels.png" alt="Full version, page 1, desktop (1020 pixels wide)" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--full-submission-1020-pixels.png" alt="Full version, page 1, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, page 1, 320 pixels wide</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--full-submission-320-pixels.png" alt="Full version, page 1, 320 pixels wide" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--full-submission-320-pixels.png" alt="Full version, page 1, 320 pixels wide" class="app-change-screenshot" width="160">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, page 2, desktop (1020 pixels wide)</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--full-organisation-details-1020-pixels.png" alt="Full version, page 2, desktop (1020 pixels wide)" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--full-organisation-details-1020-pixels.png" alt="Full version, page 2, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
 </div>
 </div>
 <h2 class="govuk-heading-m">Full version, page 2, 320 pixels wide</h2>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<img src="/public/images/changes/add-pom-submission-page/after--full-organisation-details-320-pixels.png" alt="Full version, page 2, 320 pixels wide" class="app-change-screenshot">
+<img src="/public/images/changes/add-pom-submission-page/after--full-organisation-details-320-pixels.png" alt="Full version, page 2, 320 pixels wide" class="app-change-screenshot" width="160">
 </div>
 </div>
 
