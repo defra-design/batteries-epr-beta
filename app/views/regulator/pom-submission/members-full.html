@@ -10,12 +10,13 @@
   - Member name or BPRN: free text, finds one member quickly
   - Status: Current (the default, so former members don't pad the list),
     Former or All
-  - Flags: All, or Outstanding flags only
-  - Clear filters (a secondary button, only when the filters aren't the
-    defaults): back to the page with no filters. It sits with Apply filters
+  - Flags: All, or Outstanding
+  - Clear filters (a secondary button, always there so nothing jumps): back
+    to the page with the default filters. It sits with Apply filters
     in a GOV.UK button group, so the two stay together when the row wraps
-  - Member name or BPRN grows to fill its line (app-filters__grow), so long
-    names fit, and it's full width on a phone
+  - Member name or BPRN takes the space that's left on the line
+    (app-filters__grow), so everything fits on one line on a desktop, and
+    it's full width on a phone
   - Apply filters: a plain form (GET) with a button, so it works without
     JavaScript and the page doesn't reload while someone is choosing
     (WCAG 3.2.2)
@@ -85,12 +86,10 @@
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
         {{ govukSelect({ id: "flags", name: "flags", label: { text: words.flagsLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: flagItems }) }}
         {# Apply and Clear stay together in a GOV.UK button group. Clear filters
-           only shows when the filters aren't the defaults #}
+           is always there, so nothing appears or disappears #}
         <div class="govuk-button-group">
           {{ govukButton({ text: words.applyFiltersButton }) }}
-          {% if filters.search or filters.status != "current" or filters.flags != "all" %}
-            {{ govukButton({ text: words.clearFiltersButton, href: formAction, classes: "govuk-button--secondary" }) }}
-          {% endif %}
+          {{ govukButton({ text: words.clearFiltersButton, href: formAction, classes: "govuk-button--secondary" }) }}
         </div>
       </div>
     </form>

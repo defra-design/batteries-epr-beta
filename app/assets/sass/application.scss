@@ -80,11 +80,11 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   }
 
   // A free-text field (app-filters__grow on its form group) takes the space
-  // that's left on its line, so long names fit. From tablet up: on a phone
+  // that's left on its line, so the whole row fits on one line on a desktop. From tablet up: on a phone
   // everything is full width anyway
   @include govuk-media-query($from: tablet) {
     .app-filters__grow {
-      flex: 1 1 20em;
+      flex: 1 1 10em;
     }
   }
 }

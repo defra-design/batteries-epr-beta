@@ -32,7 +32,7 @@ All
 Flags
 
 ## Outstanding flags only (filter option)
-Outstanding flags only
+Outstanding
 
 ## Apply filters button
 Apply filters
