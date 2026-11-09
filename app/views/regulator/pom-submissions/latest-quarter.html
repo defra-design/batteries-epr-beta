@@ -3,7 +3,7 @@
 {#
   EB-324: placed on the market (PoM) submissions, brief version: one quarter at a time.
   5 November 2026. Lands on the latest quarter with submissions (July to September 2026).
-  Year and quarter filters, no status filter, no summary line (Jen). Short dates (23 Oct 2026).
+  Quarter and year filters, Clear filters, no status filter, no summary line (Jen). Short dates (23 Oct 2026).
   A plain GOV.UK table: only ever 4 rows (one per scheme), in alphabetical order by scheme,
   so each scheme is always in the same place (Marie, 5 November: Jen had suggested due date order).
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
@@ -62,9 +62,12 @@
     {# The filters: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
     <form method="get" action="/regulator/pom-submissions/latest-quarter" novalidate>
       <div class="app-filters">
-        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
-        {{ govukButton({ text: words.applyFiltersButton }) }}
+        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({ text: words.applyFiltersButton }) }}
+          {{ govukButton({ text: words.clearFiltersButton, href: "/regulator/pom-submissions/latest-quarter", classes: "govuk-button--secondary" }) }}
+        </div>
       </div>
     </form>
 

@@ -7,11 +7,11 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Heading
 Submissions of batteries placed on the market
 
-## Year label
-Year
-
 ## Quarter label
 Quarter
+
+## Year label
+Year
 
 ## Status label
 Status
@@ -21,6 +21,9 @@ All
 
 ## Apply filters button
 Apply filters
+
+## Clear filters button
+Clear filters
 
 ## Summary for all submissions
 All submissions from 2024 to 2026

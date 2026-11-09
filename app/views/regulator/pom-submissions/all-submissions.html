@@ -4,7 +4,7 @@
   EB-324: placed on the market (PoM) submissions, full version: everything.
   5 November 2026. Lands on all years (2024 to 2026), all quarters and all
   statuses, to find out whether regulators want to see everything, then filter.
-  Year, quarter and status filters, and a summary line of what's showing.
+  Quarter, year and status filters, Clear filters, and a summary line of what's showing.
 
   Add-on: MOJ Frontend (sortable table). Up to 44 rows, all on one page: the
   MOJ sortable table sorts in the browser, so it would only sort one page if
@@ -85,10 +85,13 @@
     {# The filters: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
     <form method="get" action="/regulator/pom-submissions/all-submissions" novalidate>
       <div class="app-filters">
-        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
+        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
-        {{ govukButton({ text: words.applyFiltersButton }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({ text: words.applyFiltersButton }) }}
+          {{ govukButton({ text: words.clearFiltersButton, href: "/regulator/pom-submissions/all-submissions", classes: "govuk-button--secondary" }) }}
+        </div>
       </div>
     </form>
 

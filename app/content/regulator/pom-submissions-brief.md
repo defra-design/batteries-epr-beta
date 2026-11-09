@@ -7,14 +7,17 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Heading
 Submissions of batteries placed on the market
 
-## Year label
-Year
-
 ## Quarter label
 Quarter
 
+## Year label
+Year
+
 ## Apply filters button
 Apply filters
+
+## Clear filters button
+Clear filters
 
 ## No submissions
 There are no submissions for this quarter yet.
