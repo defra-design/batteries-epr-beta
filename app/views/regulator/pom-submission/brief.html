@@ -88,8 +88,8 @@
 
     {# Files: one summary card per file, newest first. The file name is the
        card's title, with Open and Download.
-       Flags: a row for each, with the producer in bold and the scheme's
-       reason next to it (the full version also says what kind of flag it is).
+       Flags: how many, then a row for each, with the producer in bold and
+       the scheme's reason next to it (the full version also says what kind of flag it is).
        Only the template CSV is checked, so a supporting document has no flag rows #}
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     {% for f in s.files %}
@@ -97,6 +97,9 @@
          reason. A checked file with no flags says so. A supporting document
          isn't checked, so it has no flag rows #}
       {% set fileRows = [] %}
+      {% if f.flagList.length %}
+        {% set fileRows = (fileRows.push({ key: { text: words.flags }, value: { text: f.flagList.length } }), fileRows) %}
+      {% endif %}
       {% for flag in f.flagList %}
         {% set fileRows = (fileRows.push({ key: { text: flag.producer }, value: { text: flag.reasonShort } }), fileRows) %}
       {% endfor %}
