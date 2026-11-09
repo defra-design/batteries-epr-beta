@@ -1,0 +1,28 @@
+{
+  "title": "Move the Welsh language link below the beta banner",
+  "type": "change",
+  "date": "2026-11-09",
+  "why": "The Welsh language link now sits below the beta banner, on the right, on every regulator page. It was in the service navigation.\n\n**Why**\n\n- It's in the same place as the [regulator toolkit prototype](https://regulator-responsibility-app-359d82a07820.herokuapp.com/v4/regulator-index--dashboard?persona=basic-user)'s link, so regulator services stay consistent\n- The service navigation stays free for menu items, the signed-in person and Sign out\n- The [GOV.UK language navigation guidance](https://design-system.service.gov.uk/components/language-navigation/) says to choose a single consistent location that works for your users. The service navigation is one option, not a rule\n\n**What hasn't changed**\n\n- It's still the GOV.UK language navigation component (in trial), with only GOV.UK override classes to place it\n- It's still its own navigation landmark (\"Language\"), so screen reader users can find it\n- Cymraeg is still marked as Welsh, so screen readers say it in Welsh (WCAG 3.1.2, language of parts)\n\n**To be confirmed**\n\nWhere the link goes in the shared regulator header, with the shared components team.",
+  "pages": [
+    {
+      "label": "Placed on the market submissions, brief version",
+      "url": "/regulator/pom-submissions/latest-quarter"
+    },
+    {
+      "label": "Placed on the market submissions, full version",
+      "url": "/regulator/pom-submissions/all-submissions"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Brief version, desktop (1020 pixels wide)",
+      "before": "changes/move-welsh-language-link-below-beta-banner/before--brief-1020-pixels.png",
+      "after": "changes/move-welsh-language-link-below-beta-banner/after--brief-1020-pixels.png"
+    },
+    {
+      "label": "Brief version, 320 pixels wide",
+      "before": "changes/move-welsh-language-link-below-beta-banner/before--brief-320-pixels.png",
+      "after": "changes/move-welsh-language-link-below-beta-banner/after--brief-320-pixels.png"
+    }
+  ]
+}

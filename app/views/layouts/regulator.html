@@ -37,10 +37,12 @@
   {#
     Phase banner and language navigation (6 November 2026).
     Both are standard GOV.UK Frontend components, not add-ons:
-    - Language navigation (GOV.UK Frontend 6.5+, in trial) sits in the service
-      navigation's end slot, as GOV.UK advises when the whole service is in
-      English and Welsh.
     - The phase banner sits straight under the service navigation.
+    - Language navigation (GOV.UK Frontend 6.5+, in trial) sits below the phase
+      banner, right aligned (9 November 2026). Same place as the regulator
+      toolkit prototype, so the service navigation stays free for menu items
+      and Sign out. GOV.UK says to choose one consistent location; it's its own
+      navigation landmark ("Language"), so it's still easy to find.
     The words are in app/content/regulator/header.md.
 
     Prototype only: Cymraeg reloads the page with ?lang=cy (how the live
@@ -54,6 +56,7 @@
   {% set languageNavigationHtml %}
     {{ govukLanguageNavigation({
       ariaLabel: headerWords.languageNavigationLabel,
+      classes: "govuk-!-text-align-right govuk-!-margin-top-2 govuk-!-margin-bottom-0",
       items: [
         { text: headerWords.english, lang: "en", href: englishUrl, current: lang == "en" },
         { text: headerWords.welsh, lang: "cy", href: welshUrl, current: lang == "cy" }
@@ -64,10 +67,7 @@
   {{ govukServiceNavigation({
     serviceName: serviceName,
     serviceUrl: "/",
-    navigationId: "service-navigation",
-    slots: {
-      end: { html: languageNavigationHtml, align: "inline" }
-    }
+    navigationId: "service-navigation"
   }) }}
 
   {% set phaseBannerHtml %}
@@ -79,6 +79,12 @@
     tag: { text: headerWords.phaseTag },
     html: phaseBannerHtml
   }) }}
+
+  {# Language navigation below the phase banner, right aligned, in line with the
+     regulator toolkit prototype. It needs its own width container. #}
+  <div class="govuk-width-container">
+    {{ languageNavigationHtml | safe }}
+  </div>
 {% endblock %}
 
 {% block footer %}

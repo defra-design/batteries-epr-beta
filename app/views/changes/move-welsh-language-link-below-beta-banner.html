@@ -1,0 +1,54 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Move the Welsh language link below the beta banner" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">9 November 2026</span>
+<h1 class="govuk-heading-l">Move the Welsh language link below the beta banner</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+<p class="govuk-body">The Welsh language link now sits below the beta banner, on the right, on every regulator page. It was in the service navigation.</p>
+<p class="govuk-body"><strong>Why</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>It's in the same place as the <a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/v4/regulator-index--dashboard?persona=basic-user" class="govuk-link" rel="noreferrer noopener" target="_blank">regulator toolkit prototype (opens in new tab)</a>'s link, so regulator services stay consistent</li><li>The service navigation stays free for menu items, the signed-in person and Sign out</li><li>The <a href="https://design-system.service.gov.uk/components/language-navigation/" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK language navigation guidance (opens in new tab)</a> says to choose a single consistent location that works for your users. The service navigation is one option, not a rule</li></ul>
+<p class="govuk-body"><strong>What hasn't changed</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>It's still the GOV.UK language navigation component (in trial), with only GOV.UK override classes to place it</li><li>It's still its own navigation landmark (&quot;Language&quot;), so screen reader users can find it</li><li>Cymraeg is still marked as Welsh, so screen readers say it in Welsh (WCAG 3.1.2, language of parts)</li></ul>
+<p class="govuk-body"><strong>To be confirmed</strong></p>
+<p class="govuk-body">Where the link goes in the shared regulator header, with the shared components team.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/latest-quarter">Placed on the market submissions, brief version</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/all-submissions">Placed on the market submissions, full version</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Brief version, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/move-welsh-language-link-below-beta-banner/before--brief-1020-pixels.png" alt="Before: Brief version, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/move-welsh-language-link-below-beta-banner/after--brief-1020-pixels.png" alt="After: Brief version, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Brief version, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/move-welsh-language-link-below-beta-banner/before--brief-320-pixels.png" alt="Before: Brief version, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/move-welsh-language-link-below-beta-banner/after--brief-320-pixels.png" alt="After: Brief version, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+
+{% endblock %}
