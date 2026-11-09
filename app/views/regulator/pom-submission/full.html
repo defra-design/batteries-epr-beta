@@ -66,7 +66,7 @@
 {% set small = "govuk-!-font-size-16" %}
 {% set fileRows = [] %}
 {% for f in s.files %}
-  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% endif %}{% endset %}
+  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% elif f.checked %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% else %}<span class="govuk-visually-hidden">{{ words.notChecked }}</span>{% endif %}{% endset %}
   {% set fileRows = (fileRows.push([
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (f.name | escape) + '</a>', classes: small + " app-table-cell--wrap" },
     { html: flagsHtml, classes: small + " app-table-cell--wrap" },

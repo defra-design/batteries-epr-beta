@@ -3,7 +3,7 @@
 {#
   EB-326: a scheme's members, brief version. 9 November 2026.
   Brief: every member on one page, in a sortable table, no filters and no
-  pagination. The full version adds filters (members-full.html).
+  pagination. How many members there are, under the intro. The full version adds filters (members-full.html).
   You get here from "View members" on the brief submission page or the brief
   organisation details. Back goes to whichever of those you came from,
   worked out from the address (app/routes.js).
@@ -57,6 +57,7 @@
     <span class="govuk-caption-l">{{ org.name }}</span>
     <h1 class="govuk-heading-l">{{ words.heading }}</h1>
     {{ words.intro | paragraphs }}
+    <p class="govuk-body">{{ members.length }} {{ words.members }}</p>
   </div>
 </div>
 

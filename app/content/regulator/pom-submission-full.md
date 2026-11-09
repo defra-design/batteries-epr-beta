@@ -64,6 +64,9 @@ Flags
 ## No flags (only screen readers hear this, in the Flags column)
 No flags
 
+## Not checked (only screen readers hear this, for a supporting document)
+Not applicable
+
 ## Submitted column (when the file was uploaded)
 Submitted
 

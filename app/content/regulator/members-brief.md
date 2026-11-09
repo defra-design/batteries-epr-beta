@@ -13,6 +13,9 @@ Members
 ## Intro (paragraphs welcome)
 Intro text...
 
+## Members (after the number, for example "587 members")
+members
+
 ## Table caption (only screen readers hear this)
 Members of the scheme
 

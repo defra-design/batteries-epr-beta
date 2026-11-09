@@ -161,9 +161,10 @@ function submission (slug, year, quarter) {
   for (let v = versions; v >= 1; v--) {
     const date = v === versions ? row.submittedSort : addDays(row.submittedSort, -8)
     const fileFlags = v === versions ? flags : []
-    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: fileFlags.length, flagList: fileFlags, dateText: shortDate(date), dateLong: longDate(date) })
+    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: fileFlags.length, flagList: fileFlags, checked: true, dateText: shortDate(date), dateLong: longDate(date) })
+    // A supporting document isn't checked, so it never has flags
     if (v === versions) {
-      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, flagList: [], dateText: shortDate(date), dateLong: longDate(date) })
+      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, flagList: [], checked: false, dateText: shortDate(date), dateLong: longDate(date) })
     }
   }
   return {

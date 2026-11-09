@@ -89,7 +89,8 @@
     {# Files: one summary card per file, newest first. The file name is the
        card's title, with Open and Download.
        Flags: just the scheme's reason, which names the producer (the full
-       version also says what kind of flag it is) #}
+       version also says what kind of flag it is). Only the template CSV is
+       checked, so a supporting document has no Flags row #}
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     {% for f in s.files %}
       {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
@@ -101,10 +102,9 @@
             { href: notBuiltHref, text: words.downloadLink, visuallyHiddenText: f.name }
           ] }
         },
-        rows: [
-          { key: { text: words.flags }, value: { html: flagsHtml } },
+        rows: ([{ key: { text: words.flags }, value: { html: flagsHtml } }] if f.checked else []).concat([
           { key: { text: words.submitted }, value: { text: f.dateLong } }
-        ]
+        ])
       }) }}
     {% endfor %}
 
