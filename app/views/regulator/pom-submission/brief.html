@@ -101,7 +101,8 @@
         {% set fileRows = (fileRows.push({ key: { text: words.flags }, value: { text: f.flagList.length } }), fileRows) %}
       {% endif %}
       {% for flag in f.flagList %}
-        {% set fileRows = (fileRows.push({ key: { text: flag.producer }, value: { text: flag.reasonShort } }), fileRows) %}
+        {# The producer isn't bold (a GOV.UK override class, not our own style), so it reads as part of Flags #}
+        {% set fileRows = (fileRows.push({ key: { text: flag.producer, classes: "govuk-!-font-weight-regular" }, value: { text: flag.reasonShort } }), fileRows) %}
       {% endfor %}
       {% if f.checked and not f.flagList.length %}
         {% set fileRows = (fileRows.push({ key: { text: words.flags }, value: { text: words.noFlags } }), fileRows) %}
