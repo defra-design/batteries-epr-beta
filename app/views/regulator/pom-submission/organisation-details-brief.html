@@ -15,7 +15,6 @@
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/organisation-details-brief.md
-  Prototype only: View members goes to the "not built yet" page.
 #}
 
 {% set wordsFile = "regulator/organisation-details-brief" %}
@@ -67,7 +66,7 @@
 
     {{ govukSummaryList({ rows: rows }) }}
 
-    <p class="govuk-body"><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
+    <p class="govuk-body"><a href="{{ membersHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
 
   </div>
 </div>

@@ -182,4 +182,37 @@ function submission (slug, year, quarter) {
   }
 }
 
-module.exports = { organisation, submission }
+// A scheme's members (producers): made-up names, made from these words so
+// every scheme gets its own list. Current members match the scheme's member
+// count; a couple of former members are kept for history.
+const NAME_START = ['Acorn', 'Beacon', 'Bright', 'Cedar', 'Delta', 'Ember', 'Falcon', 'Granite', 'Harbour', 'Iris', 'Juniper', 'Kestrel', 'Lumen', 'Maple', 'Nova', 'Orchard', 'Pioneer', 'Quartz', 'Riverside', 'Summit', 'Thistle', 'Upland', 'Vale', 'Willow', 'Yarrow', 'Zenith']
+const NAME_END = ['Batteries Ltd', 'Power Ltd', 'Energy Ltd', 'Cells Ltd', 'Electrical Ltd', 'Trading Ltd', 'Retail Ltd', 'Supplies Ltd']
+
+function members (slug, year, quarter) {
+  const s = SCHEMES[slug]
+  if (!s) return null
+  const offset = Object.keys(SCHEMES).indexOf(slug) * 7
+  const sub = submission(slug, year, quarter)
+  // Flags in this submission, by producer
+  const flagged = {}
+  if (sub) sub.flags.forEach(f => { flagged[f.producer] = (flagged[f.producer] || 0) + 1 })
+  const list = []
+  // The flagged producers are members too
+  PRODUCERS.forEach(name => list.push({ name, current: true }))
+  for (let i = 0; list.length < s.members; i++) {
+    const name = NAME_START[(i + offset) % NAME_START.length] + ' ' + NAME_END[(i * 3 + offset) % NAME_END.length]
+    if (!list.find(m => m.name === name)) list.push({ name, current: true })
+  }
+  list.push({ name: NAME_START[(offset + 5) % NAME_START.length] + ' Home Ltd', current: false })
+  list.push({ name: NAME_START[(offset + 11) % NAME_START.length] + ' Outdoor Ltd', current: false })
+  return list
+    .map((m, i) => ({
+      ...m,
+      // Made-up registration numbers: the real format is to check
+      bprn: 'BPRN' + String(10000 + (offset + 1) * 1000 + i * 37).padStart(6, '0'),
+      flags: flagged[m.name] || 0
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+}
+
+module.exports = { organisation, submission, members }

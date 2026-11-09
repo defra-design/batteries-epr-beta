@@ -1,0 +1,22 @@
+{
+  "title": "Add the members page (brief version)",
+  "type": "new",
+  "date": "2026-11-09",
+  "why": "Regulators need to see who the members of a scheme are. This is the members list only: each producer's figures by chemistry and category look like they're part of EB-366 (checking a submission), to confirm with Mak.\n\n**On the page**\n\n- The scheme name as a caption, \"Members\" as the heading, and an intro line from Jen (to write)\n- A sortable table (MOJ sortable table), alphabetical by member, in 16px text and the MOJ scrollable pane: member (a link to their organisation details), BPRN, status (current or former), outstanding flags in this submission, and View submissions\n- Former members stay on the list for history: to check with Phil\n- From \"View members\" on the submission or the organisation details. Back goes to whichever you came from\n\n**Left out, as agreed with Jen**\n\n- Producer size (only large producers join schemes), date joined, Download CSV, View scheme record\n\n**Later**\n\n- Filters or search, if schemes have hundreds of members. How many members to design for isn't agreed yet (20 to 250, or 200 to 600)\n\n**Prototype only**\n\n- Brief version only for now\n- Member names and BPRNs are made up, and the real BPRN format is to check\n- Member names and View submissions go to a \"not built yet\" page",
+  "pages": [
+    {
+      "label": "Members, brief version",
+      "url": "/regulator/pom-submissions/brief/recycling-lives/2026/3/members"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Desktop (1020 pixels wide)",
+      "after": "changes/add-members-page/after--members-brief-1020-pixels.png"
+    },
+    {
+      "label": "320 pixels wide",
+      "after": "changes/add-members-page/after--members-brief-320-pixels.png"
+    }
+  ]
+}

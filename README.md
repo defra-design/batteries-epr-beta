@@ -80,7 +80,7 @@ developers should build, and the ones that only make the prototype work.
 
 - **What it does:** components from the MOJ Design System that the GOV.UK Design System doesn't have. We use the [sortable table](https://design-patterns.service.justice.gov.uk/components/sortable-table/) (`data-module="moj-sortable-table"`). Without JavaScript it's a normal GOV.UK table
 - **Watch out:** it sorts in the browser, so it only sorts the rows on the page. Don't use it with pagination
-- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (full version, all submissions) and on `app/views/regulators.html` (the list of prototypes, prototype only)
+- **Where:** `@ministryofjustice/frontend` in `package.json` (a Prototype Kit plugin, so its styles and scripts load automatically). Used on the placed on the market submissions page (full version, all submissions), the members page (brief version) and on `app/views/regulators.html` (the list of prototypes, prototype only)
 - **Added by:** Marie Moyles, November 2026
 - **To remove:** remove the table's `data-module` and `aria-sort` attributes, then `npm uninstall @ministryofjustice/frontend`
 

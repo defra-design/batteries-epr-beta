@@ -109,6 +109,7 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter', (req, res,
     submission,
     backHref: '/regulator/pom-submissions/latest-quarter?year=' + submission.year + '&quarter=' + submission.quarter,
     organisationHref: req.path.replace(/\/$/, '') + '/organisation-details',
+    membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
@@ -120,8 +121,29 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation
   res.render('regulator/pom-submission/organisation-details-brief', {
     organisation,
     backHref: briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }),
+    membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
+})
+
+// EB-326: members (brief version), from the submission or from the
+// organisation details. Back goes to the page it was opened from
+function membersPage (req, res, next, backHref) {
+  const organisation = details.organisation(req.params.scheme)
+  const members = details.members(req.params.scheme, req.params.year, req.params.quarter)
+  if (!organisation || !members || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  res.render('regulator/pom-submission/members-brief', {
+    org: organisation,
+    members,
+    backHref,
+    notBuiltHref: notBuilt(req.originalUrl)
+  })
+}
+router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/members', (req, res, next) => {
+  membersPage(req, res, next, briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }))
+})
+router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation-details/members', (req, res, next) => {
+  membersPage(req, res, next, briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
 })
 
 // Full, page 1: back to the full list

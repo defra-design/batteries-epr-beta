@@ -1,0 +1,80 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  EB-326: a scheme's members, brief version. 9 November 2026.
+  You get here from "View members" on the brief submission page or the brief
+  organisation details. Back goes to whichever of those you came from,
+  worked out from the address (app/routes.js).
+
+  What Marie and Jen agreed (Page criteria tab, 4 November):
+  - Scheme name as the caption, "Members" as the heading, one intro line (Jen)
+  - A sortable table, alphabetical by member name:
+    member name (links to their organisation details, not built yet),
+    BPRN, status (current or former member: keep former members for
+    history, to check with Phil), outstanding flags (from this submission),
+    and View submissions (not built yet)
+  - Left out: producer size, date joined, Download CSV, View scheme record
+  - Later: filters, if schemes have hundreds of members
+
+  Add-on: MOJ Frontend (sortable table) and the MOJ scrollable pane. Without
+  JavaScript it's a normal table, in alphabetical order. See the README.
+
+  The data: app/data/pom-submission-details.js (dummy: made-up names and
+  BPRNs, and the real BPRN format is to check).
+  The words: app/content/regulator/members-brief.md
+#}
+
+{% set wordsFile = "regulator/members-brief" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = words.heading + ", " + org.name + " (brief version)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{# Table text is 16px, as on the lists of submissions #}
+{% set small = "govuk-!-font-size-16" %}
+{% set rows = [] %}
+{% for m in members %}
+  {% set rows = (rows.push([
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (m.name | escape) + '</a>', attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
+    { text: m.bprn, classes: small },
+    { text: words.current if m.current else words.former, classes: small },
+    { text: m.flags, classes: small + " govuk-table__cell--numeric" },
+    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (words.viewSubmissionsLink | escape) + '<span class="govuk-visually-hidden"> (' + (m.name | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+    {{ words.intro | paragraphs }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+      {{ govukTable({
+        caption: words.tableCaption,
+        captionClasses: "govuk-visually-hidden",
+        attributes: { "data-module": "moj-sortable-table" },
+        head: [
+          { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
+          { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
+          { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
+          { text: words.outstandingFlagsColumn, attributes: { "aria-sort": "none" }, classes: small + " govuk-table__header--numeric" },
+          { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
+        ],
+        rows: rows
+      }) }}
+    </div>
+  </div>
+</div>
+{% endblock %}

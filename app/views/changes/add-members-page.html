@@ -1,0 +1,45 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Add the members page (brief version)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">9 November 2026</span>
+<h1 class="govuk-heading-l">Add the members page (brief version)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
+<p class="govuk-body">Regulators need to see who the members of a scheme are. This is the members list only: each producer's figures by chemistry and category look like they're part of EB-366 (checking a submission), to confirm with Mak.</p>
+<p class="govuk-body"><strong>On the page</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The scheme name as a caption, &quot;Members&quot; as the heading, and an intro line from Jen (to write)</li><li>A sortable table (MOJ sortable table), alphabetical by member, in 16px text and the MOJ scrollable pane: member (a link to their organisation details), BPRN, status (current or former), outstanding flags in this submission, and View submissions</li><li>Former members stay on the list for history: to check with Phil</li><li>From &quot;View members&quot; on the submission or the organisation details. Back goes to whichever you came from</li></ul>
+<p class="govuk-body"><strong>Left out, as agreed with Jen</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Producer size (only large producers join schemes), date joined, Download CSV, View scheme record</li></ul>
+<p class="govuk-body"><strong>Later</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Filters or search, if schemes have hundreds of members. How many members to design for isn't agreed yet (20 to 250, or 200 to 600)</li></ul>
+<p class="govuk-body"><strong>Prototype only</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Brief version only for now</li><li>Member names and BPRNs are made up, and the real BPRN format is to check</li><li>Member names and View submissions go to a &quot;not built yet&quot; page</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/brief/recycling-lives/2026/3/members">Members, brief version</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-members-page/after--members-brief-1020-pixels.png" alt="Desktop (1020 pixels wide)" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-members-page/after--members-brief-320-pixels.png" alt="320 pixels wide" class="app-change-screenshot">
+</div>
+</div>
+
+{% endblock %}
