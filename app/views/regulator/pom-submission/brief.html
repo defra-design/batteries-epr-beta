@@ -88,12 +88,22 @@
 
     {# Files: one summary card per file, newest first. The file name is the
        card's title, with Open and Download.
-       Flags: just the scheme's reason, which names the producer (the full
-       version also says what kind of flag it is). Only the template CSV is
-       checked, so a supporting document has no Flags row #}
+       Flags: a row for each, with the producer in bold and the scheme's
+       reason next to it (the full version also says what kind of flag it is).
+       Only the template CSV is checked, so a supporting document has no flag rows #}
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     {% for f in s.files %}
-      {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list">{% for flag in f.flagList %}<li>{{ flag.reason }}</li>{% endfor %}</ul>{% else %}{{ words.noFlags }}{% endif %}{% endset %}
+      {# One row per flag: the producer (bold, as the key) and the scheme's
+         reason. A checked file with no flags says so. A supporting document
+         isn't checked, so it has no flag rows #}
+      {% set fileRows = [] %}
+      {% for flag in f.flagList %}
+        {% set fileRows = (fileRows.push({ key: { text: flag.producer }, value: { text: flag.reasonShort } }), fileRows) %}
+      {% endfor %}
+      {% if f.checked and not f.flagList.length %}
+        {% set fileRows = (fileRows.push({ key: { text: words.flags }, value: { text: words.noFlags } }), fileRows) %}
+      {% endif %}
+      {% set fileRows = (fileRows.push({ key: { text: words.submitted }, value: { text: f.dateLong } }), fileRows) %}
       {{ govukSummaryList({
         card: {
           title: { text: f.name, headingLevel: 3 },
@@ -102,9 +112,7 @@
             { href: notBuiltHref, text: words.downloadLink, visuallyHiddenText: f.name }
           ] }
         },
-        rows: ([{ key: { text: words.flags }, value: { html: flagsHtml } }] if f.checked else []).concat([
-          { key: { text: words.submitted }, value: { text: f.dateLong } }
-        ])
+        rows: fileRows
       }) }}
     {% endfor %}
 

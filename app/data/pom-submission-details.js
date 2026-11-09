@@ -151,9 +151,10 @@ function submission (slug, year, quarter) {
   const submittedBy = org.superUser
   const flags = open
     ? [
-        { title: 'Estimated figure', producer: PRODUCERS[0], reason: PRODUCERS[0] + ' is waiting for figures from its supplier, so this quarter is an estimate.' },
-        { title: 'Big change since last quarter', producer: PRODUCERS[1], reason: PRODUCERS[1] + ' started selling a new range of batteries in August.' },
-        { title: 'Same tonnage as last quarter', producer: PRODUCERS[2], reason: PRODUCERS[2] + ' has checked and sold the same amount.' }
+        // reason names the producer; reasonShort doesn't, for when the producer is shown next to it
+        { title: 'Estimated figure', producer: PRODUCERS[0], reason: PRODUCERS[0] + ' is waiting for figures from its supplier, so this quarter is an estimate.', reasonShort: 'Waiting for figures from its supplier, so this quarter is an estimate.' },
+        { title: 'Big change since last quarter', producer: PRODUCERS[1], reason: PRODUCERS[1] + ' started selling a new range of batteries in August.', reasonShort: 'Started selling a new range of batteries in August.' },
+        { title: 'Same tonnage as last quarter', producer: PRODUCERS[2], reason: PRODUCERS[2] + ' has checked and sold the same amount.', reasonShort: 'Has checked and sold the same amount.' }
       ]
     : []
   const fileBase = 'pom-' + slug + '-' + year + '-q' + quarter
