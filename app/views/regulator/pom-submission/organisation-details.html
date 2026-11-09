@@ -9,8 +9,8 @@
     whether regulators can change these. Prototype only: they go to the
     "not built yet" page
   - Emails are links
-  - People who can submit: the appropriate person and anyone with delegated
-    authority, without dates (if their authority has ended, they're not on
+  - Other people who can submit: anyone with delegated authority who isn't
+    the appropriate person or the super user (they're in the list above), without dates (if their authority has ended, they're not on
     the list). Other users (who can't submit) are in a details component, so a scheme
     with 14 users doesn't make a long page
   - "Super user", not "Admin" (Rich's word)
@@ -52,12 +52,15 @@
   }), rows) %}
 {% endfor %}
 
+{# Other people who can submit: not the appropriate person or the super user, who are shown above #}
 {% set peopleRows = [] %}
 {% for p in org.canSubmit %}
+  {% if p.role == "user" %}
   {% set peopleRows = (peopleRows.push([
     { text: p.name },
     { html: '<a href="mailto:' + p.email + '" class="govuk-link">' + p.email + '</a>' }
   ]), peopleRows) %}
+  {% endif %}
 {% endfor %}
 {% set otherRows = [] %}
 {% for p in org.otherUsers %}
@@ -76,17 +79,19 @@
 
     {{ govukSummaryList({ rows: rows }) }}
 
-    <h2 class="govuk-heading-m">{{ words.peopleWhoCanSubmitHeading }}</h2>
-    <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
-    {# Add-on: MOJ scrollable pane, so long emails don't make the page scroll sideways on a phone #}
-    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.peopleTableCaption }}">
-      {{ govukTable({
-        caption: words.peopleTableCaption,
-        captionClasses: "govuk-visually-hidden",
-        head: [{ text: words.nameColumn }, { text: words.emailColumn }],
-        rows: peopleRows
-      }) }}
-    </div>
+    {% if peopleRows.length %}
+      <h2 class="govuk-heading-m">{{ words.peopleWhoCanSubmitHeading }}</h2>
+      <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
+      {# Add-on: MOJ scrollable pane, so long emails don't make the page scroll sideways on a phone #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.peopleTableCaption }}">
+        {{ govukTable({
+          caption: words.peopleTableCaption,
+          captionClasses: "govuk-visually-hidden",
+          head: [{ text: words.nameColumn }, { text: words.emailColumn }],
+          rows: peopleRows
+        }) }}
+      </div>
+    {% endif %}
 
     {% if otherRows.length %}
       {% set otherHtml %}

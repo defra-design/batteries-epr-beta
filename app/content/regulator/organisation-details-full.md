@@ -31,11 +31,11 @@ Appropriate person
 ## Super user (the top of the scheme's account)
 Super user
 
-## People who can submit heading
-People who can submit
+## People who can submit heading (as well as the appropriate person and super user)
+Other people who can submit
 
 ## People who can submit intro
-The appropriate person and anyone with delegated authority.
+People with delegated authority to submit returns.
 
 ## Name column
 Name
