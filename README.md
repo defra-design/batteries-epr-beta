@@ -102,7 +102,7 @@ developers should build, and the ones that only make the prototype work.
 
 #### Filters in a row
 
-- **What it does:** puts filter dropdowns and their button side by side with a fixed 10px gap, wrapping onto a new line when there isn't room. The button lines up with the bottom of the dropdowns. Full width, one under the other, on a phone
+- **What it does:** puts filter dropdowns and their button side by side with a fixed 10px gap, wrapping onto a new line when there isn't room. The button lines up with the bottom of the dropdowns. Full width, one under the other, on a phone. A free-text field can grow to fill its line (`app-filters__grow`), and two buttons (Apply and Clear filters) stay together in a GOV.UK button group
 - **Why:** a GOV.UK select won't go narrower than 11.5em, so in grid columns they squashed into each other at some widths
 - **Where:** the `app-filters` style in `app/assets/sass/application.scss`. Used on the placed on the market submissions pages and the members page (full version)
 - **Added by:** Marie Moyles, November 2026

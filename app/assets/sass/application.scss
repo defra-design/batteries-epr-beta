@@ -50,7 +50,9 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
 // a fixed gap, and wrap onto a new line when there isn't room, so they never
 // squash into each other (a GOV.UK select won't go narrower than 11.5em).
 // The button lines up with the bottom of the dropdowns. On a phone, each one
-// is full width, one under the other. Used on the PoM submissions pages.
+// is full width, one under the other. Used on the PoM submissions pages and
+// the members page (full version), where a free-text field grows to fill its
+// line and the two buttons stay together.
 .app-filters {
   display: flex;
   flex-wrap: wrap;
@@ -64,9 +66,25 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
     @include govuk-responsive-margin(6, "bottom", $adjustment: 2px);
   }
 
+  // Two buttons (Apply filters and Clear filters) go in a GOV.UK button
+  // group, so they stay together when the row wraps. The group's own bottom
+  // margin isn't needed here: the buttons line up with the fields
+  .govuk-button-group {
+    margin-bottom: 0;
+  }
+
   @include govuk-media-query($until: tablet) {
     > * {
       flex-basis: 100%;
+    }
+  }
+
+  // A free-text field (app-filters__grow on its form group) takes the space
+  // that's left on its line, so long names fit. From tablet up: on a phone
+  // everything is full width anyway
+  @include govuk-media-query($from: tablet) {
+    .app-filters__grow {
+      flex: 1 1 20em;
     }
   }
 }

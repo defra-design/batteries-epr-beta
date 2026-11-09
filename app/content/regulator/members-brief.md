@@ -11,7 +11,7 @@ Back
 Members
 
 ## Intro (paragraphs welcome)
-[Intro text: Jen to write]
+Intro text...
 
 ## Table caption (only screen readers hear this)
 Members of the scheme

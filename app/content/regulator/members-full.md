@@ -11,7 +11,7 @@ Back
 Members
 
 ## Intro (paragraphs welcome)
-[Intro text: Jen to write]
+Intro text...
 
 ## Search label
 Member name or BPRN
@@ -36,6 +36,9 @@ Outstanding flags only
 
 ## Apply filters button
 Apply filters
+
+## Clear filters button
+Clear filters
 
 ## Showing (before the numbers, for example "Showing 3 of 587 members")
 Showing
