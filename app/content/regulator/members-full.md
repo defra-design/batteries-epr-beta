@@ -29,7 +29,7 @@ Former
 All
 
 ## Flags label
-Flags
+Irregularities
 
 ## Outstanding flags only (filter option)
 Outstanding
@@ -65,7 +65,7 @@ Registration number
 Status
 
 ## Outstanding flags column
-Outstanding flags
+Outstanding irregularities
 
 ## Action column
 Action
