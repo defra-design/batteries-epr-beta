@@ -11,10 +11,10 @@ Back
 Members
 
 ## Intro (paragraphs welcome)
-Intro text...
+
 
 ## Search label
-Member name or BPRN
+Member name or registration number
 
 ## Status label
 Status
@@ -50,7 +50,7 @@ of
 members
 
 ## No members
-No members match your filters.
+No members match your search. Check the name or registration number, or clear the filters.
 
 ## Table caption (only screen readers hear this)
 Members of the scheme
@@ -59,7 +59,7 @@ Members of the scheme
 Member
 
 ## BPRN column
-BPRN
+Registration number
 
 ## Status column
 Status
