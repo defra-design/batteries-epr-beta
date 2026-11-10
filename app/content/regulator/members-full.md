@@ -35,10 +35,10 @@ Flags
 Outstanding
 
 ## Apply filters button
-Apply filters
+Search
 
 ## Clear filters button
-Clear filters
+Clear search
 
 ## Showing (before the numbers, for example "Showing 3 of 587 members")
 Showing
@@ -50,7 +50,7 @@ of
 members
 
 ## No members
-No members match your search. Check the name or registration number, or clear the filters.
+No members match your search. Check the name or registration number, or clear your search.
 
 ## Table caption (only screen readers hear this)
 Members of the scheme
