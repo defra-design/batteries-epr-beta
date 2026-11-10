@@ -11,7 +11,7 @@ Back
 Members
 
 ## Intro (paragraphs welcome)
-Intro text...
+
 
 ## Members (after the number, for example "587 members")
 members
@@ -35,7 +35,7 @@ Current
 Former
 
 ## Outstanding flags column
-Outstanding flags
+Flags
 
 ## Action column
 Action
