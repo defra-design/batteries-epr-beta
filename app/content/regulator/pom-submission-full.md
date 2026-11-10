@@ -35,7 +35,7 @@ day left
 Submitted by
 
 ## Super user (the top of the scheme's account)
-Super user
+Director
 
 ## BCS number
 BCS number
@@ -47,10 +47,10 @@ Placed on the market
 tonnes
 
 ## Producers in the file
-Producers in the file
+Members in file
 
 ## Files heading
-Files
+Files in this submission
 
 ## Files table caption (only screen readers hear this)
 Files in this submission
@@ -71,7 +71,7 @@ Not applicable
 Submitted
 
 ## View producer figures button
-View producer figures
+View member data
 
 ## Organisation heading
 Organisation
