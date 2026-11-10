@@ -8,16 +8,16 @@ Done? Select Commit changes. It's live in about 5 minutes.
 Back
 
 ## Heading
-Members
+Search for a member
 
 ## Intro (paragraphs welcome)
 
 
 ## Search label
-Member name or registration number
+Name or registration number
 
 ## Status label
-Status
+Membership
 
 ## Current (status, and its filter option)
 Current
@@ -32,13 +32,13 @@ All
 Irregularities
 
 ## Outstanding flags only (filter option)
-Outstanding
+To review
 
 ## Apply filters button
 Search
 
 ## Clear filters button
-Clear search
+Clear
 
 ## Showing (before the numbers, for example "Showing 3 of 587 members")
 Showing
@@ -62,10 +62,10 @@ Member
 Registration number
 
 ## Status column
-Status
+Membership
 
 ## Outstanding flags column
-Outstanding irregularities
+Irregularities to review
 
 ## Action column
 Action
