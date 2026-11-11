@@ -54,12 +54,14 @@ function notBuilt (back) {
 
 // Brief version: one quarter at a time. Lands on the latest quarter with submissions.
 // Scheme names aren't links: "View submission" opens one page with everything.
+// What needs action first: soonest review by date first, accepted last
+// (design session, 10 November; was alphabetical by scheme)
 router.get('/regulator/pom-submissions/latest-quarter', (req, res) => {
   const year = pick(req.query.year, pom.YEARS, pom.LATEST_YEAR)
   const quarter = pick(req.query.quarter, ['1', '2', '3', '4'], pom.LATEST_QUARTER)
   const rows = pom.all()
     .filter(row => row.year === year && row.quarter === quarter)
-    .sort(pom.byScheme)
+    .sort(pom.byDue)
     .map(row => ({ ...row, submissionHref: briefUrl(row) }))
   res.render('regulator/pom-submissions/latest-quarter', {
     pom, rows, filters: { year, quarter }, quarterText: pom.QUARTERS[quarter - 1] + ' ' + year
@@ -68,15 +70,20 @@ router.get('/regulator/pom-submissions/latest-quarter', (req, res) => {
 
 // Full version: everything (3 years). Lands on all years, quarters and statuses.
 // Scheme names aren't links: "View" opens the submission, which links to the organisation.
+// What needs action first: soonest review by date first, then accepted, newest
+// quarter first (design session, 10 November; was newest quarter first).
+// The filters chosen are remembered, so the back link on the submission
+// comes back to the same list (design session, 10 November)
 router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
   const year = pick(req.query.year, ['all', ...pom.YEARS], 'all')
   const quarter = pick(req.query.quarter, ['all', '1', '2', '3', '4'], 'all')
   const status = pick(req.query.status, ['all', ...pom.STATUSES], 'all')
+  req.session.pomFullListQuery = '?' + new URLSearchParams({ quarter, year, status }).toString()
   const rows = pom.all()
     .filter(row => (year === 'all' || row.year === year) &&
       (quarter === 'all' || row.quarter === quarter) &&
       (status === 'all' || row.status === status))
-    .sort(pom.byQuarterThenDue)
+    .sort(pom.byDueThenNewest)
     .map(row => ({ ...row, submissionHref: fullUrl(row) }))
   res.render('regulator/pom-submissions/all-submissions', {
     pom, rows, filters: { year, quarter, status }
@@ -86,8 +93,7 @@ router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
 // -----------------------------------------------------------------------------
 // EB-325: one submission and the scheme's organisation details (6 November 2026)
 // Each version has 2 pages: the submission, then the organisation details.
-// Brief: the organisation details are view only, with just the people who can submit.
-// Full: the organisation details have Change links, and list every user.
+// The organisation details are the same page in both versions (since 10 November 2026).
 // Each back link goes to the page before it in the journey, worked out from
 // the address (no browser history, so it works without JavaScript too).
 // -----------------------------------------------------------------------------
@@ -114,11 +120,13 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter', (req, res,
   })
 })
 
-// Brief, page 2: back to that submission
+// Brief, page 2: back to that submission.
+// One organisation details page for both versions (design session, 10 November 2026).
+// Each version keeps its own address, so Back and View members stay in that version
 router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
   const organisation = details.organisation(req.params.scheme)
   if (!organisation || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
-  res.render('regulator/pom-submission/organisation-details-brief', {
+  res.render('regulator/pom-submission/organisation-details', {
     organisation,
     backHref: briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }),
     membersHref: req.path.replace(/\/$/, '') + '/members',
@@ -126,15 +134,32 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation
   })
 })
 
-// EB-326: members (brief version), from the submission or from the
-// organisation details. Back goes to the page it was opened from
+// EB-326: members. One page for both versions (11 November 2026: the brief
+// version, with just a search box, was dropped). Each version keeps its own
+// address, so Back goes to the page you came from in that version.
+// The filters are a plain form (GET): they're read from the address, so they
+// work without JavaScript
 function membersPage (req, res, next, backHref) {
   const organisation = details.organisation(req.params.scheme)
-  const members = details.members(req.params.scheme, req.params.year, req.params.quarter)
-  if (!organisation || !members || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
-  res.render('regulator/pom-submission/members-brief', {
+  const all = details.members(req.params.scheme, req.params.year, req.params.quarter)
+  if (!organisation || !all || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  const search = String(req.query.search || '').trim().slice(0, 100)
+  const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
+  // A checkbox (design session, 10 November 2026). The Prototype Kit adds a
+  // hidden "_unchecked" value to every checkbox, so a ticked box sends two
+  // values: look for "only" among them
+  const flags = [].concat(req.query.flags || []).includes('only') ? 'only' : 'all'
+  const term = search.toLowerCase()
+  const members = all.filter(m =>
+    (!term || m.name.toLowerCase().includes(term) || m.bprn.toLowerCase().includes(term)) &&
+    (status === 'all' || (status === 'current') === m.current) &&
+    (flags === 'all' || m.flags > 0))
+  res.render('regulator/pom-submission/members', {
     org: organisation,
     members,
+    total: all.length,
+    filters: { search, status, flags },
+    formAction: req.path,
     backHref,
     notBuiltHref: notBuilt(req.originalUrl)
   })
@@ -146,35 +171,11 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation
   membersPage(req, res, next, briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
 })
 
-// EB-326: members (full version), with filters. The filters are a plain
-// form (GET): they're read from the address, so they work without JavaScript
-function membersFullPage (req, res, next, backHref) {
-  const organisation = details.organisation(req.params.scheme)
-  const all = details.members(req.params.scheme, req.params.year, req.params.quarter)
-  if (!organisation || !all || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
-  const search = String(req.query.search || '').trim().slice(0, 100)
-  const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
-  const flags = pick(req.query.flags, ['all', 'outstanding'], 'all')
-  const term = search.toLowerCase()
-  const members = all.filter(m =>
-    (!term || m.name.toLowerCase().includes(term) || m.bprn.toLowerCase().includes(term)) &&
-    (status === 'all' || (status === 'current') === m.current) &&
-    (flags === 'all' || m.flags > 0))
-  res.render('regulator/pom-submission/members-full', {
-    org: organisation,
-    members,
-    total: all.length,
-    filters: { search, status, flags },
-    formAction: req.path,
-    backHref,
-    notBuiltHref: notBuilt(req.originalUrl)
-  })
-}
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/members', (req, res, next) => {
-  membersFullPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }))
+  membersPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }))
 })
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-details/members', (req, res, next) => {
-  membersFullPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
+  membersPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
 })
 
 // Full, page 1: back to the full list
@@ -183,14 +184,14 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter', (req, res, 
   if (!submission) return next()
   res.render('regulator/pom-submission/full', {
     submission,
-    backHref: '/regulator/pom-submissions/all-submissions',
+    backHref: '/regulator/pom-submissions/all-submissions' + (req.session.pomFullListQuery || ''),
     organisationHref: req.path.replace(/\/$/, '') + '/organisation-details',
     membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
 
-// Full, page 2: back to that submission
+// Full, page 2: back to that submission. The same page as the brief version's
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
   const organisation = details.organisation(req.params.scheme)
   if (!organisation || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()

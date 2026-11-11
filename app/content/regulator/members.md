@@ -1,4 +1,4 @@
-Page: a scheme's members, full version (EB-326). You get here from "View members" on the submission or on the organisation details. It has filters, so regulators can find one member among hundreds.
+Page: a scheme's members (EB-326). One page for both the brief and full versions. Search by name or registration number, filter by membership and flags.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The members, numbers and flags are dummy data: ask Marie to change those.
@@ -28,17 +28,14 @@ Former
 ## All (filter option)
 All
 
-## Flags label
-Irregularities
+## Only members with flags (the checkbox)
+Only members with flags
 
-## Outstanding flags only (filter option)
-To review
-
-## Apply filters button
+## Search button
 Search
 
-## Clear filters button
-Clear
+## Reset button (goes back to current members, with nothing ticked)
+Reset
 
 ## Showing (before the numbers, for example "Showing 3 of 587 members")
 Showing
@@ -64,8 +61,8 @@ Registration number
 ## Status column
 Membership
 
-## Outstanding flags column
-Irregularities to review
+## Flags column (how many flags each member has in this submission)
+Flags
 
 ## Action column
 Action

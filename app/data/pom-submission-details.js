@@ -4,8 +4,9 @@
 //
 // The schemes are real, but every name, address, number and email here is
 // made up. Recycling Lives has 14 users, to show a long list.
-// Member counts are between 200 and 600: what regulators told us is realistic
-// in round 2 of alpha testing (David said 20 to 250 today, maybe 500 later).
+// Member counts are up to 281: the most any scheme has, Mak said in the
+// design session (10 November 2026). Was 200 to 600, from round 2 of alpha
+// testing: whether schemes could grow that big is a question for research.
 //
 
 const pom = require('./pom-submissions')
@@ -23,11 +24,6 @@ const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 function longDate (iso) {
   const [y, m, d] = iso.split('-').map(Number)
   return d + ' ' + MONTHS_LONG[m - 1] + ' ' + y
-}
-function addDays (iso, days) {
-  const d = new Date(iso + 'T12:00:00Z')
-  d.setUTCDate(d.getUTCDate() + days)
-  return d.toISOString().slice(0, 10)
 }
 function daysBetween (from, to) {
   return Math.round((new Date(to + 'T12:00:00Z') - new Date(from + 'T12:00:00Z')) / 86400000)
@@ -50,6 +46,8 @@ const SCHEMES = {
     address: ['1 Example Street', 'Leeds', 'LS1 1AA'],
     companiesHouseNumber: '01234561',
     bcsNumber: 'BCS 00121',
+    // When the organisation details last changed (dummy)
+    lastUpdated: '2026-08-14',
     members: 214,
     tonnes: 18.4,
     people: [
@@ -64,7 +62,9 @@ const SCHEMES = {
     address: ['2 Example Road', 'Preston', 'PR1 2BB'],
     companiesHouseNumber: '01234562',
     bcsNumber: 'BCS 00122',
-    members: 583,
+    // When the organisation details last changed (dummy)
+    lastUpdated: '2026-08-14',
+    members: 281,
     tonnes: 27.6,
     people: [
       person('Michael Osei', 'superUser', true),
@@ -88,7 +88,9 @@ const SCHEMES = {
     address: ['3 Example Lane', 'London', 'SE1 3CC'],
     companiesHouseNumber: '01234563',
     bcsNumber: 'BCS 00123',
-    members: 347,
+    // When the organisation details last changed (dummy)
+    lastUpdated: '2026-06-02',
+    members: 176,
     tonnes: 22.9,
     people: [
       person('Sarah Mitchell', 'appropriatePerson'),
@@ -101,7 +103,9 @@ const SCHEMES = {
     address: ['4 Example Avenue', 'Stratford-upon-Avon', 'CV37 4DD'],
     companiesHouseNumber: '01234564',
     bcsNumber: 'BCS 00124',
-    members: 452,
+    // When the organisation details last changed (dummy)
+    lastUpdated: '2026-09-21',
+    members: 248,
     tonnes: 35.2,
     people: [
       person('Rachel Adams', 'appropriatePerson'),
@@ -129,6 +133,7 @@ function organisation (slug) {
     companiesHouseNumber: s.companiesHouseNumber,
     bcsNumber: s.bcsNumber,
     members: s.members,
+    lastUpdatedLong: longDate(s.lastUpdated),
     appropriatePerson: s.people.find(p => p.role === 'appropriatePerson'),
     superUser: s.people.find(p => p.role === 'superUser'),
     canSubmit,
@@ -149,25 +154,31 @@ function submission (slug, year, quarter) {
   const versions = ['Under review', 'Response received', 'Escalated'].includes(row.status) ? 2 : 1
   // The person who submitted: the super user, who has delegated authority
   const submittedBy = org.superUser
+  // Flags (design session, 10 November 2026), each with a type in Mak and
+  // Jen's terms: an error stops a submission, so regulators never see one.
+  // An irregularity (something not quite right, like an estimate or rounding)
+  // or a variance (a change) makes the scheme give a reason, and that's what
+  // regulators see. They're against the data, not a file.
+  // found: what we found, in specific words ("Up 42% on last quarter", not "Big change").
+  // figures: the numbers behind it (full version only).
+  // reason: the scheme's reason, which doesn't name the producer (it's shown next to it).
+  // tagClasses: GOV.UK tag colours that no status uses, so they don't compete.
+  const IRREGULARITY = { type: 'Irregularity', tagClasses: 'govuk-tag--magenta' }
+  const VARIANCE = { type: 'Variance', tagClasses: 'govuk-tag--turquoise' }
   const flags = open
     ? [
-        // reason names the producer; reasonShort doesn't, for when the producer is shown next to it
-        { title: 'Estimated figure', producer: PRODUCERS[0], reason: PRODUCERS[0] + ' is waiting for figures from its supplier, so this quarter is an estimate.', reasonShort: 'Waiting for figures from its supplier, so this quarter is an estimate.' },
-        { title: 'Big change since last quarter', producer: PRODUCERS[1], reason: PRODUCERS[1] + ' started selling a new range of batteries in August.', reasonShort: 'Started selling a new range of batteries in August.' },
-        { title: 'Same tonnage as last quarter', producer: PRODUCERS[2], reason: PRODUCERS[2] + ' has checked and sold the same amount.', reasonShort: 'Has checked and sold the same amount.' }
+        { ...IRREGULARITY, producer: PRODUCERS[0], found: 'Estimated figure', figures: '', reason: 'Waiting for figures from its supplier, so this quarter is an estimate.' },
+        { ...VARIANCE, producer: PRODUCERS[1], found: 'Up 42% on last quarter', figures: '1.2 to 1.7 tonnes', reason: 'Started selling a new range of batteries in August.' },
+        { ...VARIANCE, producer: PRODUCERS[2], found: 'Same tonnage as last quarter', figures: '0.8 tonnes', reason: 'Has checked and sold the same amount.' }
       ]
     : []
-  const fileBase = 'pom-' + slug + '-' + year + '-q' + quarter
-  const files = []
-  for (let v = versions; v >= 1; v--) {
-    const date = v === versions ? row.submittedSort : addDays(row.submittedSort, -8)
-    const fileFlags = v === versions ? flags : []
-    files.push({ name: fileBase + '-v' + v + '.csv', submittedBy: submittedBy.name, flags: fileFlags.length, flagList: fileFlags, checked: true, dateText: shortDate(date), dateLong: longDate(date) })
-    // A supporting document isn't checked, so it never has flags
-    if (v === versions) {
-      files.push({ name: 'supporting-information.pdf', submittedBy: submittedBy.name, flags: 0, flagList: [], checked: false, dateText: shortDate(date), dateLong: longDate(date) })
-    }
-  }
+  // Supporting documents the scheme chose to send, to explain the return.
+  // No data files (CSVs): the data is in the service, and the technical
+  // direction is not to store them (Phil). File trails and earlier versions
+  // belong to EB-366 (Mak). To confirm: whether supporting documents are kept
+  const supportingDocuments = [
+    { name: 'supporting-information.pdf', type: 'PDF', size: '240 KB' }
+  ]
   return {
     ...row,
     yearQuarterFull: pom.QUARTERS[quarter - 1] + ' ' + year,
@@ -179,9 +190,10 @@ function submission (slug, year, quarter) {
     versions,
     submittedBy,
     tonnes: (s.tonnes + Number(quarter) * 0.7).toFixed(1),
-    producers: org.members,
+    // Members in this submission's data. It can differ from the scheme's member count
+    membersInSubmission: org.members,
     flags,
-    files,
+    supportingDocuments,
     organisation: org
   }
 }

@@ -12,13 +12,29 @@
   - "Super user", not "Admin" (Rich's word)
 
   Order: submission details (Submitted by has the person's email as a link),
-  one files table with the flags written out against the file they're in and
-  the scheme's reason under each (the file name opens the file, in the same tab for now),
-  then View producer figures. The organisation (details on page 2, and
+  a table of flags, supporting documents, then View member data. The organisation (details on page 2, and
   members) is a short summary list after the submission details, with View links.
   The summary lists are two-thirds width, as in the brief version.
 
-  Add-on: MOJ scrollable pane round the files table, and long text wraps
+  Design session, 10 November 2026:
+  - BCS number moved to the organisation details: it's about the scheme, not this return (Jen)
+  - "Members in this submission", not "Members in file": it's the data, not a
+    file (Mak). It can differ from the scheme's member count
+  - A Version row with View earlier versions, as in the brief version.
+    Earlier versions used to show as files (Kieran)
+  - Flags have their own table: they're against the data, not a file (David,
+    Phil). Member, type (a tag, using Mak and Jen's terms: Irregularity
+    magenta, Variance turquoise, as in the brief version), what we found with
+    the figures, and the scheme's reason. Specific words: "Up 42% on last
+    quarter", not "Big change"
+  - "Flags" is the umbrella word for all the types (Marie, 11 November), with
+    a line saying what a flag is. Waste may have around 10 types: too many to list
+  - The files table is gone: no CSV files, no earlier versions as files. The
+    technical direction is not to store files (Phil), and file trails are
+    EB-366 (Mak). Supporting documents stay (Rich)
+  - "View member data" in both versions (Kieran, Mak)
+
+  Add-on: MOJ scrollable pane round the flags table, and long text wraps
   (app-table-cell--wrap), so only the table scrolls at small widths.
   See the README.
 
@@ -50,28 +66,28 @@
   {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{{ s.dueLong }}{% else %}{{ s.dueLong }} ({{ s.daysLeft }} {% if s.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}){% endif %}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
+{% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
 {% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
 {% set detailRows = (detailRows.concat([
   { key: { text: words.status }, value: { html: statusHtml } },
   { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
-  { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
   { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
-  { key: { text: words.producersInTheFile }, value: { text: s.producers } }
+  { key: { text: words.membersInThisSubmission }, value: { text: s.membersInSubmission } },
+  { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
-{# Files: one row per file, newest first. The file name opens the file in a new tab.
-   Flags sit with the file they're in: what the flag is in bold, then the
-   scheme's reason, which names the producer (the brief version leaves the reason out).
-   Table text is 16px, as on the lists of submissions #}
+{# Flags: one row per flag. Table text is 16px, as on
+   the lists of submissions. The type is a tag, as in the brief version #}
 {% set small = "govuk-!-font-size-16" %}
-{% set fileRows = [] %}
-{% for f in s.files %}
-  {% set flagsHtml %}{% if f.flagList.length %}<ul class="govuk-list govuk-!-font-size-16">{% for flag in f.flagList %}<li><strong>{{ flag.title }}</strong><br>{{ flag.reason }}</li>{% endfor %}</ul>{% elif f.checked %}<span class="govuk-visually-hidden">{{ words.noFlags }}</span>{% else %}<span class="govuk-visually-hidden">{{ words.notChecked }}</span>{% endif %}{% endset %}
-  {% set fileRows = (fileRows.push([
-    { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (f.name | escape) + '</a>', classes: small + " app-table-cell--wrap" },
-    { html: flagsHtml, classes: small + " app-table-cell--wrap" },
-    { text: f.dateText, classes: small }
-  ]), fileRows) %}
+{% set flagRows = [] %}
+{% for flag in s.flags %}
+  {% set foundHtml %}{{ flag.found }}{% if flag.figures %} ({{ flag.figures }}){% endif %}{% endset %}
+  {% set flagRows = (flagRows.push([
+    { text: flag.producer, classes: small + " app-table-cell--wrap" },
+    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + flag.tagClasses + '">' + flag.type + '</strong>', classes: small },
+    { html: foundHtml, classes: small + " app-table-cell--wrap" },
+    { text: flag.reason, classes: small + " app-table-cell--wrap" }
+  ]), flagRows) %}
 {% endfor %}
 
 {% block content %}
@@ -102,24 +118,29 @@
   </div>
 </div>
 
-{# The files table is full width, so the flags have room #}
+{# The flags table is full width, so the reasons have room #}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-
-    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
-    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.filesTableCaption }}">
-      {{ govukTable({
-        caption: words.filesTableCaption,
-        captionClasses: "govuk-visually-hidden",
-        head: [
-          { text: words.fileNameColumn, classes: small + " app-table-cell--wrap" },
-          { text: words.flagsColumn, classes: small + " app-table-cell--wrap" },
-          { text: words.submittedColumn, classes: small }
-        ],
-        rows: fileRows
-      }) }}
-    </div>
+    <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+    {% if flagRows.length %}
+      <p class="govuk-body">{{ words.flagsIntro }}</p>
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsHeading }}">
+        {{ govukTable({
+          caption: words.flagsHeading,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.memberColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.typeColumn, classes: small },
+            { text: words.whatWeFoundColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.schemeSReasonColumn, classes: small + " app-table-cell--wrap" }
+          ],
+          rows: flagRows
+        }) }}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ words.noFlags }}</p>
+    {% endif %}
 
   </div>
 </div>
@@ -127,7 +148,16 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
+    {% if s.supportingDocuments.length %}
+      <h2 class="govuk-heading-m">{{ words.supportingDocumentsHeading }}</h2>
+      <ul class="govuk-list">
+        {% for doc in s.supportingDocuments %}
+          <li><a href="{{ notBuiltHref }}" class="govuk-link">{{ doc.name }}</a> ({{ doc.type }}, {{ doc.size }})</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {{ govukButton({ text: words.viewMemberDataButton, href: notBuiltHref }) }}
 
   </div>
 </div>

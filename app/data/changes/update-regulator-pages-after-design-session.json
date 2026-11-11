@@ -1,0 +1,104 @@
+{
+  "title": "Update the placed on the market pages after the team ideation session",
+  "type": "change",
+  "date": "2026-11-11",
+  "why": "On 10 November the team reviewed the regulator placed on the market pages (EB-324 to EB-326) in an ideation session. These are the changes we made from what came up, and why.\n\n**Across all the pages**\n\n- **Flags** is the umbrella word for anything in the data that looks unusual. Each flag has a type, shown as a tag: Irregularity (magenta) or Variance (turquoise). The word is always in the tag, so it doesn't rely on colour. Errors stop a submission, so regulators never see them. We'll add types as we learn them\n- The submissions list and the submission still have brief and full versions, to test with regulators. Organisation details and members are now one page each, used by both versions\n- \"Admin\" on every page (it was \"Super user\" or \"Director\" in places)\n\n**Filters keep their button**\n\nIn the session, the devs asked whether the list could update as soon as you change a dropdown, added as a progressive enhancement where JavaScript is available. We've kept an explicit button:\n\n- **WCAG 2.2, success criterion 3.2.2 [On input](https://w3c.github.io/wcag/understanding/on-input.html) (Level A).** Changing a form control mustn't change the context unless the user has been told it will, and reloading the results counts as a change of context. Keyboard and screen reader users move through a dropdown one option at a time, so the page would reload on every option they pass. Public sector services must meet WCAG 2.2 AA, which includes every Level A criterion ([accessibility requirements for public sector websites](https://www.gov.uk/guidance/accessibility-requirements-for-public-sector-websites-and-apps))\n- **Progressive enhancement.** The filters are a plain form with a submit button, so they work without JavaScript and behave the same for everyone. Auto-submitting would mean two behaviours to build, test and support ([GOV.UK Service Manual: building a robust frontend using progressive enhancement](https://www.gov.uk/service-manual/making-software/progressive-enhancement))\n- **An established pattern.** The [MOJ filter a list pattern](https://design-patterns.service.justice.gov.uk/patterns/filter-a-list) applies filters with a button\n\n**Disabled until something changes?** We also looked at disabling the button until a filter changes. The [GOV.UK button component](https://design-system.service.gov.uk/components/button/#disabled-buttons) advises against disabled buttons: they have poor contrast and can confuse some users. Disabled buttons also can't be reached with a keyboard, and they don't say why they're disabled. Instead, the line above the table always says exactly what's showing (\"Showing July to September 2026 returns: 4 submissions\"), so it's clear which results you're looking at.\n\n**Submissions list (EB-324)**\n\n- \"Show\", not \"Apply filters\": the quarter and year switch to a different set of data, they don't filter a list down\n- Brief version: Clear filters removed. It only put the defaults back, which was confusing\n- Full version: \"Reset\" goes back to the defaults, and no longer loses your sort\n- A line says what's showing, for example \"Showing July to September 2026 returns: 4 submissions\". It also explains why the submitted dates come after the quarter\n- What needs action comes first: the soonest review by date at the top, accepted last. Status sorts in workflow order, not alphabetically\n- Your filters and sort are kept when you come back from a submission\n- Still no pagination: there are around 4 schemes a quarter\n\n**Submission (EB-325)**\n\n- Placed on the market (tonnes) on both versions: there was no way to see what had been submitted\n- Flags have their own section, against the data rather than a file, each with the scheme's reason. Specific words: \"Up 42% on last quarter\", not \"Big change\". The full version adds the figures\n- No data files (CSVs), Open or Download: the data is in the service, and the technical direction is not to store files. File trails and comparing versions belong to EB-366 (checking a submission)\n- Supporting documents stay: the scheme sent them to explain the return\n- \"View member data\" on both versions: members, not producers\n- Full version: BCS number moved to organisation details, a Version row like the brief version, and \"Members in this submission\"\n\n**Organisation details (EB-325): one page for both versions**\n\n- View only, no Change links: regulators review, they don't edit. The details come from Companies House\n- No list of other users: that's account management, not reviewing a return\n- \"Others who can submit\", the number of members with View members, and when the details were last updated\n\n**Members (EB-326): one page for both versions**\n\n- The full version: search by name or registration number, filter by membership and flags. One long list with only a search box didn't do the job\n- \"Only members with flags\" is a checkbox, not a dropdown with two options, and the column is \"Flags\"\n- \"Reset\" goes back to current members and keeps your sort. Membership sorts current, then former\n- The dummy schemes have up to 281 current members: the most any scheme has today\n\n**Questions for research**\n\nThe questions to test with regulators are in [Questions for research: placed on the market pages](https://docs.google.com/document/d/1Q-5r0nQI13jhAa0mjF5qN0mcJz73rroGY1qyFyncK8A/edit?usp=sharing).\n\n**Left for EB-366 (checking a submission)**\n\n- Comparing quarters, chemistry, tonnage per member, flag history and earlier versions",
+  "pages": [
+    {
+      "label": "Submissions list, brief version (latest quarter)",
+      "url": "/regulator/pom-submissions/latest-quarter"
+    },
+    {
+      "label": "Submissions list, full version (all submissions)",
+      "url": "/regulator/pom-submissions/all-submissions"
+    },
+    {
+      "label": "Submission, brief version",
+      "url": "/regulator/pom-submissions/brief/recycling-lives/2026/3"
+    },
+    {
+      "label": "Submission, full version",
+      "url": "/regulator/pom-submissions/full/recycling-lives/2026/3"
+    },
+    {
+      "label": "Organisation details (one page for both versions)",
+      "url": "/regulator/pom-submissions/full/recycling-lives/2026/3/organisation-details"
+    },
+    {
+      "label": "Members (one page for both versions)",
+      "url": "/regulator/pom-submissions/full/recycling-lives/2026/3/members"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Submissions list, brief version, desktop (1020 pixels wide)",
+      "before": "changes/update-regulator-pages-after-design-session/before--list-brief-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--list-brief-1020-pixels.png"
+    },
+    {
+      "label": "Submissions list, brief version, 320 pixels wide",
+      "before": "changes/update-regulator-pages-after-design-session/before--list-brief-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--list-brief-320-pixels.png"
+    },
+    {
+      "label": "Submissions list, full version, desktop (1020 pixels wide), top of the page",
+      "before": "changes/update-regulator-pages-after-design-session/before--list-full-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--list-full-1020-pixels.png"
+    },
+    {
+      "label": "Submissions list, full version, 320 pixels wide, top of the page",
+      "before": "changes/update-regulator-pages-after-design-session/before--list-full-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--list-full-320-pixels.png"
+    },
+    {
+      "label": "Submission, brief version, desktop (1020 pixels wide), top of the page",
+      "before": "changes/update-regulator-pages-after-design-session/before--submission-brief-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--submission-brief-1020-pixels.png"
+    },
+    {
+      "label": "Submission, brief version, 320 pixels wide, top of the page",
+      "before": "changes/update-regulator-pages-after-design-session/before--submission-brief-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--submission-brief-320-pixels.png"
+    },
+    {
+      "label": "Submission, full version, desktop (1020 pixels wide), top of the page",
+      "before": "changes/update-regulator-pages-after-design-session/before--submission-full-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--submission-full-1020-pixels.png"
+    },
+    {
+      "label": "Submission, full version, 320 pixels wide, top of the page",
+      "before": "changes/update-regulator-pages-after-design-session/before--submission-full-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--submission-full-320-pixels.png"
+    },
+    {
+      "label": "Organisation details, desktop (1020 pixels wide): before is the brief version",
+      "before": "changes/update-regulator-pages-after-design-session/before--organisation-brief-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--organisation-1020-pixels.png"
+    },
+    {
+      "label": "Organisation details, desktop (1020 pixels wide): before is the full version",
+      "before": "changes/update-regulator-pages-after-design-session/before--organisation-full-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--organisation-1020-pixels.png"
+    },
+    {
+      "label": "Organisation details, 320 pixels wide, top of the page: before is the full version",
+      "before": "changes/update-regulator-pages-after-design-session/before--organisation-full-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--organisation-320-pixels.png"
+    },
+    {
+      "label": "Members, desktop (1020 pixels wide), top of the page: before is the brief version",
+      "before": "changes/update-regulator-pages-after-design-session/before--members-brief-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--members-1020-pixels.png"
+    },
+    {
+      "label": "Members, desktop (1020 pixels wide), top of the page: before is the full version",
+      "before": "changes/update-regulator-pages-after-design-session/before--members-full-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--members-1020-pixels.png"
+    },
+    {
+      "label": "Members, 320 pixels wide, top of the page: before is the full version",
+      "before": "changes/update-regulator-pages-after-design-session/before--members-full-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-design-session/after--members-320-pixels.png"
+    }
+  ]
+}

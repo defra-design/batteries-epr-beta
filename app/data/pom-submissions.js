@@ -23,14 +23,16 @@ const QUARTERS_SHORT = ['Jan to Mar', 'Apr to Jun', 'Jul to Sep', 'Oct to Dec']
 
 // Jen's statuses (6 November 2026), and their tag colours. Only colours that
 // exist in GOV.UK Frontend 6: the standard tag is blue. No red: in GOV.UK
-// services red means an error
+// services red means an error.
+// In workflow order, Accepted last (design session, 10 November): the status
+// filter lists them in this order, and sorting by Status follows it, not the alphabet
 const STATUSES = {
   'To review': '',
   'Under review': 'govuk-tag--teal',
   'Query raised': 'govuk-tag--yellow',
   'Response received': 'govuk-tag--purple',
-  Accepted: 'govuk-tag--green',
-  Escalated: 'govuk-tag--orange'
+  Escalated: 'govuk-tag--orange',
+  Accepted: 'govuk-tag--green'
 }
 
 // The latest quarter (July to September 2026): a mix of statuses
@@ -95,6 +97,8 @@ function all () {
           dueSort: open ? due : '',
           overdue: open && due < TODAY,
           status,
+          // Workflow order, for sorting by Status
+          statusSort: String(Object.keys(STATUSES).indexOf(status)),
           statusClasses: STATUSES[status]
         })
       })
@@ -121,6 +125,15 @@ function byQuarterThenDue (a, b) {
   return b.quarterSort.localeCompare(a.quarterSort) || byDue(a, b)
 }
 
+// What needs action first (design session, 10 November): soonest due first,
+// then everything accepted, newest quarter first, then by scheme
+function byDueThenNewest (a, b) {
+  if (a.dueSort && b.dueSort) return a.dueSort.localeCompare(b.dueSort) || a.scheme.localeCompare(b.scheme)
+  if (a.dueSort) return -1
+  if (b.dueSort) return 1
+  return b.quarterSort.localeCompare(a.quarterSort) || a.scheme.localeCompare(b.scheme)
+}
+
 module.exports = {
   SCHEMES,
   QUARTERS,
@@ -131,5 +144,6 @@ module.exports = {
   all,
   byDue,
   byScheme,
-  byQuarterThenDue
+  byQuarterThenDue,
+  byDueThenNewest
 }

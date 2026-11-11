@@ -35,10 +35,7 @@ day left
 Submitted by
 
 ## Super user (the top of the scheme's account)
-Director
-
-## BCS number
-BCS number
+Admin
 
 ## Placed on the market
 Placed on the market
@@ -46,31 +43,19 @@ Placed on the market
 ## Tonnes (after the number)
 tonnes
 
-## Producers in the file
-Members in file
+## Members in this submission (the members in this return's data)
+Members in this submission
 
-## Files heading
-Files in this submission
+## Version
+Version
 
-## Files table caption (only screen readers hear this)
-Files in this submission
+## Version of (between the numbers, for example "2 of 2")
+of
 
-## File name column
-File name
+## View earlier versions link
+View earlier versions
 
-## Flags column
-Flags
-
-## No flags (only screen readers hear this, in the Flags column)
-No flags
-
-## Not checked (only screen readers hear this, for a supporting document)
-Not applicable
-
-## Submitted column (when the file was uploaded)
-Submitted
-
-## View producer figures button
+## View member data button
 View member data
 
 ## Organisation heading
@@ -90,3 +75,27 @@ Members
 
 ## View members link
 View members
+
+## Flags heading
+Flags
+
+## Flags intro (under the heading)
+Things in the data that look unusual. The scheme has given a reason for each one.
+
+## No flags
+There are no flags on this submission.
+
+## Member column
+Member
+
+## Type column
+Type
+
+## What we found column
+What we found
+
+## Scheme's reason column
+Scheme's reason
+
+## Supporting documents heading
+Supporting documents

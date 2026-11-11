@@ -31,6 +31,12 @@ Submitted by
 ## Super user (the top of the scheme's account)
 Admin
 
+## Placed on the market
+Placed on the market
+
+## Tonnes (after the number)
+tonnes
+
 ## Version
 Version
 
@@ -39,21 +45,6 @@ of
 
 ## View earlier versions link
 View earlier versions
-
-## Files heading
-Files
-
-## Open link (on each file)
-Open
-
-## Download link (on each file)
-Download
-
-## Flags (on each file)
-Flags
-
-## No flags (on a file with no flags)
-No flags
 
 ## Organisation heading
 Organisation
@@ -73,5 +64,17 @@ Members
 ## View members link
 View members
 
-## View producer figures button
-View producer figures
+## View member data button
+View member data
+
+## Flags heading
+Flags
+
+## Flags intro (under the heading)
+Things in the data that look unusual. The scheme has given a reason for each one.
+
+## No flags
+There are no flags on this submission.
+
+## Supporting documents heading
+Supporting documents

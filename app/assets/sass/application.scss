@@ -19,8 +19,12 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
 // (/changes/...), so you can see where each screenshot starts and ends.
 // Used by scripts/build-changes.js.
 .app-change-screenshot {
+  // Block, with space underneath, so each heading sits closer to its own
+  // screenshots than to the ones above it
+  display: block;
   max-width: 100%;
   border: 1px solid $govuk-border-colour;
+  @include govuk-responsive-margin(8, "bottom");
 }
 
 // Add-on: the MOJ scrollable pane, copied from MOJ Frontend 12 (see the file)

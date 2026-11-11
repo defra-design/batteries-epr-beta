@@ -13,11 +13,20 @@ Quarter
 ## Year label
 Year
 
-## Apply filters button
-Apply filters
+## Show button
+Show
 
-## Clear filters button
-Clear filters
+## Showing (start of the line above the table, before the quarter)
+Showing
+
+## Returns (after the quarter, in the line above the table)
+returns
+
+## Submissions (after the number)
+submissions
+
+## Submission (after the number 1)
+submission
 
 ## No submissions
 There are no submissions for this quarter yet.

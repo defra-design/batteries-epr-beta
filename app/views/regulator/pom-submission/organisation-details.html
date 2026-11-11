@@ -1,31 +1,36 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  EB-325: a scheme's organisation details, full version. 6 November 2026.
-  Page 2 of 2. You get here from "View details" on the full submission page.
-  Back goes to that submission (from app/routes.js).
+  EB-325: a scheme's organisation details. One page for both versions.
+  Page 2 of 2. You get here from "View details" on a submission (brief or full).
+  Back goes to that submission, and View members to that version's members
+  page: both come from the address (app/routes.js), so you stay in your version.
 
-  - Change links (the check answers pattern), so we can ask the business
-    whether regulators can change these. Prototype only: they go to the
-    "not built yet" page
+  Design session, 10 November 2026: the brief and full versions are now one
+  page, based on the brief version (Mak preferred it).
+  - View only, no Change links: regulators review, they don't edit (decision,
+    21 October). The details come from Companies House (Mak)
+  - No list of other users: that's account management, not reviewing a return (Mak)
+  - Others who can submit: the people with delegated authority, as well as the
+    appropriate person and the admin. Was "People who can submit", which read
+    as if only these people could (someone asked how we decide who to show)
+  - Members: the count, with View members (David, Operator mindset). Was a link
+    on its own at the bottom
+  - Last updated, so regulators know the details are current (David, Operator mindset)
   - Emails are links
-  - Other people who can submit: anyone with delegated authority who isn't
-    the appropriate person or the super user (they're in the list above), without dates (if their authority has ended, they're not on
-    the list). Other users (who can't submit) are in a details component, so a scheme
-    with 14 users doesn't make a long page
-  - "Super user", not "Admin" (Rich's word)
-  - Not here, as agreed: conditions of approval, approved and expires,
-    account manager, approval number (it's the BCS number)
+  - Not here, as agreed on 6 November: conditions of approval, approved and
+    expires, account manager (David asked for this: a research question for
+    Jason), approval number (it's the BCS number)
 
   The data: app/data/pom-submission-details.js (dummy).
-  The words: app/content/regulator/organisation-details-full.md
+  The words: app/content/regulator/organisation-details.md
 #}
 
-{% set wordsFile = "regulator/organisation-details-full" %}
+{% set wordsFile = "regulator/organisation-details" %}
 {% set words = content(wordsFile) %}
 {% set org = organisation %}
 
-{% set pageName = words.heading + ", " + org.name + " (full version)" %}
+{% set pageName = words.heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -34,43 +39,43 @@
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
 {% endblock %}
 
+{% block content %}
+
+{% macro personHtml(p, extra) %}{{ p.name }}{% if extra %}, {{ extra }}{% endif %}<br><a href="mailto:{{ p.email }}" class="govuk-link">{{ p.email }}</a>{% endmacro %}
 
 {% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
-{% set rows = [] %}
-{% for row in [
-  [words.registeredName, { text: org.registeredName }],
-  [words.registeredOfficeAddress, { html: addressHtml }],
-  [words.companiesHouseNumber, { text: org.companiesHouseNumber }],
-  [words.bcsNumber, { text: org.bcsNumber }],
-  [words.appropriatePerson, { html: (org.appropriatePerson.name | escape) + '<br><a href="mailto:' + org.appropriatePerson.email + '" class="govuk-link">' + org.appropriatePerson.email + '</a>' }],
-  [words.superUser, { html: (org.superUser.name | escape) + '<br><a href="mailto:' + org.superUser.email + '" class="govuk-link">' + org.superUser.email + '</a>' }]
-] %}
-  {% set rows = (rows.push({
-    key: { text: row[0] },
-    value: row[1],
-    actions: { items: [{ href: notBuiltHref, text: words.changeLink, visuallyHiddenText: row[0] | lower }] }
-  }), rows) %}
-{% endfor %}
 
-{# Other people who can submit: not the appropriate person or the super user, who are shown above #}
-{% set peopleRows = [] %}
+{# Everyone else who can submit: not the appropriate person or the admin, who are shown above #}
+{% set others = [] %}
 {% for p in org.canSubmit %}
-  {% if p.role == "user" %}
-  {% set peopleRows = (peopleRows.push([
-    { text: p.name },
-    { html: '<a href="mailto:' + p.email + '" class="govuk-link">' + p.email + '</a>' }
-  ]), peopleRows) %}
-  {% endif %}
+  {% if p.role == "user" %}{% set others = (others.push(p), others) %}{% endif %}
 {% endfor %}
-{% set otherRows = [] %}
-{% for p in org.otherUsers %}
-  {% set otherRows = (otherRows.push([
-    { text: p.name },
-    { html: '<a href="mailto:' + p.email + '" class="govuk-link">' + p.email + '</a>' }
-  ]), otherRows) %}
-{% endfor %}
+{% set othersHtml %}
+  <ul class="govuk-list">
+    {% for p in others %}<li>{{ personHtml(p, words.delegatedAuthority) }}</li>{% endfor %}
+  </ul>
+{% endset %}
 
-{% block content %}
+{% set rows = [
+  { key: { text: words.registeredName }, value: { text: org.registeredName } },
+  { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
+  { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
+  { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
+  { key: { text: words.appropriatePerson }, value: { html: personHtml(org.appropriatePerson) } },
+  { key: { text: words.superUser }, value: { html: personHtml(org.superUser) } }
+] %}
+{% if others.length %}
+  {% set rows = (rows.push({ key: { text: words.othersWhoCanSubmit }, value: { html: othersHtml } }), rows) %}
+{% endif %}
+{% set rows = (rows.concat([
+  {
+    key: { text: words.members },
+    value: { text: org.members },
+    actions: { items: [{ href: membersHref, text: words.viewMembersLink }] }
+  },
+  { key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }
+])) %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
@@ -78,37 +83,6 @@
     <h1 class="govuk-heading-l">{{ words.heading }}</h1>
 
     {{ govukSummaryList({ rows: rows }) }}
-
-    {% if peopleRows.length %}
-      <h2 class="govuk-heading-m">{{ words.peopleWhoCanSubmitHeading }}</h2>
-      <p class="govuk-body">{{ words.peopleWhoCanSubmitIntro }}</p>
-      {# Add-on: MOJ scrollable pane, so long emails don't make the page scroll sideways on a phone #}
-      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.peopleTableCaption }}">
-        {{ govukTable({
-          caption: words.peopleTableCaption,
-          captionClasses: "govuk-visually-hidden",
-          head: [{ text: words.nameColumn }, { text: words.emailColumn }],
-          rows: peopleRows
-        }) }}
-      </div>
-    {% endif %}
-
-    {% if otherRows.length %}
-      {% set otherHtml %}
-        <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.otherUsers }}">
-          {{ govukTable({
-            caption: words.otherUsers,
-            captionClasses: "govuk-visually-hidden",
-            head: [{ text: words.nameColumn }, { text: words.emailColumn }],
-            rows: otherRows
-          }) }}
-        </div>
-      {% endset %}
-      {{ govukDetails({ summaryText: words.otherUsers + " (" + otherRows.length + ")", html: otherHtml }) }}
-    {% endif %}
-
-    <h2 class="govuk-heading-m">{{ words.membersHeading }}</h2>
-    <p class="govuk-body"><a href="{{ membersHref }}" class="govuk-link">{{ words.viewMembersLink }}</a></p>
 
   </div>
 </div>

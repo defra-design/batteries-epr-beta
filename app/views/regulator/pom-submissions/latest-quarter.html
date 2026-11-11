@@ -3,9 +3,18 @@
 {#
   EB-324: placed on the market (PoM) submissions, brief version: one quarter at a time.
   5 November 2026. Lands on the latest quarter with submissions (July to September 2026).
-  Quarter and year filters, Clear filters, no status filter, no summary line (Jen). Short dates (23 Oct 2026).
-  A plain GOV.UK table: only ever 4 rows (one per scheme), in alphabetical order by scheme,
-  so each scheme is always in the same place (Marie, 5 November: Jen had suggested due date order).
+  Quarter and year selects and a Show button, no status filter. Short dates (23 Oct 2026).
+  A plain GOV.UK table: only ever 4 rows (one per scheme), so no sorting and no pagination.
+
+  Design session, 10 November 2026:
+  - "Show" not "Apply filters": the selects swap the quarter shown, they don't
+    filter a bigger list down (Phil, Mak). Clear filters removed: it only
+    reset the defaults, which confused people (Kieran, Ashley). The button
+    stays, so the page never changes while someone is still choosing (WCAG 3.2.2)
+  - A line saying what's showing, so the table and the selects never disagree
+    (Ashley), and so dates after the quarter make sense (Kieran)
+  - What needs action first: soonest review by date, accepted last (Jen, Rich,
+    David). Was alphabetical by scheme, so each scheme was always in the same place
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
   Scheme names aren't links (6 November): "View" opens one page with
   everything (EB-325, brief version), so two links in a row don't go to the same place.
@@ -65,13 +74,14 @@
         {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
         {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         <div class="govuk-button-group">
-          {{ govukButton({ text: words.applyFiltersButton }) }}
-          {{ govukButton({ text: words.clearFiltersButton, href: "/regulator/pom-submissions/latest-quarter", classes: "govuk-button--secondary" }) }}
+          {{ govukButton({ text: words.showButton }) }}
         </div>
       </div>
     </form>
 
     {% if rows.length %}
+      <p class="govuk-body">{{ words.showing }} {{ quarterText }} {{ words.returns }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}</p>
+
       {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
          The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">

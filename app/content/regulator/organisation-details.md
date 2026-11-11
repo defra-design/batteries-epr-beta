@@ -1,4 +1,4 @@
-Page: a scheme's organisation details, brief version (EB-325). The second of 2 pages. You get here from "View details" on a submission. View only: no Change links.
+Page: a scheme's organisation details (EB-325). One page for both the brief and full versions. The second of 2 pages. You get here from "View details" on a submission. View only: no Change links.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The scheme, people and numbers are dummy data: ask Marie to change those.
@@ -28,11 +28,17 @@ Appropriate person
 ## Super user (the top of the scheme's account)
 Admin
 
-## People who can submit (everyone else who can, as well as the appropriate person and admin)
-People who can submit
+## Others who can submit (everyone with delegated authority, as well as the appropriate person and admin)
+Others who can submit
 
 ## Delegated authority (after each person's name)
 delegated authority
 
+## Members
+Members
+
 ## View members link
 View members
+
+## Last updated (when the organisation details last changed)
+Last updated

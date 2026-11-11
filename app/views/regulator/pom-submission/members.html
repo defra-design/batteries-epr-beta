@@ -1,17 +1,21 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  EB-326: a scheme's members, full version. 9 November 2026.
-  You get here from "View members" on the full submission page or the full
-  organisation details. Back goes to whichever you came from (app/routes.js).
+  EB-326: a scheme's members. One page for both versions. 9 November 2026.
+  You get here from "View members" on a submission or its organisation
+  details, in either version. Back goes to whichever you came from, and
+  comes from the address (app/routes.js), so you stay in your version.
 
-  Schemes have 200 to 600 members (round 2 of alpha testing), so this
+  11 November 2026: the brief version (one long list with just a search box)
+  was dropped. This version does the job better.
+
+  Schemes have up to 281 members (Mak, 10 November), so this
   version has filters, from the MOJ "Filter a list" pattern:
   - Member name or BPRN: free text, finds one member quickly
   - Status: Current (the default, so former members don't pad the list),
     Former or All
-  - Flags: All, or Outstanding
-  - Clear filters (a secondary button, always there so nothing jumps): back
+  - Flags: a checkbox, only members with flags
+  - Reset (a secondary button, always there so nothing jumps): back
     to the page with the default filters. It sits with Apply filters
     in a GOV.UK button group, so the two stay together when the row wraps
   - Member name or BPRN takes the space that's left on the line
@@ -25,17 +29,27 @@
   table sorts every row. If it's slow with real data, the fallback is
   pagination with sorting done on the server.
 
+  Design session, 10 November 2026:
+  - Flags: a GOV.UK checkbox, "Only members with flags", not a dropdown with
+    two options (Kieran). "Flags" is the umbrella word, as on the submission page
+  - The Flags column, for the same reason (was "Irregularities to review")
+  - "Reset", not "Clear": it goes back to the defaults (current members),
+    as on the lists of submissions. The sort is remembered (add-on:
+    data-app-remember-sort, see application.js), so Reset keeps it (Kieran)
+  - Membership sorts current then former, not by the words (Kieran)
+  - Up to 281 members: the most any scheme has (Mak)
+
   Add-on: MOJ Frontend (sortable table), the MOJ scrollable pane, and the
   filters in a row (app-filters). See the README.
 
   The data: app/data/pom-submission-details.js (dummy).
-  The words: app/content/regulator/members-full.md
+  The words: app/content/regulator/members.md
 #}
 
-{% set wordsFile = "regulator/members-full" %}
+{% set wordsFile = "regulator/members" %}
 {% set words = content(wordsFile) %}
 
-{% set pageName = words.heading + ", " + org.name + " (full version)" %}
+{% set pageName = words.heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -49,10 +63,7 @@
   { value: "former", text: words.former, selected: filters.status == "former" },
   { value: "all", text: words.all, selected: filters.status == "all" }
 ] %}
-{% set flagItems = [
-  { value: "all", text: words.all, selected: filters.flags == "all" },
-  { value: "outstanding", text: words.outstandingFlagsOnly, selected: filters.flags == "outstanding" }
-] %}
+
 
 {# Table text is 16px, as on the lists of submissions #}
 {% set small = "govuk-!-font-size-16" %}
@@ -61,7 +72,7 @@
   {% set rows = (rows.push([
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (m.name | escape) + '</a>', attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
-    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": (words.current if m.current else words.former) }, classes: small },
+    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
     { text: m.flags, classes: small + " govuk-table__cell--numeric" },
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (words.viewSubmissionsLink | escape) + '<span class="govuk-visually-hidden"> (' + (m.name | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
@@ -84,12 +95,12 @@
       <div class="app-filters">
         {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
-        {{ govukSelect({ id: "flags", name: "flags", label: { text: words.flagsLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: flagItems }) }}
-        {# Apply and Clear stay together in a GOV.UK button group. Clear filters
+        {{ govukCheckboxes({ name: "flags", classes: "govuk-checkboxes--small", items: [{ value: "only", text: words.onlyMembersWithFlags, checked: filters.flags == "only" }] }) }}
+        {# Search and Reset stay together in a GOV.UK button group. Reset
            is always there, so nothing appears or disappears #}
         <div class="govuk-button-group">
-          {{ govukButton({ text: words.applyFiltersButton }) }}
-          {{ govukButton({ text: words.clearFiltersButton, href: formAction, classes: "govuk-button--secondary" }) }}
+          {{ govukButton({ text: words.searchButton }) }}
+          {{ govukButton({ text: words.resetButton, href: formAction, classes: "govuk-button--secondary" }) }}
         </div>
       </div>
     </form>
@@ -101,12 +112,12 @@
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
-          attributes: { "data-module": "moj-sortable-table" },
+          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "members" },
           head: [
             { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
             { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.outstandingFlagsColumn, attributes: { "aria-sort": "none" }, classes: small + " govuk-table__header--numeric" },
+            { text: words.flagsColumn, attributes: { "aria-sort": "none" }, classes: small + " govuk-table__header--numeric" },
             { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
           ],
           rows: rows

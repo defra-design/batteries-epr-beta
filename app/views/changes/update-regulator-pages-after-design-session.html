@@ -1,0 +1,202 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Update the placed on the market pages after the team ideation session" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">11 November 2026</span>
+<h1 class="govuk-heading-l">Update the placed on the market pages after the team ideation session</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+<p class="govuk-body">On 10 November the team reviewed the regulator placed on the market pages (EB-324 to EB-326) in an ideation session. These are the changes we made from what came up, and why.</p>
+<p class="govuk-body"><strong>Across all the pages</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li><strong>Flags</strong> is the umbrella word for anything in the data that looks unusual. Each flag has a type, shown as a tag: Irregularity (magenta) or Variance (turquoise). The word is always in the tag, so it doesn't rely on colour. Errors stop a submission, so regulators never see them. We'll add types as we learn them</li><li>The submissions list and the submission still have brief and full versions, to test with regulators. Organisation details and members are now one page each, used by both versions</li><li>&quot;Admin&quot; on every page (it was &quot;Super user&quot; or &quot;Director&quot; in places)</li></ul>
+<p class="govuk-body"><strong>Filters keep their button</strong></p>
+<p class="govuk-body">In the session, the devs asked whether the list could update as soon as you change a dropdown, added as a progressive enhancement where JavaScript is available. We've kept an explicit button:</p>
+<ul class="govuk-list govuk-list--bullet"><li><strong>WCAG 2.2, success criterion 3.2.2 <a href="https://w3c.github.io/wcag/understanding/on-input.html" class="govuk-link" rel="noreferrer noopener" target="_blank">On input (opens in new tab)</a> (Level A).</strong> Changing a form control mustn't change the context unless the user has been told it will, and reloading the results counts as a change of context. Keyboard and screen reader users move through a dropdown one option at a time, so the page would reload on every option they pass. Public sector services must meet WCAG 2.2 AA, which includes every Level A criterion (<a href="https://www.gov.uk/guidance/accessibility-requirements-for-public-sector-websites-and-apps" class="govuk-link" rel="noreferrer noopener" target="_blank">accessibility requirements for public sector websites (opens in new tab)</a>)</li><li><strong>Progressive enhancement.</strong> The filters are a plain form with a submit button, so they work without JavaScript and behave the same for everyone. Auto-submitting would mean two behaviours to build, test and support (<a href="https://www.gov.uk/service-manual/making-software/progressive-enhancement" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK Service Manual: building a robust frontend using progressive enhancement (opens in new tab)</a>)</li><li><strong>An established pattern.</strong> The <a href="https://design-patterns.service.justice.gov.uk/patterns/filter-a-list" class="govuk-link" rel="noreferrer noopener" target="_blank">MOJ filter a list pattern (opens in new tab)</a> applies filters with a button</li></ul>
+<p class="govuk-body"><strong>Disabled until something changes?</strong> We also looked at disabling the button until a filter changes. The <a href="https://design-system.service.gov.uk/components/button/#disabled-buttons" class="govuk-link" rel="noreferrer noopener" target="_blank">GOV.UK button component (opens in new tab)</a> advises against disabled buttons: they have poor contrast and can confuse some users. Disabled buttons also can't be reached with a keyboard, and they don't say why they're disabled. Instead, the line above the table always says exactly what's showing (&quot;Showing July to September 2026 returns: 4 submissions&quot;), so it's clear which results you're looking at.</p>
+<p class="govuk-body"><strong>Submissions list (EB-324)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>&quot;Show&quot;, not &quot;Apply filters&quot;: the quarter and year switch to a different set of data, they don't filter a list down</li><li>Brief version: Clear filters removed. It only put the defaults back, which was confusing</li><li>Full version: &quot;Reset&quot; goes back to the defaults, and no longer loses your sort</li><li>A line says what's showing, for example &quot;Showing July to September 2026 returns: 4 submissions&quot;. It also explains why the submitted dates come after the quarter</li><li>What needs action comes first: the soonest review by date at the top, accepted last. Status sorts in workflow order, not alphabetically</li><li>Your filters and sort are kept when you come back from a submission</li><li>Still no pagination: there are around 4 schemes a quarter</li></ul>
+<p class="govuk-body"><strong>Submission (EB-325)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Placed on the market (tonnes) on both versions: there was no way to see what had been submitted</li><li>Flags have their own section, against the data rather than a file, each with the scheme's reason. Specific words: &quot;Up 42% on last quarter&quot;, not &quot;Big change&quot;. The full version adds the figures</li><li>No data files (CSVs), Open or Download: the data is in the service, and the technical direction is not to store files. File trails and comparing versions belong to EB-366 (checking a submission)</li><li>Supporting documents stay: the scheme sent them to explain the return</li><li>&quot;View member data&quot; on both versions: members, not producers</li><li>Full version: BCS number moved to organisation details, a Version row like the brief version, and &quot;Members in this submission&quot;</li></ul>
+<p class="govuk-body"><strong>Organisation details (EB-325): one page for both versions</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>View only, no Change links: regulators review, they don't edit. The details come from Companies House</li><li>No list of other users: that's account management, not reviewing a return</li><li>&quot;Others who can submit&quot;, the number of members with View members, and when the details were last updated</li></ul>
+<p class="govuk-body"><strong>Members (EB-326): one page for both versions</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The full version: search by name or registration number, filter by membership and flags. One long list with only a search box didn't do the job</li><li>&quot;Only members with flags&quot; is a checkbox, not a dropdown with two options, and the column is &quot;Flags&quot;</li><li>&quot;Reset&quot; goes back to current members and keeps your sort. Membership sorts current, then former</li><li>The dummy schemes have up to 281 current members: the most any scheme has today</li></ul>
+<p class="govuk-body"><strong>Questions for research</strong></p>
+<p class="govuk-body">The questions to test with regulators are in <a href="https://docs.google.com/document/d/1Q-5r0nQI13jhAa0mjF5qN0mcJz73rroGY1qyFyncK8A/edit?usp=sharing" class="govuk-link" rel="noreferrer noopener" target="_blank">Questions for research: placed on the market pages (opens in new tab)</a>.</p>
+<p class="govuk-body"><strong>Left for EB-366 (checking a submission)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Comparing quarters, chemistry, tonnage per member, flag history and earlier versions</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/latest-quarter">Submissions list, brief version (latest quarter)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/all-submissions">Submissions list, full version (all submissions)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/brief/recycling-lives/2026/3">Submission, brief version</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/full/recycling-lives/2026/3">Submission, full version</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/full/recycling-lives/2026/3/organisation-details">Organisation details (one page for both versions)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/full/recycling-lives/2026/3/members">Members (one page for both versions)</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Submissions list, brief version, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--list-brief-1020-pixels.png" alt="Before: Submissions list, brief version, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--list-brief-1020-pixels.png" alt="After: Submissions list, brief version, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submissions list, brief version, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--list-brief-320-pixels.png" alt="Before: Submissions list, brief version, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--list-brief-320-pixels.png" alt="After: Submissions list, brief version, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submissions list, full version, desktop (1020 pixels wide), top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--list-full-1020-pixels.png" alt="Before: Submissions list, full version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--list-full-1020-pixels.png" alt="After: Submissions list, full version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submissions list, full version, 320 pixels wide, top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--list-full-320-pixels.png" alt="Before: Submissions list, full version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--list-full-320-pixels.png" alt="After: Submissions list, full version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission, brief version, desktop (1020 pixels wide), top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--submission-brief-1020-pixels.png" alt="Before: Submission, brief version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--submission-brief-1020-pixels.png" alt="After: Submission, brief version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission, brief version, 320 pixels wide, top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--submission-brief-320-pixels.png" alt="Before: Submission, brief version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--submission-brief-320-pixels.png" alt="After: Submission, brief version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission, full version, desktop (1020 pixels wide), top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--submission-full-1020-pixels.png" alt="Before: Submission, full version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--submission-full-1020-pixels.png" alt="After: Submission, full version, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission, full version, 320 pixels wide, top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--submission-full-320-pixels.png" alt="Before: Submission, full version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--submission-full-320-pixels.png" alt="After: Submission, full version, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Organisation details, desktop (1020 pixels wide): before is the brief version</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--organisation-brief-1020-pixels.png" alt="Before: Organisation details, desktop (1020 pixels wide): before is the brief version" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--organisation-1020-pixels.png" alt="After: Organisation details, desktop (1020 pixels wide): before is the brief version" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Organisation details, desktop (1020 pixels wide): before is the full version</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--organisation-full-1020-pixels.png" alt="Before: Organisation details, desktop (1020 pixels wide): before is the full version" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--organisation-1020-pixels.png" alt="After: Organisation details, desktop (1020 pixels wide): before is the full version" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Organisation details, 320 pixels wide, top of the page: before is the full version</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--organisation-full-320-pixels.png" alt="Before: Organisation details, 320 pixels wide, top of the page: before is the full version" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--organisation-320-pixels.png" alt="After: Organisation details, 320 pixels wide, top of the page: before is the full version" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, desktop (1020 pixels wide), top of the page: before is the brief version</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--members-brief-1020-pixels.png" alt="Before: Members, desktop (1020 pixels wide), top of the page: before is the brief version" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--members-1020-pixels.png" alt="After: Members, desktop (1020 pixels wide), top of the page: before is the brief version" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, desktop (1020 pixels wide), top of the page: before is the full version</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--members-full-1020-pixels.png" alt="Before: Members, desktop (1020 pixels wide), top of the page: before is the full version" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--members-1020-pixels.png" alt="After: Members, desktop (1020 pixels wide), top of the page: before is the full version" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, 320 pixels wide, top of the page: before is the full version</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/before--members-full-320-pixels.png" alt="Before: Members, 320 pixels wide, top of the page: before is the full version" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/update-regulator-pages-after-design-session/after--members-320-pixels.png" alt="After: Members, 320 pixels wide, top of the page: before is the full version" class="app-change-screenshot" width="160">
+</div>
+</div>
+
+{% endblock %}

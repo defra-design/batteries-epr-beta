@@ -3,7 +3,7 @@
 {#
   EB-325: one placed on the market (PoM) submission, brief version.
   6 November 2026. Page 1 of 2: this page, then Organisation details
-  (organisation-details-brief.html). Marie and Jen's version.
+  (organisation-details.html, the same page in both versions). Marie and Jen's version.
   You get here from "View" on the brief list (EB-324).
 
   Top to bottom:
@@ -12,10 +12,30 @@
     person who submitted it as a link
   - Organisation: the name with View details (page 2), and members with View
     members
-  - Files: one GOV.UK summary card per file, with the file name as the title
-    with Open and Download. Flags: just the scheme's reason, which names
-    the producer, then when it was submitted
-  - View producer figures: the main call to action, last
+  - Flags: a line saying what a flag is, then a GOV.UK summary list, one row
+    per flag, with a GOV.UK tag on the left saying which type it is
+  - Supporting documents: links, with the file type and size
+  - View member data: the main call to action, last
+
+  Design session, 10 November 2026:
+  - Placed on the market (tonnes) added: there was no way to see what was
+    submitted (Kieran)
+  - Flags have their own section: they're against the data, not a file
+    (David, Phil). Each has a type, using Mak and Jen's terms: irregularity
+    or variance. Errors stop a submission, so regulators never see them.
+    Each says specifically what was found ("Up 42% on last quarter", not "Big change")
+  - "Flags" is the umbrella word for all the types (Marie, 11 November): waste
+    may have around 10 types, too many to list in headings, columns and
+    filters. A line under the heading says what a flag is
+  - Tags: Irregularity is magenta, Variance is turquoise, colours no status
+    uses. The word is in the tag, so it doesn't rely on colour.
+    GOV.UK tags are mainly for statuses: here they say what kind of thing it is
+  - The Files section is gone: no CSV file names, no Open or Download. The data
+    is in the service, and the technical direction is not to store files
+    (Phil). File trails and comparing versions are EB-366 (Mak). Supporting
+    documents stay: the scheme sent them to explain the return (Rich)
+  - "View member data", not "View producer figures": the same words in both
+    versions, members not producers (Kieran, Mak)
   "Admin", not "Super user" (Jen's word)
 
   The data: app/data/pom-submission-details.js (dummy).
@@ -51,8 +71,20 @@
 {% set detailRows = (detailRows.concat([
   { key: { text: words.status }, value: { html: statusHtml } },
   { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
+  { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
+
+{# Flags: the tag on the left (the key), then the
+   producer and what was found in bold, and the scheme's reason underneath #}
+{% set flagRows = [] %}
+{% for flag in s.flags %}
+  {% set flagHtml %}<strong>{{ flag.producer }}: {{ flag.found | lower }}</strong><br>{{ flag.reason }}{% endset %}
+  {% set flagRows = (flagRows.push({
+    key: { html: '<strong class="govuk-tag ' + flag.tagClasses + '">' + flag.type + '</strong>' },
+    value: { html: flagHtml }
+  }), flagRows) %}
+{% endfor %}
 
 {% block content %}
 
@@ -86,41 +118,24 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {# Files: one summary card per file, newest first. The file name is the
-       card's title, with Open and Download.
-       Flags: how many, then a row for each, with the producer in bold and
-       the scheme's reason next to it (the full version also says what kind of flag it is).
-       Only the template CSV is checked, so a supporting document has no flag rows #}
-    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
-    {% for f in s.files %}
-      {# One row per flag: the producer (bold, as the key) and the scheme's
-         reason. A checked file with no flags says so. A supporting document
-         isn't checked, so it has no flag rows #}
-      {% set fileRows = [] %}
-      {% if f.flagList.length %}
-        {% set fileRows = (fileRows.push({ key: { text: words.flags }, value: { text: f.flagList.length } }), fileRows) %}
-      {% endif %}
-      {% for flag in f.flagList %}
-        {# The producer isn't bold (a GOV.UK override class, not our own style), so it reads as part of Flags #}
-        {% set fileRows = (fileRows.push({ key: { text: flag.producer, classes: "govuk-!-font-weight-regular" }, value: { text: flag.reasonShort } }), fileRows) %}
-      {% endfor %}
-      {% if f.checked and not f.flagList.length %}
-        {% set fileRows = (fileRows.push({ key: { text: words.flags }, value: { text: words.noFlags } }), fileRows) %}
-      {% endif %}
-      {% set fileRows = (fileRows.push({ key: { text: words.submitted }, value: { text: f.dateLong } }), fileRows) %}
-      {{ govukSummaryList({
-        card: {
-          title: { text: f.name, headingLevel: 3 },
-          actions: { items: [
-            { href: notBuiltHref, text: words.openLink, visuallyHiddenText: f.name },
-            { href: notBuiltHref, text: words.downloadLink, visuallyHiddenText: f.name }
-          ] }
-        },
-        rows: fileRows
-      }) }}
-    {% endfor %}
+    <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+    {% if flagRows.length %}
+      <p class="govuk-body">{{ words.flagsIntro }}</p>
+      {{ govukSummaryList({ rows: flagRows }) }}
+    {% else %}
+      <p class="govuk-body">{{ words.noFlags }}</p>
+    {% endif %}
 
-    {{ govukButton({ text: words.viewProducerFiguresButton, href: notBuiltHref }) }}
+    {% if s.supportingDocuments.length %}
+      <h2 class="govuk-heading-m">{{ words.supportingDocumentsHeading }}</h2>
+      <ul class="govuk-list">
+        {% for doc in s.supportingDocuments %}
+          <li><a href="{{ notBuiltHref }}" class="govuk-link">{{ doc.name }}</a> ({{ doc.type }}, {{ doc.size }})</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {{ govukButton({ text: words.viewMemberDataButton, href: notBuiltHref }) }}
 
   </div>
 </div>

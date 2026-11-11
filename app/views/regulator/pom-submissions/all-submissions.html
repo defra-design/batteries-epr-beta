@@ -4,12 +4,24 @@
   EB-324: placed on the market (PoM) submissions, full version: everything.
   5 November 2026. Lands on all years (2024 to 2026), all quarters and all
   statuses, to find out whether regulators want to see everything, then filter.
-  Quarter, year and status filters, Clear filters, and a summary line of what's showing.
+  Quarter, year and status filters, Show and Reset buttons, and a summary line of what's showing.
+
+  Design session, 10 November 2026:
+  - "Show" not "Apply filters" (Phil, Mak), and "Reset" not "Clear filters":
+    it goes back to the defaults, it doesn't empty the selects (Kieran, Ashley)
+  - Lands sorted by Review by, so what needs action comes first (Jen, Rich, David).
+    Was newest quarter first
+  - Status sorts in workflow order, Accepted last, not alphabetically (Kieran).
+    Sorting is stable, so within a column's ties the rows keep the order they
+    were in: what needs action first, to start with (Kieran's second sort)
+  - The sort is remembered (add-on: data-app-remember-sort, see application.js),
+    so Reset and coming back from a submission keep it (Kieran, David).
+    The filters are remembered for the back link too (see app/routes.js)
 
   Add-on: MOJ Frontend (sortable table). Up to 44 rows, all on one page: the
   MOJ sortable table sorts in the browser, so it would only sort one page if
   we added pagination. The real service would need to sort on the server.
-  Without JavaScript it's a normal table, newest quarter first.
+  Without JavaScript it's a normal table, what needs action first.
 
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
   Scheme names aren't links: "View" opens the submission (EB-325, full
@@ -71,7 +83,7 @@
     { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
     { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort }, classes: small },
     { html: due(row, words), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
-    { html: statusTag(row), attributes: { "data-sort-value": row.status }, classes: small },
+    { html: statusTag(row), attributes: { "data-sort-value": row.statusSort }, classes: small },
     { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
 {% endfor %}
@@ -89,8 +101,8 @@
         {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
         <div class="govuk-button-group">
-          {{ govukButton({ text: words.applyFiltersButton }) }}
-          {{ govukButton({ text: words.clearFiltersButton, href: "/regulator/pom-submissions/all-submissions", classes: "govuk-button--secondary" }) }}
+          {{ govukButton({ text: words.showButton }) }}
+          {{ govukButton({ text: words.resetButton, href: "/regulator/pom-submissions/all-submissions", classes: "govuk-button--secondary" }) }}
         </div>
       </div>
     </form>
@@ -104,12 +116,12 @@
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
-          attributes: { "data-module": "moj-sortable-table" },
+          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "pom-submissions-full" },
           head: [
             { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
-            { text: words.quarterColumn, attributes: { "aria-sort": "descending" }, classes: small },
+            { text: words.quarterColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.dueColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.dueColumn, attributes: { "aria-sort": "ascending" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.linkColumn, classes: small + " govuk-!-text-align-right" }
           ],

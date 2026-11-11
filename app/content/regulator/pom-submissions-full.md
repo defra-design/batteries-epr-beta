@@ -19,11 +19,11 @@ Status
 ## All (filter option)
 All
 
-## Apply filters button
-Apply filters
+## Show button
+Show
 
-## Clear filters button
-Clear filters
+## Reset button (goes back to all quarters, years and statuses)
+Reset
 
 ## Summary for all submissions
 All submissions from 2024 to 2026
