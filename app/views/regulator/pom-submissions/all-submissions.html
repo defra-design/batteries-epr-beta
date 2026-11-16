@@ -60,9 +60,9 @@
   {% set statusItems = (statusItems.push({ value: status, text: status, selected: status == filters.status }), statusItems) %}
 {% endfor %}
 
-{# The summary line: everything, or what the filters show #}
+{# The summary line: everything ("Showing 44 results", Jen, 16 November 2026), or what the filters show #}
 {% if filters.year == "all" and filters.quarter == "all" and filters.status == "all" %}
-  {% set summary = words.summaryForAllSubmissions %}
+  {% set summary = "" %}
 {% else %}
   {% set when = [] %}
   {% if filters.quarter != "all" %}{% set when = (when.push(pom.QUARTERS[filters.quarter - 1]), when) %}{% endif %}
@@ -121,7 +121,7 @@
       </div>
     </form>
 
-    <p class="govuk-body">{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}</p>
+    <p class="govuk-body">{% if summary %}{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}{% else %}{{ words.summaryStartForAllSubmissions }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}{% endif %}</p>
 
     {% if rows.length %}
       {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
