@@ -61,6 +61,10 @@
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
 
 {#
+  Jen, 16 November 2026: one line, not two. The date, unless it's due today
+  ("Due today") or overdue ("3 days overdue", in bold), which show in place
+  of the date. This replaces the time left under the date, below.
+
   Review by: the date the regulator needs to review it by (10 days after it
   was submitted), with the time left under it: "3 days left", "Due today",
   or "3 days overdue" in bold. Bold black, not red: in GOV.UK services red
@@ -71,7 +75,7 @@
   where the 10 days are counted from
   The same as the lists. Accepted: no Review by row.
 #}
-{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% else %}<span class="govuk-!-display-block">{{ dateText }}</span>{% if row.daysLeft < 0 %}<strong>{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdueBy }}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ row.daysLeft }} {% if row.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}{% endif %}{% endif %}{% endmacro %}
+{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% elif row.daysLeft < 0 %}<strong>{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdueBy }}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ dateText }}{% endif %}{% endmacro %}
 
 {% block beforeContent %}
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
