@@ -54,7 +54,7 @@
 {% set s = submission %}
 {% set org = s.organisation %}
 
-{% set heading = s.yearQuarterFull + " " + words.heading %}
+{% set heading = (s.yearQuarterFull + " " + words.heading) | trim %}
 {% set pageName = heading + ", " + s.scheme + " (full version)" %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
