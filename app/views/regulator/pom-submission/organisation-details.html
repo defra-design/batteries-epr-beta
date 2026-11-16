@@ -6,6 +6,10 @@
   Back goes to that list: the brief one on that quarter, or the full one with
   its filters (app/routes.js), so you stay in your version.
 
+  Jen, 16 November 2026: the heading is now "Organisation details", with the
+  quarter in a Reported row at the top of the list. This replaces the
+  quarter-first heading in the playback note below.
+
   Team playback, 16 November 2026:
   - Reached from the scheme name on the list, not from the submission: these
     are the details for that quarter (the admin and others can change over time)
@@ -39,7 +43,7 @@
 {% set words = content(wordsFile) %}
 {% set org = organisation %}
 
-{% set heading = quarterText + " " + words.heading %}
+{% set heading = words.heading %}
 {% set pageName = heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
@@ -67,6 +71,7 @@
 {% endset %}
 
 {% set rows = [
+  { key: { text: words.reported }, value: { text: quarterText } },
   { key: { text: words.registeredName }, value: { text: org.registeredName } },
   { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
   { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
