@@ -32,10 +32,11 @@
   - No Flags column and no "Only members with flags" checkbox: the flags are
     on the submission page, so this page is for finding members
   - Reached only from the submission (not the organisation details)
-  - The heading says which quarter's submission the members are from, for
-    example "Members in the July to September 2026 submission", so it's
-    clear they're the members for that quarter (Marie). The caption is just
-    the scheme name, as on Organisation details. Was: "Search for a member"
+  - The heading starts with the quarter, for example "July to September 2026
+    members", so it's clear they're the members for that quarter. The same
+    as the submission and organisation details pages: the scheme name in the
+    caption, then quarter first, then what the page is (Marie, 16 November).
+    Was: "Search for a member"
 
   Design session, 10 November 2026:
   - (Flags: a checkbox and a column. Both removed on 16 November)
@@ -59,7 +60,7 @@
 {% set wordsFile = "regulator/members" %}
 {% set words = content(wordsFile) %}
 
-{% set heading = words.headingStart + " " + quarterText + " " + words.headingEnd %}
+{% set heading = quarterText + " " + words.heading %}
 {% set pageName = heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}

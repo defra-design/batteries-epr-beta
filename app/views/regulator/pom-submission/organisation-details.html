@@ -9,10 +9,11 @@
   Team playback, 16 November 2026:
   - Reached from the scheme name on the list, not from the submission: these
     are the details for that quarter (the admin and others can change over time)
-  - A Quarter row, under Registered name, says which quarter the details are
-    for, for example "July to September 2026". The caption is just the scheme
-    name. Was: the quarter in the caption too, "BatteryBack, July to September
-    2026", which read awkwardly (Marie, 16 November)
+  - The heading starts with the quarter, for example "July to September 2026
+    organisation details", the same as the submission and members pages: the
+    scheme name in the caption, then quarter first, then what the page is
+    (Marie, 16 November). Was: the quarter in the caption, "BatteryBack, July
+    to September 2026", then a Quarter row in the list
   - No Members row: members are reached from the submission, since they're the
     members in that quarter's return. One way there, not two
 
@@ -38,7 +39,8 @@
 {% set words = content(wordsFile) %}
 {% set org = organisation %}
 
-{% set pageName = words.heading + ", " + org.name %}
+{% set heading = quarterText + " " + words.heading %}
+{% set pageName = heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -66,7 +68,6 @@
 
 {% set rows = [
   { key: { text: words.registeredName }, value: { text: org.registeredName } },
-  { key: { text: words.quarter }, value: { text: quarterText } },
   { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
   { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
   { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
@@ -82,7 +83,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">{{ org.name }}</span>
-    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
 
     {{ govukSummaryList({ rows: rows }) }}
 

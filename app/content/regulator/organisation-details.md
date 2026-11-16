@@ -7,14 +7,11 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Heading
-Organisation details
+## Heading (after the quarter, for example "July to September 2026 organisation details")
+organisation details
 
 ## Registered name
 Registered name
-
-## Quarter (the quarter these details are for, for example "July to September 2026")
-Quarter
 
 ## Registered office address
 Registered office address

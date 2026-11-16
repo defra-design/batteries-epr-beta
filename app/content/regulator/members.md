@@ -7,11 +7,8 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Heading start (before the quarter, for example "Members in the July to September 2026 submission")
-Members in the
-
-## Heading end (after the quarter)
-submission
+## Heading (after the quarter, for example "July to September 2026 members")
+members
 
 ## Intro (paragraphs welcome)
 
