@@ -61,7 +61,7 @@
 {#
   Review by: the date the regulator needs to review it by (10 days after it
   was submitted), with the time left under it: "3 days left", "Due today",
-  or "Overdue by 3 days" in bold. Bold black, not red: in GOV.UK services red
+  or "3 days overdue" in bold. Bold black, not red: in GOV.UK services red
   text means an error (agreed with Jen, 6 November). One date column, so the
   team can see at a glance when each one needs doing by, and how long they've
   got (team playback, 16 November). Was: a Submitted column and a Review by
@@ -69,7 +69,7 @@
   where the 10 days are counted from
   The same as the lists. Accepted: no Review by row.
 #}
-{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% else %}<span class="govuk-!-display-block">{{ dateText }}</span>{% if row.daysLeft < 0 %}<strong>{{ words.overdueBy }} {{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ row.daysLeft }} {% if row.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}{% endif %}{% endif %}{% endmacro %}
+{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% else %}<span class="govuk-!-display-block">{{ dateText }}</span>{% if row.daysLeft < 0 %}<strong>{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdueBy }}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ row.daysLeft }} {% if row.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}{% endif %}{% endif %}{% endmacro %}
 
 {% block beforeContent %}
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
