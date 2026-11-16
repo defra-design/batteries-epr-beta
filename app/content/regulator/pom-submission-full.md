@@ -21,8 +21,8 @@ Submitted
 ## Review by
 Review by
 
-## Overdue by (bold, under the review by date, before the number of days, for example "Overdue by 3 days")
-Overdue by
+## Overdue by (bold, under the review by date, after the number of days, for example "3 days overdue")
+overdue
 
 ## Day (after the number 1, when it's overdue)
 day
