@@ -29,7 +29,8 @@
   - Others who can submit: the people with delegated authority, as well as the
     appropriate person and the admin. Was "People who can submit", which read
     as if only these people could (someone asked how we decide who to show)
-  - Last updated, so regulators know the details are current (David, Operator mindset)
+  - Last updated, so regulators know the details are current (David, Operator
+    mindset). Removed by Jen, 16 November 2026
   - Emails are links
   - Not here, as agreed on 6 November: conditions of approval, approved and
     expires, account manager (David asked for this: a research question for
@@ -82,7 +83,6 @@
 {% if others.length %}
   {% set rows = (rows.push({ key: { text: words.othersWhoCanSubmit }, value: { html: othersHtml } }), rows) %}
 {% endif %}
-{% set rows = (rows.push({ key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }), rows) %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
