@@ -58,7 +58,7 @@ Registration number
 Membership
 
 ## Action column
-Action
+
 
 ## View submissions link
 View submissions
