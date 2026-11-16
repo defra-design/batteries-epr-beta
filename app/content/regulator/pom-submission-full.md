@@ -85,7 +85,7 @@ Member
 Type
 
 ## What we found column
-What we found
+Description
 
 ## Scheme's reason column
 Scheme's reason
