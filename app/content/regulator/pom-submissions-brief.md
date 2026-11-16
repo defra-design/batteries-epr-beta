@@ -16,17 +16,14 @@ Year
 ## Show button
 Show
 
-## Showing (start of the line above the table, before the quarter)
+## Showing (start of the line above the table, before the number, for example "Showing 4 results")
 Showing
 
-## Returns (after the quarter, in the line above the table)
-returns
+## Results (after the number)
+results
 
-## Submissions (after the number)
-submissions
-
-## Submission (after the number 1)
-submission
+## Result (after the number 1)
+result
 
 ## No submissions
 There are no submissions for this quarter yet.
