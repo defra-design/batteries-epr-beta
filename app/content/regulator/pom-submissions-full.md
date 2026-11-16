@@ -25,8 +25,14 @@ Show
 ## Reset button (goes back to all quarters, years and statuses)
 Reset
 
-## Summary for all submissions
-All submissions from 2024 to 2026
+## Summary start for all submissions (before the number, for example "Showing 44 results")
+Showing
+
+## Results (after the number, for all submissions)
+results
+
+## Result (after the number 1, for all submissions)
+result
 
 ## Summary start for filtered submissions
 Showing
