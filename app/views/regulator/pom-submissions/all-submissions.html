@@ -60,18 +60,8 @@
   {% set statusItems = (statusItems.push({ value: status, text: status, selected: status == filters.status }), statusItems) %}
 {% endfor %}
 
-{# The summary line: everything ("Showing 44 results", Jen, 16 November 2026), or what the filters show #}
-{% if filters.year == "all" and filters.quarter == "all" and filters.status == "all" %}
-  {% set summary = "" %}
-{% else %}
-  {% set when = [] %}
-  {% if filters.quarter != "all" %}{% set when = (when.push(pom.QUARTERS[filters.quarter - 1]), when) %}{% endif %}
-  {% if filters.year != "all" %}{% set when = (when.push(filters.year), when) %}{% endif %}
-  {% set parts = [] %}
-  {% if when.length %}{% set parts = (parts.push(when | join(" ")), parts) %}{% endif %}
-  {% if filters.status != "all" %}{% set parts = (parts.push(filters.status), parts) %}{% endif %}
-  {% set summary = words.summaryStartForFilteredSubmissions + " " + parts | join(", ") %}
-{% endif %}
+{# The summary line: "Showing 44 results", with or without filters. The filters
+   that are on show in the selects, so the line doesn't repeat them (Jen, 16 November 2026) #}
 
 
 {# Table text is 16px, as large tables of data allow and as the regulator toolkit does,
@@ -121,7 +111,7 @@
       </div>
     </form>
 
-    <p class="govuk-body">{% if summary %}{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}{% else %}{{ words.summaryStartForAllSubmissions }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}{% endif %}</p>
+    <p class="govuk-body">{{ words.summaryStartForAllSubmissions }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}</p>
 
     {% if rows.length %}
       {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
