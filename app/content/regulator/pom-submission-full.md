@@ -75,9 +75,6 @@ View members
 ## Flags heading
 Flags
 
-## Flags intro (under the heading)
-Things in the data that look unusual. The scheme has given a reason for each one.
-
 ## No flags
 There are no flags on this submission.
 
