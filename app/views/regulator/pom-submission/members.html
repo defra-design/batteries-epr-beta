@@ -32,6 +32,10 @@
   - No Flags column and no "Only members with flags" checkbox: the flags are
     on the submission page, so this page is for finding members
   - Reached only from the submission (not the organisation details)
+  - The heading says which quarter's submission the members are from, for
+    example "Members in the July to September 2026 submission", so it's
+    clear they're the members for that quarter (Marie). The caption is just
+    the scheme name, as on Organisation details. Was: "Search for a member"
 
   Design session, 10 November 2026:
   - (Flags: a checkbox and a column. Both removed on 16 November)
@@ -46,12 +50,17 @@
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/members.md
+
+  The Action column heading is only for screen readers: on screen it's empty,
+  as the links say what they do (Jen, 16 November). Without it, the column has
+  no name for people who use a screen reader.
 #}
 
 {% set wordsFile = "regulator/members" %}
 {% set words = content(wordsFile) %}
 
-{% set pageName = words.heading + ", " + org.name %}
+{% set heading = words.headingStart + " " + quarterText + " " + words.headingEnd %}
+{% set pageName = heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -83,7 +92,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-l">{{ org.name }}</span>
-    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
     {{ words.intro | paragraphs }}
   </div>
 </div>
@@ -117,7 +126,7 @@
             { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
             { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
+            { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],
           rows: rows
         }) }}

@@ -9,7 +9,10 @@
   Team playback, 16 November 2026:
   - Reached from the scheme name on the list, not from the submission: these
     are the details for that quarter (the admin and others can change over time)
-  - The caption says which quarter, for example "BatteryBack, July to September 2026"
+  - A Quarter row, under Registered name, says which quarter the details are
+    for, for example "July to September 2026". The caption is just the scheme
+    name. Was: the quarter in the caption too, "BatteryBack, July to September
+    2026", which read awkwardly (Marie, 16 November)
   - No Members row: members are reached from the submission, since they're the
     members in that quarter's return. One way there, not two
 
@@ -63,6 +66,7 @@
 
 {% set rows = [
   { key: { text: words.registeredName }, value: { text: org.registeredName } },
+  { key: { text: words.quarter }, value: { text: quarterText } },
   { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
   { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
   { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
@@ -77,7 +81,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <span class="govuk-caption-l">{{ org.name }}, {{ quarterText }}</span>
+    <span class="govuk-caption-l">{{ org.name }}</span>
     <h1 class="govuk-heading-l">{{ words.heading }}</h1>
 
     {{ govukSummaryList({ rows: rows }) }}

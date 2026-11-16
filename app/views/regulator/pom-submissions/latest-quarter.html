@@ -25,6 +25,10 @@
   Was: the name not a link, and "View" (6 November).
   Action is right aligned.
   The words: app/content/regulator/pom-submissions-brief.md
+
+  The Action column heading is only for screen readers: on screen it's empty,
+  as the links say what they do (Jen, 16 November). Without it, the column has
+  no name for people who use a screen reader.
 #}
 
 {% set wordsFile = "regulator/pom-submissions-brief" %}
@@ -101,7 +105,7 @@
             { text: words.schemeColumn, classes: small + " app-table-cell--wrap" },
             { text: words.dueColumn, classes: small },
             { text: words.statusColumn, classes: small },
-            { text: words.linkColumn, classes: small + " govuk-!-text-align-right" }
+            { html: '<span class="govuk-visually-hidden">' + (words.linkColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],
           rows: tableRows
         }) }}

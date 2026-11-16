@@ -98,11 +98,14 @@
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
-{# Flags: the tag on the left (the key), then the
-   producer and what was found in bold, and the scheme's reason underneath #}
+{# Flags: the tag on the left (the key), then the producer in bold, what was
+   found on the next line, ending in a full stop (added here if the words file
+   doesn't have one), and the scheme's reason underneath. No colon, and what
+   was found isn't bold (Jen, 16 November). Was: "Brightcell Ltd: estimated
+   figure", all in bold #}
 {% set flagRows = [] %}
 {% for flag in s.flags %}
-  {% set flagHtml %}<strong>{{ flag.producer }}: {{ flag.found | lower }}</strong><br>{{ flag.reason }}{% endset %}
+  {% set flagHtml %}<strong class="govuk-!-display-block">{{ flag.producer }}</strong><span class="govuk-!-display-block">{{ flag.found }}{% if (flag.found | last) != "." %}.{% endif %}</span>{{ flag.reason }}{% endset %}
   {% set flagRows = (flagRows.push({
     key: { html: '<strong class="govuk-tag ' + flag.tagClasses + '">' + flag.type + '</strong>' },
     value: { html: flagHtml }

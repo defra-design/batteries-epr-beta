@@ -33,6 +33,10 @@
   in a row, going to two different places (team playback, 16 November 2026).
   Was: the name not a link, and "View". Action is right aligned.
   The words: app/content/regulator/pom-submissions-full.md
+
+  The Action column heading is only for screen readers: on screen it's empty,
+  as the links say what they do (Jen, 16 November). Without it, the column has
+  no name for people who use a screen reader.
 #}
 
 {% set wordsFile = "regulator/pom-submissions-full" %}
@@ -132,7 +136,7 @@
             { text: words.quarterColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.dueColumn, attributes: { "aria-sort": "ascending" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.linkColumn, classes: small + " govuk-!-text-align-right" }
+            { html: '<span class="govuk-visually-hidden">' + (words.linkColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],
           rows: tableRows
         }) }}

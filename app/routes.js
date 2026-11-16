@@ -145,7 +145,8 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation
 function membersPage (req, res, next, backHref) {
   const organisation = details.organisation(req.params.scheme)
   const all = details.members(req.params.scheme, req.params.year, req.params.quarter)
-  if (!organisation || !all || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  const submission = details.submission(req.params.scheme, req.params.year, req.params.quarter)
+  if (!organisation || !all || !submission) return next()
   const search = String(req.query.search || '').trim().slice(0, 100)
   const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
   const term = search.toLowerCase()
@@ -154,6 +155,8 @@ function membersPage (req, res, next, backHref) {
     (status === 'all' || (status === 'current') === m.current))
   res.render('regulator/pom-submission/members', {
     org: organisation,
+    // The heading says which quarter's submission these members are from
+    quarterText: submission.yearQuarterFull,
     members,
     total: all.length,
     filters: { search, status },

@@ -55,7 +55,7 @@ Review by
 ## Status column
 Status
 
-## Link column
+## Link column (only screen readers hear this: it's hidden on screen)
 Action
 
 ## View link (opens the submission: the scheme name and quarter are added for screen readers)

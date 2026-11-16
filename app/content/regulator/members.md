@@ -7,8 +7,11 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Heading
-Search for a member
+## Heading start (before the quarter, for example "Members in the July to September 2026 submission")
+Members in the
+
+## Heading end (after the quarter)
+submission
 
 ## Intro (paragraphs welcome)
 
@@ -57,8 +60,8 @@ Registration number
 ## Status column
 Membership
 
-## Action column
-
+## Action column (only screen readers hear this: it's hidden on screen)
+Action
 
 ## View submissions link
 View submissions
