@@ -131,7 +131,6 @@
 
     <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
     {% if flagRows.length %}
-      <p class="govuk-body">{{ words.flagsIntro }}</p>
       {{ govukSummaryList({ rows: flagRows }) }}
     {% else %}
       <p class="govuk-body">{{ words.noFlags }}</p>
