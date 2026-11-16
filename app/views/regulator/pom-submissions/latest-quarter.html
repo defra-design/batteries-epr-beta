@@ -93,7 +93,7 @@
     </form>
 
     {% if rows.length %}
-      <p class="govuk-body">{{ words.showing }} {{ quarterText }} {{ words.returns }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}</p>
+      <p class="govuk-body">{{ words.showing }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}</p>
 
       {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
          The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}
