@@ -37,9 +37,6 @@ Submissions of batteries placed on the market
 ## Scheme column
 Scheme
 
-## Date submitted column
-Submitted
-
 ## Due column
 Review by
 
@@ -50,10 +47,28 @@ Status
 Action
 
 ## View link (opens the submission: the scheme name is added for screen readers)
-View
+View submission
+
+## Organisation details (only screen readers hear this, after the scheme name, which links to the scheme's organisation details for that quarter)
+organisation details
 
 ## Not applicable (only screen readers hear this, in the Review by column once a submission is accepted)
 Not applicable
 
-## Overdue (bold text above the review by date)
-Overdue
+## Overdue by (bold, under the review by date, before the number of days, for example "Overdue by 3 days")
+Overdue by
+
+## Day (after the number 1, when it's overdue)
+day
+
+## Days (after the number, when it's overdue)
+days
+
+## Due today (under the review by date)
+Due today
+
+## Days left (under the review by date, after the number, for example "3 days left")
+days left
+
+## One day left (after the number 1)
+day left

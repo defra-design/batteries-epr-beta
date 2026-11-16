@@ -4,8 +4,14 @@
 //
 // The 4 real compliance schemes, and one submission per scheme per quarter
 // from January to March 2024 to July to September 2026. Everything is
-// "Accepted" except the latest quarter and one escalated return. "Today" is fixed at 5 November 2026,
+// "Accepted" except the latest quarter. "Today" is fixed at 5 November 2026,
 // so what's overdue doesn't change as the days go by.
+//
+// The latest quarter shows each review date case once, so research can see
+// them all and nothing looks odd (team playback, 16 November):
+// overdue by 3 days, due today, 7 days left, and accepted (no review date).
+// Was: an escalated return from April to June 2026, overdue by 101 days, which
+// would throw people in research. No dummy return is Query raised or Escalated
 //
 
 const TODAY = '2026-11-05'
@@ -38,19 +44,20 @@ const STATUSES = {
 // The latest quarter (July to September 2026): a mix of statuses
 const LATEST = {
   'recycling-lives': { submitted: '2026-10-23', status: 'Response received' },
-  'erp-uk': { submitted: '2026-10-29', status: 'Under review' },
+  'erp-uk': { submitted: '2026-10-26', status: 'Under review' },
   batteryback: { submitted: '2026-11-02', status: 'To review' },
   valpak: { submitted: '2026-10-16', status: 'Accepted' }
 }
 
-// Earlier submissions that aren't accepted yet (everything else is Accepted)
-const OPEN_EARLIER = {
-  '2026-2-erp-uk': 'Escalated'
-}
 const LATEST_YEAR = 2026
 const LATEST_QUARTER = 3
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+// Days from one date to another: minus when it's already gone
+function daysBetween (from, to) {
+  return Math.round((new Date(to + 'T12:00:00Z') - new Date(from + 'T12:00:00Z')) / 86400000)
+}
 
 function addDays (iso, days) {
   const d = new Date(iso + 'T12:00:00Z')
@@ -79,7 +86,7 @@ function all () {
           // Each quarter's returns come in during the month after it ends
           const quarterEnd = new Date(Date.UTC(year, quarter * 3, 0)).toISOString().slice(0, 10)
           submitted = addDays(quarterEnd, 9 + i * 4)
-          status = OPEN_EARLIER[year + '-' + quarter + '-' + scheme.slug] || 'Accepted'
+          status = 'Accepted'
         }
         const due = addDays(submitted, 10)
         const open = status !== 'Accepted'
@@ -96,6 +103,9 @@ function all () {
           dueText: open ? shortDate(due) : '',
           dueSort: open ? due : '',
           overdue: open && due < TODAY,
+          // Time left to review it (team playback, 16 November): 3 is 3 days
+          // left, 0 is due today, -3 is overdue by 3 days. Nothing once accepted
+          daysLeft: open ? daysBetween(TODAY, due) : null,
           status,
           // Workflow order, for sorting by Status
           statusSort: String(Object.keys(STATUSES).indexOf(status)),

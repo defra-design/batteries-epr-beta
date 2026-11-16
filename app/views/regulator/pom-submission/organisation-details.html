@@ -2,9 +2,16 @@
 
 {#
   EB-325: a scheme's organisation details. One page for both versions.
-  Page 2 of 2. You get here from "View details" on a submission (brief or full).
-  Back goes to that submission, and View members to that version's members
-  page: both come from the address (app/routes.js), so you stay in your version.
+  You get here from the scheme name on the list of submissions (brief or full).
+  Back goes to that list: the brief one on that quarter, or the full one with
+  its filters (app/routes.js), so you stay in your version.
+
+  Team playback, 16 November 2026:
+  - Reached from the scheme name on the list, not from the submission: these
+    are the details for that quarter (the admin and others can change over time)
+  - The caption says which quarter, for example "BatteryBack, July to September 2026"
+  - No Members row: members are reached from the submission, since they're the
+    members in that quarter's return. One way there, not two
 
   Design session, 10 November 2026: the brief and full versions are now one
   page, based on the brief version (Mak preferred it).
@@ -14,8 +21,6 @@
   - Others who can submit: the people with delegated authority, as well as the
     appropriate person and the admin. Was "People who can submit", which read
     as if only these people could (someone asked how we decide who to show)
-  - Members: the count, with View members (David, Operator mindset). Was a link
-    on its own at the bottom
   - Last updated, so regulators know the details are current (David, Operator mindset)
   - Emails are links
   - Not here, as agreed on 6 November: conditions of approval, approved and
@@ -67,19 +72,12 @@
 {% if others.length %}
   {% set rows = (rows.push({ key: { text: words.othersWhoCanSubmit }, value: { html: othersHtml } }), rows) %}
 {% endif %}
-{% set rows = (rows.concat([
-  {
-    key: { text: words.members },
-    value: { text: org.members },
-    actions: { items: [{ href: membersHref, text: words.viewMembersLink }] }
-  },
-  { key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }
-])) %}
+{% set rows = (rows.push({ key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }), rows) %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <span class="govuk-caption-l">{{ org.name }}</span>
+    <span class="govuk-caption-l">{{ org.name }}, {{ quarterText }}</span>
     <h1 class="govuk-heading-l">{{ words.heading }}</h1>
 
     {{ govukSummaryList({ rows: rows }) }}

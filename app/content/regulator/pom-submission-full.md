@@ -9,7 +9,6 @@ Back
 
 ## Heading (after the quarter, for example "July to September 2026 submission")
 
-
 ## Status
 Status
 
@@ -22,10 +21,19 @@ Submitted
 ## Review by
 Review by
 
-## Overdue (bold text above the review by date)
-Overdue
+## Overdue by (bold, under the review by date, before the number of days, for example "Overdue by 3 days")
+Overdue by
 
-## Days left (after the number, for example "3 days left")
+## Day (after the number 1, when it's overdue)
+day
+
+## Days (after the number, when it's overdue)
+days
+
+## Due today (under the review by date)
+Due today
+
+## Days left (under the review by date, after the number, for example "3 days left")
 days left
 
 ## One day left (after the number 1)
@@ -57,18 +65,6 @@ View earlier versions
 
 ## View member data button
 View member data
-
-## Organisation heading
-Organisation
-
-## Organisation (the label for the scheme's name)
-Name
-
-## View details link
-View details
-
-## Organisation details hidden text (only screen readers hear this, after View details)
-organisation details
 
 ## Members
 Members

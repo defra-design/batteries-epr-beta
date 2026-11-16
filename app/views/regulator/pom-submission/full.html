@@ -12,9 +12,15 @@
   - "Super user", not "Admin" (Rich's word)
 
   Order: submission details (Submitted by has the person's email as a link),
-  a table of flags, supporting documents, then View member data. The organisation (details on page 2, and
-  members) is a short summary list after the submission details, with View links.
+  a table of flags, supporting documents, then View member data. Members in
+  this submission has View members. The organisation details are reached
+  from the scheme name on the list, not from here.
   The summary lists are two-thirds width, as in the brief version.
+
+  Team playback, 16 November 2026:
+  - No Organisation section: the organisation details are reached from the
+    scheme name on the list, since they're the details for that quarter
+  - View members is on the Members in this submission row
 
   Design session, 10 November 2026:
   - BCS number moved to the organisation details: it's about the scheme, not this return (Jen)
@@ -54,6 +60,19 @@
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
 
+{#
+  Review by: the date the regulator needs to review it by (10 days after it
+  was submitted), with the time left under it: "3 days left", "Due today",
+  or "Overdue by 3 days" in bold. Bold black, not red: in GOV.UK services red
+  text means an error (agreed with Jen, 6 November). One date column, so the
+  team can see at a glance when each one needs doing by, and how long they've
+  got (team playback, 16 November). Was: a Submitted column and a Review by
+  column, with "Overdue" above the date. Submitted stays on this page: it's
+  where the 10 days are counted from
+  The same as the lists. Accepted: no Review by row.
+#}
+{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% else %}<span class="govuk-!-display-block">{{ dateText }}</span>{% if row.daysLeft < 0 %}<strong>{{ words.overdueBy }} {{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ row.daysLeft }} {% if row.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}{% endif %}{% endif %}{% endmacro %}
+
 {% block beforeContent %}
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
 {% endblock %}
@@ -63,7 +82,7 @@
   { key: { text: words.submitted }, value: { text: s.submittedLong } }
 ] %}
 {% if s.open %}
-  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{{ s.dueLong }}{% else %}{{ s.dueLong }} ({{ s.daysLeft }} {% if s.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}){% endif %}{% endset %}
+  {% set reviewByHtml %}{{ reviewBy(s, words, s.dueLong) }}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
 {% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
@@ -72,7 +91,11 @@
   { key: { text: words.status }, value: { html: statusHtml } },
   { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
   { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
-  { key: { text: words.membersInThisSubmission }, value: { text: s.membersInSubmission } },
+  {
+    key: { text: words.membersInThisSubmission },
+    value: { text: s.membersInSubmission },
+    actions: { items: [{ href: membersHref, text: words.viewMembersLink }] }
+  },
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
@@ -99,21 +122,6 @@
 
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
-
-    {# The organisation: its details (page 2) and members, near the top but after the submission #}
-    <h2 class="govuk-heading-m">{{ words.organisationHeading }}</h2>
-    {{ govukSummaryList({ rows: [
-      {
-        key: { text: words.organisation },
-        value: { text: org.name },
-        actions: { items: [{ href: organisationHref, text: words.viewDetailsLink, visuallyHiddenText: words.organisationDetailsHiddenText }] }
-      },
-      {
-        key: { text: words.members },
-        value: { text: org.members },
-        actions: { items: [{ href: membersHref, text: words.viewMembersLink }] }
-      }
-    ] }) }}
 
   </div>
 </div>

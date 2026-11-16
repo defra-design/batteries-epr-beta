@@ -19,8 +19,23 @@ Submitted
 ## Review by
 Review by
 
-## Overdue (bold text above the review by date)
-Overdue
+## Overdue by (bold, under the review by date, before the number of days, for example "Overdue by 3 days")
+Overdue by
+
+## Day (after the number 1, when it's overdue)
+day
+
+## Days (after the number, when it's overdue)
+days
+
+## Due today (under the review by date)
+Due today
+
+## Days left (under the review by date, after the number, for example "3 days left")
+days left
+
+## One day left (after the number 1)
+day left
 
 ## Status
 Status
@@ -45,18 +60,6 @@ of
 
 ## View earlier versions link
 View earlier versions
-
-## Organisation heading
-Organisation
-
-## Name (the scheme's name, in the Organisation list)
-Name
-
-## View details link
-View details
-
-## Organisation details hidden text (only screen readers hear this, after View details)
-organisation details
 
 ## Members
 Members

@@ -53,7 +53,8 @@ function notBuilt (back) {
 }
 
 // Brief version: one quarter at a time. Lands on the latest quarter with submissions.
-// Scheme names aren't links: "View submission" opens one page with everything.
+// The scheme name links to that quarter's organisation details, and
+// "View submission" opens the submission (team playback, 16 November 2026).
 // What needs action first: soonest review by date first, accepted last
 // (design session, 10 November; was alphabetical by scheme)
 router.get('/regulator/pom-submissions/latest-quarter', (req, res) => {
@@ -62,14 +63,15 @@ router.get('/regulator/pom-submissions/latest-quarter', (req, res) => {
   const rows = pom.all()
     .filter(row => row.year === year && row.quarter === quarter)
     .sort(pom.byDue)
-    .map(row => ({ ...row, submissionHref: briefUrl(row) }))
+    .map(row => ({ ...row, submissionHref: briefUrl(row), organisationHref: briefUrl(row) + '/organisation-details' }))
   res.render('regulator/pom-submissions/latest-quarter', {
     pom, rows, filters: { year, quarter }, quarterText: pom.QUARTERS[quarter - 1] + ' ' + year
   })
 })
 
 // Full version: everything (3 years). Lands on all years, quarters and statuses.
-// Scheme names aren't links: "View" opens the submission, which links to the organisation.
+// The scheme name links to that quarter's organisation details, and
+// "View submission" opens the submission (team playback, 16 November 2026).
 // What needs action first: soonest review by date first, then accepted, newest
 // quarter first (design session, 10 November; was newest quarter first).
 // The filters chosen are remembered, so the back link on the submission
@@ -84,7 +86,7 @@ router.get('/regulator/pom-submissions/all-submissions', (req, res) => {
       (quarter === 'all' || row.quarter === quarter) &&
       (status === 'all' || row.status === status))
     .sort(pom.byDueThenNewest)
-    .map(row => ({ ...row, submissionHref: fullUrl(row) }))
+    .map(row => ({ ...row, submissionHref: fullUrl(row), organisationHref: fullUrl(row) + '/organisation-details' }))
   res.render('regulator/pom-submissions/all-submissions', {
     pom, rows, filters: { year, quarter, status }
   })
@@ -114,22 +116,23 @@ router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter', (req, res,
   res.render('regulator/pom-submission/brief', {
     submission,
     backHref: '/regulator/pom-submissions/latest-quarter?year=' + submission.year + '&quarter=' + submission.quarter,
-    organisationHref: req.path.replace(/\/$/, '') + '/organisation-details',
     membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
 
-// Brief, page 2: back to that submission.
+// Organisation details, brief version: back to the brief list, on that quarter.
+// Reached from the scheme name on the list (team playback, 16 November 2026).
 // One organisation details page for both versions (design session, 10 November 2026).
-// Each version keeps its own address, so Back and View members stay in that version
+// Each version keeps its own address, so Back goes to that version's list
 router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
   const organisation = details.organisation(req.params.scheme)
-  if (!organisation || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  const submission = details.submission(req.params.scheme, req.params.year, req.params.quarter)
+  if (!organisation || !submission) return next()
   res.render('regulator/pom-submission/organisation-details', {
     organisation,
-    backHref: briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }),
-    membersHref: req.path.replace(/\/$/, '') + '/members',
+    quarterText: submission.yearQuarterFull,
+    backHref: '/regulator/pom-submissions/latest-quarter?year=' + submission.year + '&quarter=' + submission.quarter,
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
@@ -145,20 +148,15 @@ function membersPage (req, res, next, backHref) {
   if (!organisation || !all || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
   const search = String(req.query.search || '').trim().slice(0, 100)
   const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
-  // A checkbox (design session, 10 November 2026). The Prototype Kit adds a
-  // hidden "_unchecked" value to every checkbox, so a ticked box sends two
-  // values: look for "only" among them
-  const flags = [].concat(req.query.flags || []).includes('only') ? 'only' : 'all'
   const term = search.toLowerCase()
   const members = all.filter(m =>
     (!term || m.name.toLowerCase().includes(term) || m.bprn.toLowerCase().includes(term)) &&
-    (status === 'all' || (status === 'current') === m.current) &&
-    (flags === 'all' || m.flags > 0))
+    (status === 'all' || (status === 'current') === m.current))
   res.render('regulator/pom-submission/members', {
     org: organisation,
     members,
     total: all.length,
-    filters: { search, status, flags },
+    filters: { search, status },
     formAction: req.path,
     backHref,
     notBuiltHref: notBuilt(req.originalUrl)
@@ -167,15 +165,9 @@ function membersPage (req, res, next, backHref) {
 router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/members', (req, res, next) => {
   membersPage(req, res, next, briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }))
 })
-router.get('/regulator/pom-submissions/brief/:scheme/:year/:quarter/organisation-details/members', (req, res, next) => {
-  membersPage(req, res, next, briefUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
-})
 
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/members', (req, res, next) => {
   membersPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }))
-})
-router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-details/members', (req, res, next) => {
-  membersPage(req, res, next, fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }) + '/organisation-details')
 })
 
 // Full, page 1: back to the full list
@@ -185,20 +177,21 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter', (req, res, 
   res.render('regulator/pom-submission/full', {
     submission,
     backHref: '/regulator/pom-submissions/all-submissions' + (req.session.pomFullListQuery || ''),
-    organisationHref: req.path.replace(/\/$/, '') + '/organisation-details',
     membersHref: req.path.replace(/\/$/, '') + '/members',
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })
 
-// Full, page 2: back to that submission. The same page as the brief version's
+// Organisation details, full version: back to the full list, with its filters.
+// The same page as the brief version's
 router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
   const organisation = details.organisation(req.params.scheme)
-  if (!organisation || !details.submission(req.params.scheme, req.params.year, req.params.quarter)) return next()
+  const submission = details.submission(req.params.scheme, req.params.year, req.params.quarter)
+  if (!organisation || !submission) return next()
   res.render('regulator/pom-submission/organisation-details', {
     organisation,
-    backHref: fullUrl({ schemeSlug: req.params.scheme, year: req.params.year, quarter: req.params.quarter }),
-    membersHref: req.path.replace(/\/$/, '') + '/members',
+    quarterText: submission.yearQuarterFull,
+    backHref: '/regulator/pom-submissions/all-submissions' + (req.session.pomFullListQuery || ''),
     notBuiltHref: notBuilt(req.originalUrl)
   })
 })

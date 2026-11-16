@@ -18,14 +18,20 @@
     so Reset and coming back from a submission keep it (Kieran, David).
     The filters are remembered for the back link too (see app/routes.js)
 
+  Team playback, 16 November 2026: one date column, Review by, with the time
+  left under it. The Submitted column is gone: the date is on the submission.
+  The remembered sort has a new name, as the column numbers changed
+
   Add-on: MOJ Frontend (sortable table). Up to 44 rows, all on one page: the
   MOJ sortable table sorts in the browser, so it would only sort one page if
   we added pagination. The real service would need to sort on the server.
   Without JavaScript it's a normal table, what needs action first.
 
   The rows come from app/routes.js and app/data/pom-submissions.js (dummy data).
-  Scheme names aren't links: "View" opens the submission (EB-325, full
-  version), which links to the organisation. Action is right aligned.
+  The scheme name links to its organisation details for that quarter, and
+  "View submission" opens the submission (EB-325, full version): two links
+  in a row, going to two different places (team playback, 16 November 2026).
+  Was: the name not a link, and "View". Action is right aligned.
   The words: app/content/regulator/pom-submissions-full.md
 #}
 
@@ -69,20 +75,24 @@
 {% set small = "govuk-!-font-size-16" %}
 {% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status }}</strong>{% endmacro %}
 {#
-  Review by: overdue shows "Overdue" in bold black text above the date. Not
-  red: in GOV.UK services red text means an error. Agreed with Jen, 6 November.
+  Review by: the date the regulator needs to review it by (10 days after it
+  was submitted), with the time left under it: "3 days left", "Due today",
+  or "Overdue by 3 days" in bold. Bold black, not red: in GOV.UK services red
+  text means an error (agreed with Jen, 6 November). One date column, so the
+  team can see at a glance when each one needs doing by, and how long they've
+  got (team playback, 16 November). Was: a Submitted column and a Review by
+  column, with "Overdue" above the date. The Submitted date is on the submission.
   Accepted: nothing to review, so the cell is empty on screen, and screen
   readers hear "Not applicable" (as the regulator toolkit does).
 #}
-{% macro due(row, words) %}{% if row.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{{ row.dueText }}{% elif row.dueText %}{{ row.dueText }}{% else %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% endif %}{% endmacro %}
+{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% else %}<span class="govuk-!-display-block">{{ dateText }}</span>{% if row.daysLeft < 0 %}<strong>{{ words.overdueBy }} {{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ row.daysLeft }} {% if row.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}{% endif %}{% endif %}{% endmacro %}
 
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
-    { text: row.scheme, attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
+    { html: '<a href="' + row.organisationHref + '" class="govuk-link">' + (row.scheme | escape) + '<span class="govuk-visually-hidden">, ' + (words.organisationDetails | escape) + ', ' + row.quarterText + '</span></a>', attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
     { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
-    { text: row.submittedText, attributes: { "data-sort-value": row.submittedSort }, classes: small },
-    { html: due(row, words), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
+    { html: reviewBy(row, words, row.dueText), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
     { html: statusTag(row), attributes: { "data-sort-value": row.statusSort }, classes: small },
     { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
@@ -116,11 +126,10 @@
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
-          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "pom-submissions-full" },
+          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "pom-submissions-full-review-by" },
           head: [
             { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
             { text: words.quarterColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.dateSubmittedColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.dueColumn, attributes: { "aria-sort": "ascending" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.linkColumn, classes: small + " govuk-!-text-align-right" }

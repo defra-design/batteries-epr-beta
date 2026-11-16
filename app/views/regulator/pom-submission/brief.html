@@ -4,18 +4,22 @@
   EB-325: one placed on the market (PoM) submission, brief version.
   6 November 2026. Page 1 of 2: this page, then Organisation details
   (organisation-details.html, the same page in both versions). Marie and Jen's version.
-  You get here from "View" on the brief list (EB-324).
+  You get here from "View submission" on the brief list (EB-324).
+  The organisation details are reached from the scheme name on the list, not from here.
 
   Top to bottom:
   - Back to the brief list, on this submission's quarter (from app/routes.js)
   - Submission details, with the status tag in the list, and the email of the
     person who submitted it as a link
-  - Organisation: the name with View details (page 2), and members with View
-    members
   - Flags: a line saying what a flag is, then a GOV.UK summary list, one row
     per flag, with a GOV.UK tag on the left saying which type it is
   - Supporting documents: links, with the file type and size
   - View member data: the main call to action, last
+
+  Team playback, 16 November 2026:
+  - No Organisation section: the organisation details are reached from the
+    scheme name on the list, since they're the details for that quarter
+  - Members (how many, with View members) is in the submission details
 
   Design session, 10 November 2026:
   - Placed on the market (tonnes) added: there was no way to see what was
@@ -54,16 +58,30 @@
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
 
+{#
+  Review by: the date the regulator needs to review it by (10 days after it
+  was submitted), with the time left under it: "3 days left", "Due today",
+  or "Overdue by 3 days" in bold. Bold black, not red: in GOV.UK services red
+  text means an error (agreed with Jen, 6 November). One date column, so the
+  team can see at a glance when each one needs doing by, and how long they've
+  got (team playback, 16 November). Was: a Submitted column and a Review by
+  column, with "Overdue" above the date. Submitted stays on this page: it's
+  where the 10 days are counted from
+  The same as the lists. Accepted: no Review by row.
+#}
+{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% else %}<span class="govuk-!-display-block">{{ dateText }}</span>{% if row.daysLeft < 0 %}<strong>{{ words.overdueBy }} {{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %}</strong>{% elif row.daysLeft == 0 %}{{ words.dueToday }}{% else %}{{ row.daysLeft }} {% if row.daysLeft == 1 %}{{ words.oneDayLeft }}{% else %}{{ words.daysLeft }}{% endif %}{% endif %}{% endif %}{% endmacro %}
+
 {% block beforeContent %}
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
 {% endblock %}
 
-{# Submission details: submitted, review by, status, submitted by, version #}
+{# Submission details: submitted, review by, status, submitted by, placed on
+   the market, members (with View members) and version #}
 {% set detailRows = [
   { key: { text: words.submitted }, value: { text: s.submittedLong } }
 ] %}
 {% if s.open %}
-  {% set reviewByHtml %}{% if s.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% endif %}{{ s.dueLong }}{% endset %}
+  {% set reviewByHtml %}{{ reviewBy(s, words, s.dueLong) }}{% endset %}
   {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
 {% endif %}
 {% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
@@ -72,6 +90,11 @@
   { key: { text: words.status }, value: { html: statusHtml } },
   { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
   { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
+  {
+    key: { text: words.members },
+    value: { text: s.membersInSubmission },
+    actions: { items: [{ href: membersHref, text: words.viewMembersLink }] }
+  },
   { key: { text: words.version }, value: { html: versionHtml } }
 ])) %}
 
@@ -96,21 +119,6 @@
 
     <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
-
-    {# The organisation: its details and members are on other pages #}
-    <h2 class="govuk-heading-m">{{ words.organisationHeading }}</h2>
-    {{ govukSummaryList({ rows: [
-      {
-        key: { text: words.name },
-        value: { text: org.name },
-        actions: { items: [{ href: organisationHref, text: words.viewDetailsLink, visuallyHiddenText: words.organisationDetailsHiddenText }] }
-      },
-      {
-        key: { text: words.members },
-        value: { text: org.members },
-        actions: { items: [{ href: membersHref, text: words.viewMembersLink }] }
-      }
-    ] }) }}
 
   </div>
 </div>

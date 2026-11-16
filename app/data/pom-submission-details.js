@@ -10,6 +10,9 @@
 //
 
 const pom = require('./pom-submissions')
+// Add-on: words-only content files. The example flags are in a words file,
+// so content design can change or add them (app/content/regulator/flags.md)
+const { content } = require('../lib/content')
 
 const TODAY = '2026-11-05'
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -24,9 +27,6 @@ const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 function longDate (iso) {
   const [y, m, d] = iso.split('-').map(Number)
   return d + ' ' + MONTHS_LONG[m - 1] + ' ' + y
-}
-function daysBetween (from, to) {
-  return Math.round((new Date(to + 'T12:00:00Z') - new Date(from + 'T12:00:00Z')) / 86400000)
 }
 
 // Delegated authority runs for a compliance year (dummy dates)
@@ -116,8 +116,31 @@ const SCHEMES = {
   }
 }
 
-// Made-up producer names, for the flags
-const PRODUCERS = ['Brightcell Ltd', 'Northpower Batteries Ltd', 'Cellwise Trading Ltd']
+// The example flags, from app/content/regulator/flags.md (16 November 2026:
+// moved out of this file, so content design can change them in one place and
+// add more). Read every time, so a saved change shows when you refresh.
+// Flag 1, Flag 2 and so on, up to 10. A flag needs at least a member and a type.
+// Tag colours: GOV UK tag colours that no status uses, so they don't compete.
+const FLAG_TAGS = { Irregularity: 'govuk-tag--magenta', Variance: 'govuk-tag--turquoise' }
+function exampleFlags () {
+  const words = content('regulator/flags')
+  const flags = []
+  for (let n = 1; n <= 10; n++) {
+    const get = (name) => ('flag' + n + name in words) ? String(words['flag' + n + name]).trim() : ''
+    const producer = get('Member')
+    const type = get('Type')
+    if (!producer || !type) continue
+    flags.push({
+      type,
+      tagClasses: FLAG_TAGS[type] || 'govuk-tag--grey',
+      producer,
+      found: get('WhatWeFound'),
+      figures: get('Figures'),
+      reason: get('Reason')
+    })
+  }
+  return flags
+}
 
 function organisation (slug) {
   const s = SCHEMES[slug]
@@ -162,16 +185,8 @@ function submission (slug, year, quarter) {
   // found: what we found, in specific words ("Up 42% on last quarter", not "Big change").
   // figures: the numbers behind it (full version only).
   // reason: the scheme's reason, which doesn't name the producer (it's shown next to it).
-  // tagClasses: GOV.UK tag colours that no status uses, so they don't compete.
-  const IRREGULARITY = { type: 'Irregularity', tagClasses: 'govuk-tag--magenta' }
-  const VARIANCE = { type: 'Variance', tagClasses: 'govuk-tag--turquoise' }
-  const flags = open
-    ? [
-        { ...IRREGULARITY, producer: PRODUCERS[0], found: 'Estimated figure', figures: '', reason: 'Waiting for figures from its supplier, so this quarter is an estimate.' },
-        { ...VARIANCE, producer: PRODUCERS[1], found: 'Up 42% on last quarter', figures: '1.2 to 1.7 tonnes', reason: 'Started selling a new range of batteries in August.' },
-        { ...VARIANCE, producer: PRODUCERS[2], found: 'Same tonnage as last quarter', figures: '0.8 tonnes', reason: 'Has checked and sold the same amount.' }
-      ]
-    : []
+  // The examples are in app/content/regulator/flags.md. Accepted returns have none.
+  const flags = open ? exampleFlags() : []
   // Supporting documents the scheme chose to send, to explain the return.
   // No data files (CSVs): the data is in the service, and the technical
   // direction is not to store them (Phil). File trails and earlier versions
@@ -185,7 +200,6 @@ function submission (slug, year, quarter) {
     submittedLong: longDate(row.submittedSort),
     dueLong: row.dueSort ? longDate(row.dueSort) : '',
     open,
-    daysLeft: open && !row.overdue ? daysBetween(TODAY, row.dueSort) : null,
     version: versions,
     versions,
     submittedBy,
@@ -219,7 +233,8 @@ function members (slug, year, quarter) {
   const flagged = {}
   if (sub) sub.flags.forEach(f => { flagged[f.producer] = (flagged[f.producer] || 0) + 1 })
   // The flagged producers are members too
-  const list = PRODUCERS.map(name => ({ name, current: true }))
+  const flaggedNames = [...new Set(exampleFlags().map(f => f.producer))]
+  const list = flaggedNames.map(name => ({ name, current: true }))
   for (let i = 0; list.length < s.members; i++) list.push({ name: memberName(i, offset), current: true })
   for (let i = 0; i < 4; i++) list.push({ name: memberName(1000 + i * 53, offset), current: false })
   return list

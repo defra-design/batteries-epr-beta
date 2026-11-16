@@ -2,9 +2,9 @@
 
 {#
   EB-326: a scheme's members. One page for both versions. 9 November 2026.
-  You get here from "View members" on a submission or its organisation
-  details, in either version. Back goes to whichever you came from, and
-  comes from the address (app/routes.js), so you stay in your version.
+  You get here from "View members" on a submission, in either version. Back
+  goes to that submission, and comes from the address (app/routes.js), so
+  you stay in your version.
 
   11 November 2026: the brief version (one long list with just a search box)
   was dropped. This version does the job better.
@@ -14,7 +14,6 @@
   - Member name or BPRN: free text, finds one member quickly
   - Status: Current (the default, so former members don't pad the list),
     Former or All
-  - Flags: a checkbox, only members with flags
   - Reset (a secondary button, always there so nothing jumps): back
     to the page with the default filters. It sits with Apply filters
     in a GOV.UK button group, so the two stay together when the row wraps
@@ -29,10 +28,13 @@
   table sorts every row. If it's slow with real data, the fallback is
   pagination with sorting done on the server.
 
+  Team playback, 16 November 2026:
+  - No Flags column and no "Only members with flags" checkbox: the flags are
+    on the submission page, so this page is for finding members
+  - Reached only from the submission (not the organisation details)
+
   Design session, 10 November 2026:
-  - Flags: a GOV.UK checkbox, "Only members with flags", not a dropdown with
-    two options (Kieran). "Flags" is the umbrella word, as on the submission page
-  - The Flags column, for the same reason (was "Irregularities to review")
+  - (Flags: a checkbox and a column. Both removed on 16 November)
   - "Reset", not "Clear": it goes back to the defaults (current members),
     as on the lists of submissions. The sort is remembered (add-on:
     data-app-remember-sort, see application.js), so Reset keeps it (Kieran)
@@ -73,7 +75,6 @@
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (m.name | escape) + '</a>', attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
     { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
-    { text: m.flags, classes: small + " govuk-table__cell--numeric" },
     { html: '<a href="' + notBuiltHref + '" class="govuk-link">' + (words.viewSubmissionsLink | escape) + '<span class="govuk-visually-hidden"> (' + (m.name | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
 {% endfor %}
@@ -95,7 +96,6 @@
       <div class="app-filters">
         {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
-        {{ govukCheckboxes({ name: "flags", classes: "govuk-checkboxes--small", items: [{ value: "only", text: words.onlyMembersWithFlags, checked: filters.flags == "only" }] }) }}
         {# Search and Reset stay together in a GOV.UK button group. Reset
            is always there, so nothing appears or disappears #}
         <div class="govuk-button-group">
@@ -117,7 +117,6 @@
             { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
             { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.flagsColumn, attributes: { "aria-sort": "none" }, classes: small + " govuk-table__header--numeric" },
             { text: words.actionColumn, classes: small + " govuk-!-text-align-right" }
           ],
           rows: rows

@@ -1,4 +1,4 @@
-Page: a scheme's members (EB-326). One page for both the brief and full versions. Search by name or registration number, filter by membership and flags.
+Page: a scheme's members (EB-326). One page for both the brief and full versions. Search by name or registration number, filter by membership.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The members, numbers and flags are dummy data: ask Marie to change those.
@@ -11,7 +11,6 @@ Back
 Search for a member
 
 ## Intro (paragraphs welcome)
-
 
 ## Search label
 Name or registration number
@@ -28,13 +27,10 @@ Former
 ## All (filter option)
 All
 
-## Only members with flags (the checkbox)
-Only members with flags
-
 ## Search button
 Search
 
-## Reset button (goes back to current members, with nothing ticked)
+## Reset button (goes back to current members)
 Reset
 
 ## Showing (before the numbers, for example "Showing 3 of 587 members")
@@ -60,9 +56,6 @@ Registration number
 
 ## Status column
 Membership
-
-## Flags column (how many flags each member has in this submission)
-Flags
 
 ## Action column
 Action
