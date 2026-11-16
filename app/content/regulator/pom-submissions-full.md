@@ -25,23 +25,14 @@ Show
 ## Reset button (goes back to all quarters, years and statuses)
 Reset
 
-## Summary start for all submissions (before the number, for example "Showing 44 results")
+## Summary start for all submissions (before the number, for example "Showing 44 results". The same with or without filters)
 Showing
 
-## Results (after the number, for all submissions)
+## Results (after the number)
 results
 
-## Result (after the number 1, for all submissions)
+## Result (after the number 1)
 result
-
-## Summary start for filtered submissions
-Showing
-
-## Submissions (after the number, version B)
-submissions
-
-## Submission (after the number 1, version B)
-submission
 
 ## No submissions
 There are no submissions for this quarter yet.
