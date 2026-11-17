@@ -134,6 +134,9 @@
       <p class="govuk-body">{{ words.noSubmissions }}</p>
     {% endif %}
 
+    {# Prototype only, for research: switch to version 4B, every submission with filters #}
+    <p class="govuk-body govuk-!-margin-top-8"><a href="{{ switchHref }}" class="govuk-link">{{ words.switchLink }}</a></p>
+
   </div>
 </div>
 {% endblock %}

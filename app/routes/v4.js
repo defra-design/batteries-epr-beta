@@ -9,6 +9,9 @@
 //
 //   /regulator/pom-submissions/v4                                  > v4/pom-submissions.html
 //     The submissions for the latest quarter (EB-324, as version 3)
+//   /regulator/pom-submissions/v4/all                              > v4/pom-submissions-all.html
+//     Version 4B: every submission, with filters (as version 3B). A link at the
+//     bottom of each list switches between them
 //
 //   One submission, 5 pages with a sub navigation between them (Marie, 17 November).
 //   Each has the same top (v4/_submission-header.html):
@@ -44,8 +47,9 @@ function submissionUrl (scheme, year, quarter) {
 
 // What every page of a submission needs for its top (v4/_submission-header.html):
 // the links in the sub navigation, which one you're on, the download, and
-// Back, which always goes to the list of submissions
-function submissionTabs (scheme, year, quarter, current) {
+// Back, which goes to the list you came from: version 4 (the latest quarter)
+// or version 4B (all submissions, with its filters). The lists remember it
+function submissionTabs (req, scheme, year, quarter, current) {
   const here = submissionUrl(scheme, year, quarter)
   return {
     tabs: {
@@ -57,7 +61,7 @@ function submissionTabs (scheme, year, quarter, current) {
       scheme: here + '/organisation-details'
     },
     downloadHref: here + '/download',
-    backHref: V4 + '?year=' + year + '&quarter=' + quarter
+    backHref: (req.session && req.session.v4ListBack) || V4 + '?year=' + year + '&quarter=' + quarter
   }
 }
 
@@ -78,6 +82,8 @@ module.exports = (router) => {
   router.get(V4, (req, res) => {
     const year = pick(req.query.year, pom.YEARS, pom.LATEST_YEAR)
     const quarter = pick(req.query.quarter, ['1', '2', '3', '4'], pom.LATEST_QUARTER)
+    // Back on a submission comes back to this list, on this quarter
+    req.session.v4ListBack = V4 + '?year=' + year + '&quarter=' + quarter
     const rows = pom.all()
       .filter(row => row.year === year && row.quarter === quarter)
       .sort(pom.byDue)
@@ -87,7 +93,35 @@ module.exports = (router) => {
       rows,
       filters: { year, quarter },
       quarterText: pom.QUARTERS[quarter - 1] + ' ' + year,
-      formAction: V4
+      formAction: V4,
+      // Prototype only, for research: switch to version 4B
+      switchHref: V4 + '/all'
+    })
+  })
+
+  // Version 4B: every submission, with quarter, year and status filters. A
+  // copy of version 3B's list, as a back-up for research (Marie, 17 November).
+  // Lands on everything, what needs action first. One link per row, to the
+  // version 4 submission
+  router.get(V4 + '/all', (req, res) => {
+    const year = pick(req.query.year, ['all', ...pom.YEARS], 'all')
+    const quarter = pick(req.query.quarter, ['all', '1', '2', '3', '4'], 'all')
+    const status = pick(req.query.status, ['all', ...pom.STATUSES], 'all')
+    // Back on a submission comes back to this list, with the same filters
+    req.session.v4ListBack = V4 + '/all?' + new URLSearchParams({ quarter, year, status }).toString()
+    const rows = pom.all()
+      .filter(row => (year === 'all' || row.year === year) &&
+        (quarter === 'all' || row.quarter === quarter) &&
+        (status === 'all' || row.status === status))
+      .sort(pom.byDueThenNewest)
+      .map(row => ({ ...row, submissionHref: submissionUrl(row.schemeSlug, row.year, row.quarter) }))
+    res.render('regulator/v4/pom-submissions-all', {
+      pom,
+      rows,
+      filters: { year, quarter, status },
+      formAction: V4 + '/all',
+      // Prototype only, for research: switch to version 4
+      switchHref: V4
     })
   })
 
@@ -108,7 +142,10 @@ module.exports = (router) => {
       submission,
       flags,
       membersCount: members.length,
-      ...submissionTabs(scheme, year, quarter, 'flags')
+      // Make a decision: accept, query or reject the whole return (next ticket,
+      // Rich's screen 4). Not built yet
+      decisionHref: notBuilt(req.originalUrl),
+      ...submissionTabs(req, scheme, year, quarter, 'flags')
     })
   })
 
@@ -122,7 +159,7 @@ module.exports = (router) => {
       downloadName: scheme + '-' + year + '-q' + quarter + '.csv',
       lastChanged: amendments.lastChanged(scheme, year, quarter),
       notBuiltHref: notBuilt(req.originalUrl),
-      ...submissionTabs(scheme, year, quarter, 'details')
+      ...submissionTabs(req, scheme, year, quarter, 'details')
     })
   })
 
@@ -161,7 +198,7 @@ module.exports = (router) => {
       submission,
       quarterText: submission.yearQuarterFull,
       notBuiltHref: notBuilt(req.originalUrl),
-      ...submissionTabs(scheme, year, quarter, 'scheme')
+      ...submissionTabs(req, scheme, year, quarter, 'scheme')
     })
   })
 
@@ -178,7 +215,7 @@ module.exports = (router) => {
         // ?from=changes: so Back on the member's page comes back here
         ...c, href: here + '/member-figures/' + c.bprn + '?from=changes'
       })),
-      ...submissionTabs(scheme, year, quarter, 'changes')
+      ...submissionTabs(req, scheme, year, quarter, 'changes')
     })
   })
 
@@ -219,7 +256,7 @@ module.exports = (router) => {
       total: all.length,
       filters: { search, status },
       formAction: req.path,
-      ...submissionTabs(scheme, year, quarter, 'members')
+      ...submissionTabs(req, scheme, year, quarter, 'members')
     })
   })
 
@@ -268,6 +305,8 @@ module.exports = (router) => {
       same: show === compare,
       table: figures.comparison(member, show, compare),
       formAction: req.path,
+      // Make a decision on the whole return, as on Flags. Not built yet
+      decisionHref: notBuilt(req.originalUrl),
       backHref
     })
   })

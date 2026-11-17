@@ -19,6 +19,12 @@
 
 const AMENDMENTS = {
   'recycling-lives-2026-3': [
+    // Flagged and changed, so the member page shows both (Marie, 17 November):
+    // Northpower's Other was sent as 17.00, fixed to 1.70, still a variance
+    {
+      member: 'Northpower Batteries Ltd', bprn: 'BPRN142037', date: '10 Nov 2026', madeBy: 'Michael Osei',
+      chemistries: ['Other']
+    },
     {
       member: 'Acorn Hill Electrical Ltd', bprn: 'BPRN146366', date: '10 Nov 2026', madeBy: 'Michael Osei',
       chemistries: ['Lead acid', 'Nickel cadmium', 'Other']

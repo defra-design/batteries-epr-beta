@@ -60,3 +60,6 @@ days
 
 ## Due today (bold, in place of the review by date)
 Due today
+
+## Switch link (prototype only, at the bottom, goes to version 4B: every submission, with filters)
+Switch to alternative version

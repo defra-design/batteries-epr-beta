@@ -39,3 +39,6 @@ All
 
 ## All passed after (after the number of members)
 members passed the checks.
+
+## Make a decision button (accept, query or reject the whole return)
+Make a decision

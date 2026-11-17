@@ -33,6 +33,8 @@
     the scheme sent the return, newest first: date, chemistry, before and
     after (tonnes), who changed it. From Ian's amendment history design.
     After the figures, so you see what's odd, then what's been fixed
+  - Make a decision (a green button): the same as on Flags, for the whole
+    return, not this member. Not built yet
   - No links under the tables: Back at the top is the way back
 
   One page, not a sub navigation like the submission: the flags, figures and
@@ -224,6 +226,10 @@
         }) }}
       </div>
     {% endif %}
+
+    {# Make a decision on the whole return, as on Flags: you're often looking
+       at a member when you decide. The next ticket: not built yet #}
+    {{ govukButton({ text: words.makeADecisionButton, href: decisionHref }) }}
 
   </div>
 </div>

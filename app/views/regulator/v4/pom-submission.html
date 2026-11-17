@@ -13,6 +13,10 @@
   (Jen, 17 November). Was: the flags, then the submission details under
   them, then View member data, all on this page.
 
+  Then Make a decision (a green button): accept, query or reject the whole
+  return. It's where Rich's producer figures page puts it, and goes to his
+  "Make a decision" page (the next ticket). Not built yet.
+
   With no flags, the page says so and how many members passed the checks,
   so you don't land on an empty page (Marie, 17 November).
 
@@ -88,6 +92,10 @@
       <p class="govuk-body">{{ words.noFlags }}</p>
       <p class="govuk-body">{{ words.allPassedBefore }} {{ membersCount }} {{ words.allPassedAfter }}</p>
     {% endif %}
+
+    {# Make a decision on the whole return: accept, query or reject. The next
+       ticket (Rich's screen 4, "Make a decision"): not built yet #}
+    {{ govukButton({ text: words.makeADecisionButton, href: decisionHref }) }}
   </div>
 </div>
 {% endblock %}

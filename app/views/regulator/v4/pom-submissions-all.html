@@ -1,0 +1,147 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4B (17 November 2026): every placed on the market submission, with
+  quarter, year and status filters. A copy of version 3B's list (the full
+  version, app/views/regulator/pom-submissions/all-submissions.html), so
+  research has a back-up list to try alongside version 4's latest quarter
+  list (Marie, 17 November). Version 3B stays exactly as it was.
+  Address: /regulator/pom-submissions/v4/all
+
+  The same as 3B, except:
+  - One link per row, View submission, as on the version 4 list: the scheme
+    name isn't a link. Scheme details is in the submission's sub navigation
+  - View submission opens the version 4 submission. Back on it comes back
+    here, to the same filters (app/routes/v4.js remembers which list you came from)
+  - At the bottom, a link to switch to version 4's list (prototype only, for research)
+
+  Lands on all years, all quarters and all statuses, sorted by Review by,
+  so what needs action comes first. Add-on: MOJ sortable table, with the
+  sort remembered (data-app-remember-sort). Without JavaScript it's a normal
+  table, what needs action first.
+
+  The rows: app/routes/v4.js and app/data/pom-submissions.js (dummy data).
+  The words: app/content/regulator/v4/pom-submissions-all.md
+#}
+
+{% set wordsFile = "regulator/v4/pom-submissions-all" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = words.heading + " (version 4B)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% set yearItems = [{ value: "all", text: words.all, selected: filters.year == "all" }] %}
+{% for year in pom.YEARS %}
+  {% set yearItems = (yearItems.push({ value: year, text: year, selected: year == filters.year }), yearItems) %}
+{% endfor %}
+{% set quarterItems = [{ value: "all", text: words.all, selected: filters.quarter == "all" }] %}
+{% for quarterName in pom.QUARTERS %}
+  {% set quarterItems = (quarterItems.push({ value: loop.index | string, text: quarterName, selected: (loop.index | string) == filters.quarter }), quarterItems) %}
+{% endfor %}
+{% set statusItems = [{ value: "all", text: words.all, selected: filters.status == "all" }] %}
+{% for status in pom.STATUSES %}
+  {% set statusItems = (statusItems.push({ value: status, text: status, selected: status == filters.status }), statusItems) %}
+{% endfor %}
+
+{# The summary line: everything ("Showing 44 results", Jen, 16 November 2026), or
+   what the filters show, for example "Showing April to June 2024, Accepted: 4 submissions".
+   It says what's showing, so the table and the selects never disagree (Ashley,
+   design session, 10 November). Put back on 17 November: "Showing 44 results"
+   with filters on (16 November) didn't say what the filters had done (Marie) #}
+{% if filters.year == "all" and filters.quarter == "all" and filters.status == "all" %}
+  {% set summary = "" %}
+{% else %}
+  {% set when = [] %}
+  {% if filters.quarter != "all" %}{% set when = (when.push(pom.QUARTERS[filters.quarter - 1]), when) %}{% endif %}
+  {% if filters.year != "all" %}{% set when = (when.push(filters.year), when) %}{% endif %}
+  {% set parts = [] %}
+  {% if when.length %}{% set parts = (parts.push(when | join(" ")), parts) %}{% endif %}
+  {% if filters.status != "all" %}{% set parts = (parts.push(filters.status), parts) %}{% endif %}
+  {% set summary = words.summaryStartForFilteredSubmissions + " " + parts | join(", ") %}
+{% endif %}
+
+
+{# Table text is 16px, as large tables of data allow and as the regulator toolkit does,
+   so the columns stay steady when the filters change #}
+{% set small = "govuk-!-font-size-16" %}
+{% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status }}</strong>{% endmacro %}
+{#
+  Review by: the date the regulator needs to review it by (10 days after it
+  was submitted), on one line. In place of the date: "Due today" or
+  "3 days overdue", both in bold, so what needs doing now stands out. Bold
+  black, not red: in GOV.UK services red text means an error (agreed with
+  Jen, 6 November). One date column, so the team can see at a glance what
+  needs doing first. The Submitted date is on the submission.
+  Accepted: nothing to review, so the cell is empty on screen, and screen
+  readers hear "Not applicable" (as the regulator toolkit does).
+  History: team playback, 16 November: one date column (was Submitted and
+  Review by), with the time left under the date. Jen, 16 November: one line,
+  the date or how overdue it is. Marie, 17 November: Due today in bold too
+  Option A, Marie, 17 November: always the review by date, with "3 days
+  overdue" or "Due today" in bold under it. Accepted returns show their
+  review by date too, so there's always a date and older returns show when
+  they were due. Was (Jen, 16 November): the warning in place of the date,
+  so the date disappeared when it mattered most, and an empty cell once accepted.
+#}
+{% macro reviewBy(row, words, dateText) %}{{ dateText }}{% if row.daysLeft != null and row.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endmacro %}
+
+{% set tableRows = [] %}
+{% for row in rows %}
+  {% set tableRows = (tableRows.push([
+    { text: row.scheme, attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
+    { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
+    { html: reviewBy(row, words, row.reviewByText), attributes: { "data-sort-value": row.dueSort or ("z" + row.reviewBySort) }, classes: small },
+    { html: statusTag(row), attributes: { "data-sort-value": row.statusSort }, classes: small },
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+  ]), tableRows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    {# The filters: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
+    <form method="get" action="{{ formAction }}" novalidate>
+      <div class="app-filters">
+        {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
+        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
+        {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({ text: words.showButton }) }}
+          {{ govukButton({ text: words.resetButton, href: formAction, classes: "govuk-button--secondary" }) }}
+        </div>
+      </div>
+    </form>
+
+    <p class="govuk-body">{% if summary %}{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}{% else %}{{ words.summaryStartForAllSubmissions }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}{% endif %}</p>
+
+    {% if rows.length %}
+      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
+         The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+        {{ govukTable({
+          caption: words.tableCaption,
+          captionClasses: "govuk-visually-hidden",
+          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "pom-submissions-v4b" },
+          head: [
+            { text: words.schemeColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
+            { text: words.quarterColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.dueColumn, attributes: { "aria-sort": "ascending" }, classes: small },
+            { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { html: '<span class="govuk-visually-hidden">' + (words.linkColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
+          ],
+          rows: tableRows
+        }) }}
+      </div>
+    {% endif %}
+
+    {# Prototype only, for research: switch to version 4's list #}
+    <p class="govuk-body govuk-!-margin-top-8"><a href="{{ switchHref }}" class="govuk-link">{{ words.switchLink }}</a></p>
+
+  </div>
+</div>
+{% endblock %}
