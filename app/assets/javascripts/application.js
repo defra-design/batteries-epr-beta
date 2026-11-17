@@ -5,6 +5,7 @@
 
 window.GOVUKPrototypeKit.documentReady(() => {
   rememberTableSort()
+  suggestMembers()
 })
 
 //
@@ -50,4 +51,75 @@ function rememberTableSort () {
       })
     }, 0)
   })
+}
+
+//
+// Add-on: accessible autocomplete (GOV.UK). Version 4 member figures list
+// (17 November 2026, EB-366).
+//
+// Why: schemes have up to 281 members. Suggesting members as you type finds
+// one quickly, without scrolling a long list.
+//
+// How: a text input with data-app-suggestions (a list of "Name (BPRN)") is
+// swapped for an accessible autocomplete with the same id, name and value, so
+// its label and the form still work. Picking a suggestion fills the box, and
+// Search filters the list to that member (the matching happens in app/routes/v4.js).
+// The letters typed are in bold in each suggestion.
+// Picking doesn't change the page by itself (WCAG 3.2.2). Without JavaScript nothing
+// changes: it's a normal search box.
+//
+// The package is accessible-autocomplete, loaded through app/plugin-proxy.json,
+// with its styles imported in application.scss.
+//
+// To remove this add-on: delete this function and the line that calls it,
+// app/plugin-proxy.json, the import in application.scss and the
+// data-app-suggestions attribute, then npm uninstall accessible-autocomplete.
+//
+function suggestMembers () {
+  const $input = document.querySelector('input[data-app-suggestions]')
+  if (!$input || typeof window.accessibleAutocomplete !== 'function') return
+
+  let names = []
+  try { names = JSON.parse($input.getAttribute('data-app-suggestions')) } catch (e) { return }
+
+  // What's been typed, so each suggestion can show it in bold
+  let typed = ''
+
+  const $container = document.createElement('div')
+  $input.parentNode.insertBefore($container, $input)
+  $input.parentNode.removeChild($input)
+
+  window.accessibleAutocomplete({
+    element: $container,
+    id: $input.id,
+    name: $input.name,
+    defaultValue: $input.value,
+    minLength: 2,
+    showNoOptionsFound: false,
+    // The suggestions sit over the page, so the buttons next to the box don't move
+    displayMenu: 'overlay',
+    // Members whose name or registration number has what's typed in it, up to 10
+    source: (query, populate) => {
+      typed = query
+      const term = query.toLowerCase()
+      populate(names.filter(name => name.toLowerCase().includes(term)).slice(0, 10))
+    },
+    // The component's own way to change how suggestions look (its "templates"
+    // option): the letters typed are in bold, so you can see why each one matched
+    templates: {
+      inputValue: (name) => name || '',
+      suggestion: (name) => boldTyped(name, typed)
+    }
+  })
+}
+
+// "Northpower Batteries Ltd" with "north" typed > "<strong>North</strong>power Batteries Ltd".
+// Everything is escaped first, so a name can't become code
+function boldTyped (name, typed) {
+  const escape = (text) => text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+  if (!name) return ''
+  const start = typed ? name.toLowerCase().indexOf(typed.toLowerCase()) : -1
+  if (start === -1) return escape(name)
+  const end = start + typed.length
+  return escape(name.slice(0, start)) + '<strong>' + escape(name.slice(start, end)) + '</strong>' + escape(name.slice(end))
 }

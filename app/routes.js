@@ -200,6 +200,14 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-
 })
 
 
+// -----------------------------------------------------------------------------
+// Version 4 (17 November 2026): EB-366, a member's figures, and the journey
+// to them. In its own file, so each version's logic stays separate, like its
+// pages and words: app/routes/v4.js
+// -----------------------------------------------------------------------------
+
+require('./routes/v4')(router)
+
 // A holding page for links to pages we haven't built yet
 router.get('/regulator/not-built', (req, res) => {
   const back = String(req.query.back || '')

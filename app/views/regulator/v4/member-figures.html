@@ -1,0 +1,133 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (17 November 2026). EB-366: every member in a submission, with
+  the chemistry that changed most on the quarter before.
+  Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures
+  You get here from View member data on the version 4 submission.
+
+  Why: regulators check a return member by member, and by chemistry. Sorting
+  by Biggest change is a quick way to spot swings the flags didn't catch
+  (UN-036, UN-057). It's by chemistry, not each member's total, so tonnage
+  moving from one chemistry to another can't hide behind a total that stays
+  the same (Marie, 17 November). Each name opens that member's page
+  (member.html): their details, flags and figures.
+
+  Top to bottom:
+  - Back to the submission
+  - The scheme name in the caption, then "July to September 2026 member figures"
+  - Search by name or registration number, and Membership (Current, the
+    default, Former or All, as version 3), with Search and Reset. With
+    JavaScript, the search box suggests members as you type, with the letters
+    typed in bold (add-on: accessible autocomplete). Search filters this
+    list: it never jumps to another page
+  - A line saying how many are showing, and what the change is compared with
+  - The table, 4 columns: member (a link, with their flag types as tags),
+    registration number, membership, and the biggest change in words.
+    Sortable (MOJ sortable table): Biggest change sorts by its size, up or down
+  - Members who've left have no figures this quarter, so their biggest change
+    is what they reported before ("Other: none this quarter")
+
+  Add-ons: accessible autocomplete, MOJ sortable table, MOJ scrollable pane,
+  the filters in a row (app-filters). See the README.
+
+  The data: app/data/pom-submission-details.js and app/data/member-figures.js (dummy).
+  The words: app/content/regulator/v4/member-figures.md
+#}
+
+{% set wordsFile = "regulator/v4/member-figures" %}
+{% set words = content(wordsFile) %}
+
+{% set heading = quarterText + " " + words.heading %}
+{% set pageName = heading + ", " + org.name + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{#
+  The change between two figures, in words: "Up 0.50 (42%)", "Down 0.02 (8%)",
+  "No change", "New this quarter" (none before) or "None this quarter".
+  The numbers come from app/data/member-figures.js, the words from the words file.
+  The same on the member figures and member pages.
+#}
+{% macro changeText(figure, words) -%}
+  {%- if figure.diff == 0 -%}{{ words.noChange }}
+  {%- elif figure.before == 0 -%}{{ words.newThisQuarter }}
+  {%- elif figure.now == 0 -%}{{ words.noneThisQuarter }}
+  {%- elif figure.diff > 0 -%}{{ words.up }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- else -%}{{ words.down }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- endif -%}
+{%- endmacro %}
+
+{# Table text is 16px, as on the lists of submissions #}
+{% set small = "govuk-!-font-size-16" %}
+{% set statusItems = [
+  { value: "current", text: words.current, selected: filters.status == "current" },
+  { value: "former", text: words.former, selected: filters.status == "former" },
+  { value: "all", text: words.all, selected: filters.status == "all" }
+] %}
+
+{% set rows = [] %}
+{% for m in members %}
+  {% set tagsHtml %}{% for f in m.flags %} <strong class="govuk-tag govuk-!-font-size-16 {{ f.tagClasses }}">{{ f.type }}</strong>{% endfor %}{% endset %}
+  {% set rows = (rows.push([
+    { html: '<a href="' + m.href + '" class="govuk-link">' + (m.name | escape) + '</a>' + tagsHtml, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
+    { text: m.bprn, classes: small },
+    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
+    { text: m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower), attributes: { "data-sort-value": (m.biggest.diff | abs) }, classes: small }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {# The search: a GOV.UK input and buttons in a row (add-on: app-filters, see application.scss) #}
+    <form method="get" action="{{ formAction }}" novalidate>
+      <div class="app-filters">
+        {# Add-on: accessible autocomplete. data-app-suggestions is every member,
+           "Name (BPRN)", for the suggestions (see application.js) #}
+        {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
+        {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({ text: words.searchButton }) }}
+          {{ govukButton({ text: words.resetButton, href: formAction, classes: "govuk-button--secondary" }) }}
+        </div>
+      </div>
+    </form>
+
+    <p class="govuk-body">{{ words.showing }} {{ members.length }} {{ words.of }} {{ total }} {{ words.members }}. {{ words.comparedWith }} {{ compareName }}.</p>
+
+    {% if members.length %}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+        {{ govukTable({
+          caption: words.tableCaption,
+          captionClasses: "govuk-visually-hidden",
+          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "member-figures-v4" },
+          head: [
+            { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
+            { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.changeColumn, attributes: { "aria-sort": "none" }, classes: small }
+          ],
+          rows: rows
+        }) }}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ words.noMembers }}</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

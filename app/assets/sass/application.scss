@@ -27,6 +27,11 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   @include govuk-responsive-margin(8, "bottom");
 }
 
+// Add-on: accessible autocomplete (GOV.UK), the search on the version 4
+// member figures list suggests members as you type. Its own styles, from the package.
+// See the README, "Add-ons"
+@import "node_modules/accessible-autocomplete/dist/accessible-autocomplete.min";
+
 // Add-on: the MOJ scrollable pane, copied from MOJ Frontend 12 (see the file)
 @import "vendor/moj-scrollable-pane";
 

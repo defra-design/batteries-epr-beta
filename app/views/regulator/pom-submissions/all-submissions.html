@@ -60,8 +60,22 @@
   {% set statusItems = (statusItems.push({ value: status, text: status, selected: status == filters.status }), statusItems) %}
 {% endfor %}
 
-{# The summary line: "Showing 44 results", with or without filters. The filters
-   that are on show in the selects, so the line doesn't repeat them (Jen, 16 November 2026) #}
+{# The summary line: everything ("Showing 44 results", Jen, 16 November 2026), or
+   what the filters show, for example "Showing April to June 2024, Accepted: 4 submissions".
+   It says what's showing, so the table and the selects never disagree (Ashley,
+   design session, 10 November). Put back on 17 November: "Showing 44 results"
+   with filters on (16 November) didn't say what the filters had done (Marie) #}
+{% if filters.year == "all" and filters.quarter == "all" and filters.status == "all" %}
+  {% set summary = "" %}
+{% else %}
+  {% set when = [] %}
+  {% if filters.quarter != "all" %}{% set when = (when.push(pom.QUARTERS[filters.quarter - 1]), when) %}{% endif %}
+  {% if filters.year != "all" %}{% set when = (when.push(filters.year), when) %}{% endif %}
+  {% set parts = [] %}
+  {% if when.length %}{% set parts = (parts.push(when | join(" ")), parts) %}{% endif %}
+  {% if filters.status != "all" %}{% set parts = (parts.push(filters.status), parts) %}{% endif %}
+  {% set summary = words.summaryStartForFilteredSubmissions + " " + parts | join(", ") %}
+{% endif %}
 
 
 {# Table text is 16px, as large tables of data allow and as the regulator toolkit does,
@@ -80,15 +94,20 @@
   History: team playback, 16 November: one date column (was Submitted and
   Review by), with the time left under the date. Jen, 16 November: one line,
   the date or how overdue it is. Marie, 17 November: Due today in bold too
+  Option A, Marie, 17 November: always the review by date, with "3 days
+  overdue" or "Due today" in bold under it. Accepted returns show their
+  review by date too, so there's always a date and older returns show when
+  they were due. Was (Jen, 16 November): the warning in place of the date,
+  so the date disappeared when it mattered most, and an empty cell once accepted.
 #}
-{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% elif row.daysLeft < 0 %}<strong>{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong>{{ words.dueToday }}</strong>{% else %}{{ dateText }}{% endif %}{% endmacro %}
+{% macro reviewBy(row, words, dateText) %}{{ dateText }}{% if row.daysLeft != null and row.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endmacro %}
 
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
     { html: '<a href="' + row.organisationHref + '" class="govuk-link">' + (row.scheme | escape) + '<span class="govuk-visually-hidden">, ' + (words.organisationDetails | escape) + ', ' + row.quarterText + '</span></a>', attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
     { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
-    { html: reviewBy(row, words, row.dueText), attributes: { "data-sort-value": row.dueSort or "zzz" }, classes: small },
+    { html: reviewBy(row, words, row.reviewByText), attributes: { "data-sort-value": row.dueSort or ("z" + row.reviewBySort) }, classes: small },
     { html: statusTag(row), attributes: { "data-sort-value": row.statusSort }, classes: small },
     { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
@@ -113,7 +132,7 @@
       </div>
     </form>
 
-    <p class="govuk-body">{{ words.summaryStartForAllSubmissions }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}</p>
+    <p class="govuk-body">{% if summary %}{{ summary }}: {{ rows.length }} {% if rows.length == 1 %}{{ words.submission }}{% else %}{{ words.submissions }}{% endif %}{% else %}{{ words.summaryStartForAllSubmissions }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}{% endif %}</p>
 
     {% if rows.length %}
       {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.

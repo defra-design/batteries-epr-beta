@@ -198,6 +198,8 @@ function submission (slug, year, quarter) {
     yearQuarterFull: pom.QUARTERS[quarter - 1] + ' ' + year,
     submittedLong: longDate(row.submittedSort),
     dueLong: row.dueSort ? longDate(row.dueSort) : '',
+    // Even once it's accepted (version 4)
+    reviewByLong: longDate(row.reviewBySort),
     open,
     version: versions,
     versions,

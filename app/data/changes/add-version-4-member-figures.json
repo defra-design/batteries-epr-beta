@@ -1,0 +1,58 @@
+{
+  "title": "Add version 4: checking a member's figures (EB-366)",
+  "type": "new",
+  "date": "2026-11-17",
+  "why": "Version 4 is for EB-366: regulators checking the figures in a placed on the market submission. It's a copy of version 3's journey, with its own pages and words, so version 3 stays as it was played back and tested. Start at the submissions list for the latest quarter.\n\n**The idea: two ways in, one way to check**\n\n- Flags bring the unusual figures to the regulator: each flag on the submission links to that member\n- Search finds any other member: on the member figures page, the search suggests members as you type\n- Both lead to the same member page, with their figures for two quarters side by side, by chemistry\n- No big tables of every member and every figure. Regulators check by member and by chemistry: in Round 2 they said scheme-level figures \"mean absolutely nothing\"\n\n**Submissions list**\n\n- One link per row, View submission. The scheme name isn't a link: two links in a row going to two places make people choose, and double the tab stops for keyboard users. Version 3 keeps the scheme name as a link, so research can compare\n\n**Submission**\n\n- The flags come first, under the status and review by date: they decide whether to accept or query\n- Each flag: the type on top, then the member, what was found and the figures, the scheme's reason, and View figures, across the full width\n- The organisation details are reached from the Scheme row, with View details\n- View member data goes to the member figures\n\n**Member figures (new)**\n\n- Every member, with the chemistry that changed most on the quarter before, for example \"Other: up 0.50 (42%)\". By chemistry, not each member's total, so tonnage moving from one chemistry to another can't hide behind a total that stays the same. Sort by Biggest change to spot swings the flags didn't catch\n- Search by name or registration number: with JavaScript, it suggests members as you type, with the letters typed in bold (GOV.UK's accessible autocomplete). Searching filters the list: it never jumps to another page\n- Membership: current members first, or former, or all, as version 3\n\n**One member (new)**\n\n- About the member first (registration number, membership, when they joined), so clicking a member's name takes you to that member, as clicking a scheme takes you to the scheme\n- Their flags, then their figures by chemistry for two quarters, with the change in tonnes and as a percentage, in words. It starts on the submission's quarter compared with the one before; Quarter and Compared with change that\n\n**To test with regulators**\n\n- What do they compare first: last quarter, the same quarter last year, the last accepted version, or an average?\n- Does a biggest change on the member figures page help them spot problems?\n- Is a flag shown as two figures enough to decide whether to query?\n\nNew words are drafts for content design to review.",
+  "pages": [
+    {
+      "label": "Submissions list (version 4)",
+      "url": "/regulator/pom-submissions/v4"
+    },
+    {
+      "label": "Submission (version 4)",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3"
+    },
+    {
+      "label": "Member figures",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures"
+    },
+    {
+      "label": "One member",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Submissions list, desktop (1020 pixels wide)",
+      "after": "changes/add-version-4-member-figures/after--list-1020-pixels.png"
+    },
+    {
+      "label": "Submissions list, 320 pixels wide",
+      "after": "changes/add-version-4-member-figures/after--list-320-pixels.png"
+    },
+    {
+      "label": "Submission, desktop (1020 pixels wide)",
+      "after": "changes/add-version-4-member-figures/after--submission-1020-pixels.png"
+    },
+    {
+      "label": "Submission, 320 pixels wide, top of the page",
+      "after": "changes/add-version-4-member-figures/after--submission-320-pixels.png"
+    },
+    {
+      "label": "Member figures, desktop (1020 pixels wide), top of the page",
+      "after": "changes/add-version-4-member-figures/after--member-figures-1020-pixels.png"
+    },
+    {
+      "label": "Member figures, with suggestions after typing \"ac\"",
+      "after": "changes/add-version-4-member-figures/after--member-search-1020-pixels.png"
+    },
+    {
+      "label": "One member, desktop (1020 pixels wide)",
+      "after": "changes/add-version-4-member-figures/after--member-1020-pixels.png"
+    },
+    {
+      "label": "One member, 320 pixels wide, top of the page",
+      "after": "changes/add-version-4-member-figures/after--member-320-pixels.png"
+    }
+  ]
+}

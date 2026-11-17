@@ -16,14 +16,11 @@ Year
 ## Show button
 Show
 
-## Showing (start of the line above the table, before the number, for example "Showing 4 results")
+## Showing (start of the line above the table, before the quarter, for example "Showing July to September 2026 returns". The quarter must stay in this line: it tells people which quarter they're looking at)
 Showing
 
-## Results (after the number)
-results
-
-## Result (after the number 1)
-result
+## Returns (after the quarter, in the line above the table)
+returns
 
 ## No submissions
 There are no submissions for this quarter yet.

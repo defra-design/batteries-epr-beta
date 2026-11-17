@@ -22,7 +22,8 @@ Then open http://localhost:3000.
 | Pages | `app/views/` (the web address matches the file: `/regulator/indicative-obligation/option-a-table` is `app/views/regulator/indicative-obligation/option-a-table.html`) |
 | Words and dummy figures for each page | `app/content/` (see "Add-ons") |
 | Answers a journey remembers | the kit's session data (`app/data/session-data-defaults.js` for starting values) |
-| Branching between pages | `app/routes.js` |
+| Branching between pages | `app/routes.js`. Version 4 has its own file, `app/routes/v4.js`, called from `app/routes.js` |
+| Dummy data | `app/data/`: the submissions (`pom-submissions.js`), one submission and its scheme (`pom-submission-details.js`), and members' figures (`member-figures.js`) |
 | Homepage | `app/views/index.html`: one section per area (Regulators, Compliance schemes, Treatment operators, Producers), each with a link to its page |
 | Area pages | `app/views/regulators.html` and so on: one sortable table of all the area's work, newest first. To add work, add it to the top of the list in the page |
 | Patterns | `app/views/patterns.html`: patterns, components and experiments we're trying out, and a link to the regulator toolkit prototype, which we align with for regulator pages |
@@ -31,6 +32,24 @@ Then open http://localhost:3000.
 | Layout for regulator (internal) pages | `app/views/layouts/regulator.html` |
 | Beta banner and Welsh language navigation (every regulator page) | `app/views/layouts/regulator.html`, words in `app/content/regulator/header.md`. Both are standard GOV.UK components, not add-ons: the [phase banner](https://design-system.service.gov.uk/components/phase-banner/) and [language navigation](https://design-system.service.gov.uk/components/language-navigation/) (GOV.UK Frontend 6.5 or later). The language navigation sits below the phase banner, right aligned, in the same place as the regulator toolkit prototype. For now, Cymraeg adds `?lang=cy` to the address (as the live regulator service does) and flips which language is current, but the words stay in English. The feedback link goes to a "not built yet" page. The language is set in `app/routes.js` |
 | Service name | `app/config.json` |
+
+## Versions
+
+Each version of a journey keeps its own pages, so a version that's been
+tested is never changed. The Regulators page (`/regulators`) lists every
+version, with its date, status and Jira ticket.
+
+| Version | What | Pages | Words | Addresses start |
+|---|---|---|---|---|
+| 3 | The placed on the market submissions journey, as played back on 16 November 2026 (EB-324 to EB-326) | `app/views/regulator/pom-submissions/` and `app/views/regulator/pom-submission/` | `app/content/regulator/` | `/regulator/pom-submissions/latest-quarter`, `/regulator/pom-submissions/brief/` |
+| 3B | An alternative to version 3: every quarter on one list, and a fuller submission page. Was called "full" (version 3 was "brief") | the same folders as version 3 (`all-submissions.html`, `full.html`) | `app/content/regulator/` (the `-full` files) | `/regulator/pom-submissions/all-submissions`, `/regulator/pom-submissions/full/` |
+| 4 | EB-366: checking a member's figures, and the journey to them. A copy of version 3, with one link per row on the list, the flags first on the submission, and two new pages: member figures (every member, with their biggest change by chemistry) and one member (their details, flags and figures by chemistry) | `app/views/regulator/v4/` | `app/content/regulator/v4/` | `/regulator/pom-submissions/v4` |
+
+To start a new version: copy the last version's pages and words into new
+`v5` folders, give it its own routes file (`app/routes/v5.js`, called from
+`app/routes.js`), and add it to the top of the list on the Regulators page.
+Version 3 and 3B keep their old addresses (with "brief" and "full" in them),
+as people already have links to them.
 
 ## Updating the content
 
@@ -53,6 +72,9 @@ If something looks wrong, edit it again, or ask Marie. Every change is saved in 
 - Every page works without JavaScript and is accessible by default.
 - The interaction designer builds the pages. The content designer edits the
   words in `app/content/`, not in the pages.
+- Working with Claude: the rules for it are in `CLAUDE.md`, and they're the
+  same as these. Keep it vanilla: if a designer couldn't have built it by
+  copying from the Design System, it's too clever.
 
 ## Add-ons
 
@@ -75,6 +97,14 @@ developers should build, and the ones that only make the prototype work.
 - **Where:** `app/views/layouts/regulator.html`, `app/views/macros/defra-internal/`, `app/assets/sass/_defra-internal.scss`, `app/assets/sass/settings.scss`, two lines at the top of `app/assets/sass/application.scss`
 - **Added by:** Alex Colbeck; added by Marie Moyles, October 2026
 - **To remove:** delete those, and change regulator pages to extend `layouts/main.html`
+
+#### Accessible autocomplete (GOV.UK)
+
+- **What it does:** the search on the version 4 member figures list suggests members as you type, by name or registration number. Picking one fills the box, and Search shows just that member. Without JavaScript it's a normal search box
+- **Why:** schemes have up to 281 members, so this finds one quickly without scrolling a long list (EB-366)
+- **Where:** `accessible-autocomplete` in `package.json`, loaded through `app/plugin-proxy.json` (it isn't a Prototype Kit plugin by itself), its styles imported in `app/assets/sass/application.scss`, and `suggestMembers` in `app/assets/javascripts/application.js`. Used on `app/views/regulator/v4/member-figures.html` (`data-app-suggestions`)
+- **Added by:** Marie Moyles, 17 November 2026
+- **To remove:** delete those, then `npm uninstall accessible-autocomplete`
 
 #### MOJ Frontend (sortable table)
 

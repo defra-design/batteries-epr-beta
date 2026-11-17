@@ -1,0 +1,6 @@
+{
+  "accessible-autocomplete": {
+    "scripts": ["/dist/accessible-autocomplete.min.js"],
+    "assets": ["/dist"]
+  }
+}

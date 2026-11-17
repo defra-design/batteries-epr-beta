@@ -106,6 +106,10 @@ function all () {
           submittedSort: submitted,
           // Once it's accepted, nothing is due
           dueText: open ? shortDate(due) : '',
+          // The review by date, even once it's accepted, so older returns
+          // still show when they were due (version 4, Marie, 17 November)
+          reviewByText: shortDate(due),
+          reviewBySort: due,
           dueSort: open ? due : '',
           overdue: open && due < TODAY,
           // Time left to review it (team playback, 16 November): 3 is 3 days
@@ -152,6 +156,8 @@ function byDueThenNewest (a, b) {
 module.exports = {
   SCHEMES,
   QUARTERS,
+  // Short quarter names, for table headings (version 4, 17 November 2026)
+  QUARTERS_SHORT,
   STATUSES: Object.keys(STATUSES),
   YEARS: ['2024', '2025', '2026'],
   LATEST_YEAR: String(LATEST_YEAR),

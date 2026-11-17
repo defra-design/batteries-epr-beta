@@ -1,0 +1,168 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (17 November 2026). EB-366: one member's figures. New page.
+  Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037
+  You get here from View figures on a flag (the submission), or from a
+  member's name on the member figures list. Back goes to the member figures list.
+
+  A page about the member, so clicking a member's name takes you to that
+  member, as clicking a scheme takes you to the scheme (Marie, 17 November).
+
+  Top to bottom:
+  - Back to the member figures list
+  - The scheme name in the caption, the member's name as the heading, then
+    about them: registration number, membership, when they joined the
+    scheme, and when they left, if they have
+  - Flags in this submission: this member's flags, as on the submission (only
+    when the quarter shown is the submission's quarter, and they have some)
+  - Quarter and Compared with: two selects and a Show button, in a row
+    (add-on: app-filters). A plain form (GET), so it works without JavaScript
+    and nothing changes while someone is still choosing (WCAG 3.2.2).
+    It lands on the submission's quarter, compared with the quarter before
+  - A line saying what's showing, so the table and the selects never disagree
+  - The table: one row per chemistry, then the total, in a scrollable pane
+    (add-on), so it works on a phone. 4 columns: chemistry,
+    the two quarters (tonnes), and the change in tonnes and as a percentage,
+    in words (Up, Down, No change), not colour or arrows
+  - No links under the table: Back at the top is the way back (Marie, 17 November)
+
+  Why two quarters: today regulators compare a return with last quarter's, in
+  the EA comparison tool. Two quarters keep the table to 4 columns, and they
+  can pick any two (for example the same quarter last year). Still to test:
+  whether they need more than two, the last accepted version, or an average.
+
+  Still to agree: the list of chemistries (the dummy data has the 3 portable
+  battery returns use today) and whether to split by category too (UN-036).
+
+  The data: app/data/member-figures.js (dummy).
+  The words: app/content/regulator/v4/member.md
+#}
+
+{% set wordsFile = "regulator/v4/member" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = member.name + ", " + org.name + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{#
+  The change between two figures, in words: "Up 0.50 (42%)", "Down 0.02 (8%)",
+  "No change", "New this quarter" (none before) or "None this quarter".
+  The numbers come from app/data/member-figures.js, the words from the words file.
+  The same on the member figures and member pages.
+#}
+{% macro changeText(figure, words) -%}
+  {%- if figure.diff == 0 -%}{{ words.noChange }}
+  {%- elif figure.before == 0 -%}{{ words.newThisQuarter }}
+  {%- elif figure.now == 0 -%}{{ words.noneThisQuarter }}
+  {%- elif figure.diff > 0 -%}{{ words.up }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- else -%}{{ words.down }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- endif -%}
+{%- endmacro %}
+
+{# This member's flags: the same as on the submission #}
+{% set flagRows = [] %}
+{% for flag in flags %}
+  {% set flagHtml %}<span class="govuk-!-display-block">{{ flag.found }}{% if (flag.found | last) != "." %}.{% endif %}{% if flag.figures %} {{ flag.figures }}{% if (flag.figures | last) != "." %}.{% endif %}{% endif %}</span>{{ flag.reason }}{% endset %}
+  {% set flagRows = (flagRows.push({
+    key: { html: '<strong class="govuk-tag ' + flag.tagClasses + '">' + flag.type + '</strong>' },
+    value: { html: flagHtml }
+  }), flagRows) %}
+{% endfor %}
+
+{# About the member. Left the scheme only shows if they have #}
+{% set membershipHtml %}<strong class="govuk-tag {{ 'govuk-tag--green' if member.current else 'govuk-tag--grey' }}">{{ words.current if member.current else words.former }}</strong>{% endset %}
+{% set aboutRows = [
+  { key: { text: words.registrationNumber }, value: { text: member.bprn } },
+  { key: { text: words.membership }, value: { html: membershipHtml } },
+  { key: { text: words.joined }, value: { text: about.joined } }
+] %}
+{% if about.left %}
+  {% set aboutRows = (aboutRows.push({ key: { text: words.left }, value: { text: about.left } }), aboutRows) %}
+{% endif %}
+
+{# The table. Numbers are right aligned, as GOV.UK tables do #}
+{% set nowHeading = showShort + " " + words.tonnes %}
+{% if table.nowEstimated %}{% set nowHeading = showShort + ", " + words.estimated + " " + words.tonnes %}{% endif %}
+{% set beforeHeading = compareShort + " " + words.tonnes %}
+{% if table.beforeEstimated %}{% set beforeHeading = compareShort + ", " + words.estimated + " " + words.tonnes %}{% endif %}
+
+{% set tableRows = [] %}
+{% for row in table.rows %}
+  {% set tableRows = (tableRows.push([
+    { text: row.chemistry },
+    { text: row.nowText, format: "numeric" },
+    { text: row.beforeText, format: "numeric" },
+    { text: changeText(row, words) }
+  ]), tableRows) %}
+{% endfor %}
+{% set tableRows = (tableRows.push([
+  { html: "<strong>" + (words.total | escape) + "</strong>" },
+  { html: "<strong>" + table.total.nowText + "</strong>", format: "numeric" },
+  { html: "<strong>" + table.total.beforeText + "</strong>", format: "numeric" },
+  { html: "<strong>" + (changeText(table.total, words) | escape) + "</strong>" }
+]), tableRows) %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    <h1 class="govuk-heading-l">{{ member.name }}</h1>
+
+    {{ govukSummaryList({ rows: aboutRows }) }}
+
+    {% if flagRows.length %}
+      <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+      {{ govukSummaryList({ rows: flagRows }) }}
+    {% endif %}
+
+  </div>
+</div>
+
+{# Full width from here, so the 4 columns of the table fit on one line each on a desktop #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {# The selects: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
+    <form method="get" action="{{ formAction }}" novalidate>
+      <div class="app-filters">
+        {{ govukSelect({ id: "show", name: "show", label: { text: words.showLabel, classes: "govuk-label--s" }, items: showItems }) }}
+        {{ govukSelect({ id: "compare", name: "compare", label: { text: words.compareLabel, classes: "govuk-label--s" }, items: compareItems }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({ text: words.showButton }) }}
+        </div>
+      </div>
+    </form>
+
+    <p class="govuk-body">{{ words.showing }} {{ showName }} {{ words.comparedWith }} {{ compareName }}</p>
+
+    {% if same %}
+      {{ govukInsetText({ text: words.sameQuarter }) }}
+    {% endif %}
+
+    {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways, not the page #}
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+    {{ govukTable({
+      caption: words.tableCaption,
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      head: [
+        { text: words.chemistryColumn },
+        { text: nowHeading, format: "numeric" },
+        { text: beforeHeading, format: "numeric" },
+        { text: words.changeColumn }
+      ],
+      rows: tableRows
+    }) }}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -68,8 +68,13 @@
   History: team playback, 16 November: one date column on the lists, with the
   time left under the date. Jen, 16 November: one line, the date or how
   overdue it is. Marie, 17 November: Due today in bold too
+  Option A, Marie, 17 November: always the review by date, with "3 days
+  overdue" or "Due today" in bold under it. Accepted returns show their
+  review by date too, so there's always a date and older returns show when
+  they were due. Was (Jen, 16 November): the warning in place of the date,
+  so the date disappeared when it mattered most, and an empty cell once accepted.
 #}
-{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% elif row.daysLeft < 0 %}<strong>{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong>{{ words.dueToday }}</strong>{% else %}{{ dateText }}{% endif %}{% endmacro %}
+{% macro reviewBy(row, words, dateText) %}{{ dateText }}{% if row.daysLeft != null and row.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endmacro %}
 
 {% block beforeContent %}
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
@@ -77,13 +82,12 @@
 
 {# Submission details: submitted, review by, status, submitted by, placed on
    the market, members (with View members) and version #}
+{# Review by first, then Submitted, where the 10 days are counted from (Marie, 17 November) #}
+{% set reviewByHtml %}{{ reviewBy(s, words, s.reviewByLong) }}{% endset %}
 {% set detailRows = [
+  { key: { text: words.reviewBy }, value: { html: reviewByHtml } },
   { key: { text: words.submitted }, value: { text: s.submittedLong } }
 ] %}
-{% if s.open %}
-  {% set reviewByHtml %}{{ reviewBy(s, words, s.dueLong) }}{% endset %}
-  {% set detailRows = (detailRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), detailRows) %}
-{% endif %}
 {% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
 {% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
 {% set detailRows = (detailRows.concat([

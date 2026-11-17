@@ -1,0 +1,177 @@
+//
+// Version 4 (17 November 2026): EB-366, a member's figures, and the journey to them.
+//
+// A copy of version 3's journey, with its own pages (app/views/regulator/v4/)
+// and words (app/content/regulator/v4/), so version 3 stays exactly as it was
+// tested. Every address starts /regulator/pom-submissions/v4.
+//
+// The journey, and the page each address shows:
+//
+//   /regulator/pom-submissions/v4                                  > v4/pom-submissions.html
+//     The submissions for the latest quarter (EB-324, as version 3)
+//   /v4/recycling-lives/2026/3                                     > v4/pom-submission.html
+//     One submission: the flags first, each linking to that member's figures
+//   /v4/recycling-lives/2026/3/organisation-details                > v4/organisation-details.html
+//     From the Scheme row on the submission
+//   /v4/recycling-lives/2026/3/member-figures                      > v4/member-figures.html
+//     Every member, with their biggest change, and a search that suggests members
+//   /v4/recycling-lives/2026/3/member-figures/BPRN142037           > v4/member.html
+//     One member: their details, flags, and figures for 2 quarters by chemistry
+//
+// Called from app/routes.js.
+//
+
+const pom = require('../data/pom-submissions')
+const details = require('../data/pom-submission-details')
+const figures = require('../data/member-figures')
+
+const V4 = '/regulator/pom-submissions/v4'
+
+// One submission's address, for example /regulator/pom-submissions/v4/recycling-lives/2026/3
+function submissionUrl (scheme, year, quarter) {
+  return V4 + '/' + scheme + '/' + year + '/' + quarter
+}
+
+// Only keep a value we offer: anything else falls back to the default
+function pick (value, allowed, fallback) {
+  return allowed.includes(value) ? value : fallback
+}
+
+// The "not built yet" page, coming back to this address
+function notBuilt (back) {
+  return '/regulator/not-built?back=' + encodeURIComponent(back)
+}
+
+module.exports = (router) => {
+  // The submissions for one quarter. Lands on the latest quarter, as version 3.
+  // One link per row, View submission: the organisation details are reached
+  // from inside the submission (Marie, 17 November)
+  router.get(V4, (req, res) => {
+    const year = pick(req.query.year, pom.YEARS, pom.LATEST_YEAR)
+    const quarter = pick(req.query.quarter, ['1', '2', '3', '4'], pom.LATEST_QUARTER)
+    const rows = pom.all()
+      .filter(row => row.year === year && row.quarter === quarter)
+      .sort(pom.byDue)
+      .map(row => ({ ...row, submissionHref: submissionUrl(row.schemeSlug, row.year, row.quarter) }))
+    res.render('regulator/v4/pom-submissions', {
+      pom,
+      rows,
+      filters: { year, quarter },
+      quarterText: pom.QUARTERS[quarter - 1] + ' ' + year,
+      formAction: V4
+    })
+  })
+
+  // One submission. Each flag links to that member's figures
+  router.get(V4 + '/:scheme/:year/:quarter', (req, res, next) => {
+    const { scheme, year, quarter } = req.params
+    const submission = details.submission(scheme, year, quarter)
+    const members = details.members(scheme, year, quarter)
+    if (!submission || !members) return next()
+    const here = submissionUrl(scheme, year, quarter)
+    const flags = submission.flags.map(flag => {
+      const member = members.find(m => m.name === flag.producer)
+      return { ...flag, figuresHref: member ? here + '/member-figures/' + member.bprn : null }
+    })
+    res.render('regulator/v4/pom-submission', {
+      submission,
+      flags,
+      backHref: V4 + '?year=' + year + '&quarter=' + quarter,
+      memberFiguresHref: here + '/member-figures',
+      organisationHref: here + '/organisation-details',
+      notBuiltHref: notBuilt(req.originalUrl)
+    })
+  })
+
+  // The scheme's organisation details for that quarter: back to the submission
+  router.get(V4 + '/:scheme/:year/:quarter/organisation-details', (req, res, next) => {
+    const { scheme, year, quarter } = req.params
+    const organisation = details.organisation(scheme)
+    const submission = details.submission(scheme, year, quarter)
+    if (!organisation || !submission) return next()
+    res.render('regulator/v4/organisation-details', {
+      organisation,
+      quarterText: submission.yearQuarterFull,
+      backHref: submissionUrl(scheme, year, quarter),
+      notBuiltHref: notBuilt(req.originalUrl)
+    })
+  })
+
+  // Member figures: every member, with the chemistry that changed most on
+  // the quarter before. Search by name or registration number, and filter
+  // by membership (current members first, as version 3). The search filters
+  // this list: it never jumps to another page. A suggestion picked from the
+  // list is "Name (BPRN)", so that matches too
+  router.get(V4 + '/:scheme/:year/:quarter/member-figures', (req, res, next) => {
+    const { scheme, year, quarter } = req.params
+    const organisation = details.organisation(scheme)
+    const submission = details.submission(scheme, year, quarter)
+    const all = details.members(scheme, year, quarter)
+    if (!organisation || !submission || !all) return next()
+    const key = year + '-' + quarter
+    const compareKey = figures.previousQuarter(key)
+    const search = String(req.query.search || '').trim().slice(0, 100)
+    const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
+    const term = search.toLowerCase()
+    const found = all.filter(m =>
+      (status === 'all' || (status === 'current') === m.current) &&
+      (!term ||
+        m.name.toLowerCase().includes(term) ||
+        m.bprn.toLowerCase().includes(term) ||
+        (m.name + ' (' + m.bprn + ')').toLowerCase() === term))
+    res.render('regulator/v4/member-figures', {
+      org: organisation,
+      quarterText: submission.yearQuarterFull,
+      compareName: figures.quarterName(compareKey),
+      members: found.map(m => ({
+        ...m,
+        href: submissionUrl(scheme, year, quarter) + '/member-figures/' + m.bprn,
+        biggest: figures.biggestChange(m, key, compareKey),
+        flags: submission.flags.filter(f => f.producer === m.name)
+      })),
+      suggestions: all.map(m => m.name + ' (' + m.bprn + ')'),
+      total: all.length,
+      filters: { search, status },
+      formAction: req.path,
+      backHref: submissionUrl(scheme, year, quarter)
+    })
+  })
+
+  // One member: their details, flags, and figures for two quarters side by
+  // side, by chemistry. Lands on
+  // the submission's quarter, compared with the one before. The two selects
+  // and Show button (a plain form) change which quarters are compared
+  router.get(V4 + '/:scheme/:year/:quarter/member-figures/:bprn', (req, res, next) => {
+    const { scheme, year, quarter, bprn } = req.params
+    const organisation = details.organisation(scheme)
+    const submission = details.submission(scheme, year, quarter)
+    const all = details.members(scheme, year, quarter)
+    const member = all && all.find(m => m.bprn === bprn)
+    if (!organisation || !submission || !member) return next()
+    const keys = figures.quarters()
+    const submissionKey = year + '-' + quarter
+    const show = pick(req.query.show, keys, submissionKey)
+    const compare = pick(req.query.compare, keys, figures.previousQuarter(show) || keys[0])
+    // Newest quarter first in the selects
+    const items = (selected) => keys.slice().reverse().map(key => ({
+      value: key, text: figures.quarterName(key), selected: key === selected
+    }))
+    res.render('regulator/v4/member', {
+      org: organisation,
+      member,
+      about: figures.about(member),
+      // This member's flags, only on the submission's own quarter
+      flags: show === submissionKey ? submission.flags.filter(f => f.producer === member.name) : [],
+      showItems: items(show),
+      compareItems: items(compare),
+      showName: figures.quarterName(show),
+      compareName: figures.quarterName(compare),
+      showShort: figures.quarterName(show, true),
+      compareShort: figures.quarterName(compare, true),
+      same: show === compare,
+      table: figures.comparison(member, show, compare),
+      formAction: req.path,
+      backHref: submissionUrl(scheme, year, quarter) + '/member-figures'
+    })
+  })
+}

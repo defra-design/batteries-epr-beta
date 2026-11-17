@@ -1,0 +1,129 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (17 November 2026): one placed on the market (PoM) submission.
+  A copy of version 3 (the brief version, app/views/regulator/pom-submission/brief.html),
+  changed for EB-366. You get here from "View submission" on the version 4 list.
+
+  What's different from version 3:
+  - The flags come first, straight after a short summary of where the return
+    is (status and review by). They're what regulators want to see most, and
+    they decide whether to accept or query (Jen, 17 November)
+  - Each flag shows its figures, if it has any (in version 3 only the full
+    version did): a flag is two figures that don't match, so show both
+  - Each flag links to that member's figures (View figures), the new EB-366
+    page, so it's one step from "something looks different" to the numbers
+  - Each flag: the tag on top, then the member, what was found, the figures
+    and the scheme's reason, across the full width, with a line between
+    flags. Was a summary list with the tag on the left, which squeezed the
+    words into a narrow column, and real reasons can be long (Marie, 17 November)
+  - No line under the Flags heading: the flags explain themselves
+  - View member data now works: it goes to the member figures (every
+    member's total and change, with search). The Members row has no link, so
+    there's one way there, not two (Marie, 17 November)
+  - The rest of the submission details come after the flags, starting with
+    the scheme, with View organisation details. In version 3 they're reached
+    from the scheme name on the list: version 4 has one link per row there
+    (Marie, 17 November)
+
+  Everything else is as version 3: see its notes for why.
+
+  The data: app/data/pom-submission-details.js (dummy). The example flags: app/content/regulator/flags.md
+  The words: app/content/regulator/v4/pom-submission.md
+  Prototype only: links to pages we haven't built go to the "not built yet" page.
+#}
+
+{% set wordsFile = "regulator/v4/pom-submission" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+
+{% set heading = (s.yearQuarterFull + " " + words.heading) | trim %}
+{% set pageName = heading + ", " + s.scheme + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{# Review by, as version 3: the date, or "Due today" or "3 days overdue" in bold   Option A, Marie, 17 November: always the review by date, with "3 days
+  overdue" or "Due today" in bold under it. Accepted returns show their
+  review by date too, so there's always a date and older returns show when
+  they were due. Was (Jen, 16 November): the warning in place of the date,
+  so the date disappeared when it mattered most, and an empty cell once accepted.
+#}
+{% macro reviewBy(row, words, dateText) %}{{ dateText }}{% if row.daysLeft != null and row.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endmacro %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{# Where the return is: status, then review by (open returns only) #}
+{% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
+{% set summaryRows = [{ key: { text: words.status }, value: { html: statusHtml } }] %}
+{# Review by, even once it's accepted, so older returns still show when they
+   were due (Marie, 17 November). Version 3 left it out once accepted #}
+{% set reviewByHtml %}{{ reviewBy(s, words, s.reviewByLong) }}{% endset %}
+{% set summaryRows = (summaryRows.push({ key: { text: words.reviewBy }, value: { html: reviewByHtml } }), summaryRows) %}
+
+{# The rest of the submission details #}
+{% set versionHtml %}{{ s.version }} {{ words.versionOf }} {{ s.versions }}{% if s.versions > 1 %}<br><a href="{{ notBuiltHref }}" class="govuk-link">{{ words.viewEarlierVersionsLink }}</a>{% endif %}{% endset %}
+{% set detailRows = [
+  {
+    key: { text: words.scheme },
+    value: { text: s.scheme },
+    actions: { items: [{ href: organisationHref, text: words.viewOrganisationDetailsLink, visuallyHiddenText: s.scheme }] }
+  },
+  { key: { text: words.submitted }, value: { text: s.submittedLong } },
+  { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
+  { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
+  { key: { text: words.members }, value: { text: s.membersInSubmission } },
+  { key: { text: words.version }, value: { html: versionHtml } }
+] %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ s.scheme }}</span>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
+
+    {{ govukSummaryList({ rows: summaryRows }) }}
+
+    <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+    {#
+      Each flag: the tag (its type) on top, then the member as a small
+      heading, what was found and the figures, the scheme's reason, and View
+      figures (with the member's name for screen readers). A line between flags.
+    #}
+    {% if flags.length %}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0">
+      {% for flag in flags %}
+        <strong class="govuk-tag {{ flag.tagClasses }}">{{ flag.type }}</strong>
+        <h3 class="govuk-heading-s govuk-!-margin-top-3 govuk-!-margin-bottom-1">{{ flag.producer }}</h3>
+        <p class="govuk-body govuk-!-margin-bottom-1">{{ flag.found }}{% if (flag.found | last) != "." %}.{% endif %}{% if flag.figures %} {{ flag.figures }}{% if (flag.figures | last) != "." %}.{% endif %}{% endif %}</p>
+        <p class="govuk-body govuk-!-margin-bottom-2">{{ flag.reason }}</p>
+        {% if flag.figuresHref %}
+          <p class="govuk-body govuk-!-margin-bottom-0"><a href="{{ flag.figuresHref }}" class="govuk-link">{{ words.viewFiguresLink }}<span class="govuk-visually-hidden"> {{ words.viewFiguresFor }} {{ flag.producer }}</span></a></p>
+        {% endif %}
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {% endfor %}
+    {% else %}
+      <p class="govuk-body">{{ words.noFlags }}</p>
+    {% endif %}
+
+    <h2 class="govuk-heading-m">{{ words.submissionDetailsHeading }}</h2>
+    {{ govukSummaryList({ rows: detailRows }) }}
+
+    {% if s.supportingDocuments.length %}
+      <h2 class="govuk-heading-m">{{ words.supportingDocumentsHeading }}</h2>
+      <ul class="govuk-list">
+        {% for doc in s.supportingDocuments %}
+          <li><a href="{{ notBuiltHref }}" class="govuk-link">{{ doc.name }}</a> ({{ doc.type }}, {{ doc.size }})</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {{ govukButton({ text: words.viewMemberDataButton, href: memberFiguresHref }) }}
+
+  </div>
+</div>
+{% endblock %}

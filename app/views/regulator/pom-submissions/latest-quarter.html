@@ -64,14 +64,19 @@
   History: team playback, 16 November: one date column (was Submitted and
   Review by), with the time left under the date. Jen, 16 November: one line,
   the date or how overdue it is. Marie, 17 November: Due today in bold too
+  Option A, Marie, 17 November: always the review by date, with "3 days
+  overdue" or "Due today" in bold under it. Accepted returns show their
+  review by date too, so there's always a date and older returns show when
+  they were due. Was (Jen, 16 November): the warning in place of the date,
+  so the date disappeared when it mattered most, and an empty cell once accepted.
 #}
-{% macro reviewBy(row, words, dateText) %}{% if row.daysLeft == null %}<span class="govuk-visually-hidden">{{ words.notApplicable }}</span>{% elif row.daysLeft < 0 %}<strong>{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong>{{ words.dueToday }}</strong>{% else %}{{ dateText }}{% endif %}{% endmacro %}
+{% macro reviewBy(row, words, dateText) %}{{ dateText }}{% if row.daysLeft != null and row.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endmacro %}
 
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
     { html: '<a href="' + row.organisationHref + '" class="govuk-link">' + (row.scheme | escape) + '<span class="govuk-visually-hidden">, ' + (words.organisationDetails | escape) + '</span></a>', classes: small + " app-table-cell--wrap" },
-    { html: reviewBy(row, words, row.dueText), classes: small },
+    { html: reviewBy(row, words, row.reviewByText), classes: small },
     { html: statusTag(row), classes: small },
     { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}
@@ -95,7 +100,11 @@
     </form>
 
     {% if rows.length %}
-      <p class="govuk-body">{{ words.showing }} {{ rows.length }} {% if rows.length == 1 %}{{ words.result }}{% else %}{{ words.results }}{% endif %}</p>
+      {# The line says which quarter is showing, so the table and the selects
+         never disagree (Ashley, design session, 10 November). Put back on
+         17 November: "Showing 4 results" (16 November) lost the quarter. No
+         count: the table only ever has the 4 schemes (Marie) #}
+      <p class="govuk-body">{{ words.showing }} {{ quarterText }} {{ words.returns }}</p>
 
       {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
          The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}

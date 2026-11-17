@@ -1,0 +1,60 @@
+{
+  "title": "Update the placed on the market pages again, after content updates changed how they work",
+  "type": "fix",
+  "date": "2026-11-17",
+  "why": "These pages were played back to the team on 16 November (EB-324 to EB-326). Content updates made on the evening of 16 November, after the playback, changed some of the page code as well as the words. That changed how some of the pages work and what they show. On 17 November we put back what the team agreed at the playback, and kept the new wording.\n\n**Headings follow one pattern again**\n\n- The submission and organisation details headings start with the quarter and say what the page is, for example \"July to September 2026 submission\" and \"July to September 2026 organisation details\", with the scheme name above. The content updates had taken \"submission\" out of one heading and the quarter out of the other, so the pages no longer matched each other or the members page\n- Organisation details: the Reported row has gone, as the quarter is in the heading again\n\n**Organisation details: Last updated is back**\n\n- The content updates had removed it. David asked for it, so regulators know the details are current\n\n**The line above the submissions table says what's showing**\n\n- Brief version (latest quarter): \"Showing July to September 2026 returns\". The content updates had changed it to \"Showing 4 results\", which didn't say which quarter was showing, so after choosing a quarter and selecting Show you couldn't tell whether anything had changed. Saying what's showing was agreed in the design session (10 November), so the table and the selects never disagree\n- Full version (all submissions): with filters on, the line says what they're showing again, for example \"Showing April to June 2024: 4 submissions\". The content updates had changed it to \"Showing 44 results\" whatever the filters were\n\n**Review by always shows the date**\n\n- The content updates made Review by show either the date or \"3 days overdue\" or \"Due today\", so the date disappeared when it mattered most\n- Now the date is always there, with \"3 days overdue\" or \"Due today\" in bold under it when it needs action. The playback agreed the date with the time left under it\n- Accepted returns show their review by date too, so the column is never empty and older quarters still show when they were due\n- On the submission, Review by now comes first, above Submitted (the date the 10 days are counted from)\n\n**Also changed on 17 November**\n\n- \"Due today\" is in bold, like \"3 days overdue\", so both stand out\n- \"Today\" is fixed at Monday 23 November 2026 in the prototype, the first day of user research, so every review date adds up on that day (David and Steve)\n\nThe wording is from the content updates: \"Review by\", \"3 days overdue\" and \"Due today\".",
+  "pages": [
+    {
+      "label": "Submissions list, brief version (latest quarter)",
+      "url": "/regulator/pom-submissions/latest-quarter"
+    },
+    {
+      "label": "Submissions list, full version (all submissions)",
+      "url": "/regulator/pom-submissions/all-submissions"
+    },
+    {
+      "label": "Submission, brief version",
+      "url": "/regulator/pom-submissions/brief/recycling-lives/2026/3"
+    },
+    {
+      "label": "Submission, full version",
+      "url": "/regulator/pom-submissions/full/recycling-lives/2026/3"
+    },
+    {
+      "label": "Organisation details",
+      "url": "/regulator/pom-submissions/brief/recycling-lives/2026/3/organisation-details"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Submissions list, brief version, desktop (1020 pixels wide)",
+      "before": "changes/update-regulator-pages-after-content-changes/before--list-brief-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-content-changes/after--list-brief-1020-pixels.png"
+    },
+    {
+      "label": "Submissions list, brief version, 320 pixels wide",
+      "before": "changes/update-regulator-pages-after-content-changes/before--list-brief-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-content-changes/after--list-brief-320-pixels.png"
+    },
+    {
+      "label": "Submissions list, full version, April to June 2024, desktop (1020 pixels wide), top of the page",
+      "before": "changes/update-regulator-pages-after-content-changes/before--list-full-filtered-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-content-changes/after--list-full-filtered-1020-pixels.png"
+    },
+    {
+      "label": "Submission, brief version, desktop (1020 pixels wide), top of the page",
+      "before": "changes/update-regulator-pages-after-content-changes/before--submission-brief-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-content-changes/after--submission-brief-1020-pixels.png"
+    },
+    {
+      "label": "Submission, brief version, 320 pixels wide, top of the page",
+      "before": "changes/update-regulator-pages-after-content-changes/before--submission-brief-320-pixels.png",
+      "after": "changes/update-regulator-pages-after-content-changes/after--submission-brief-320-pixels.png"
+    },
+    {
+      "label": "Organisation details, desktop (1020 pixels wide)",
+      "before": "changes/update-regulator-pages-after-content-changes/before--organisation-1020-pixels.png",
+      "after": "changes/update-regulator-pages-after-content-changes/after--organisation-1020-pixels.png"
+    }
+  ]
+}

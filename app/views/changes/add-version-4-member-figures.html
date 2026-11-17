@@ -1,0 +1,89 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Add version 4: checking a member's figures (EB-366)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">17 November 2026</span>
+<h1 class="govuk-heading-l">Add version 4: checking a member's figures (EB-366)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
+<p class="govuk-body">Version 4 is for EB-366: regulators checking the figures in a placed on the market submission. It's a copy of version 3's journey, with its own pages and words, so version 3 stays as it was played back and tested. Start at the submissions list for the latest quarter.</p>
+<p class="govuk-body"><strong>The idea: two ways in, one way to check</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Flags bring the unusual figures to the regulator: each flag on the submission links to that member</li><li>Search finds any other member: on the member figures page, the search suggests members as you type</li><li>Both lead to the same member page, with their figures for two quarters side by side, by chemistry</li><li>No big tables of every member and every figure. Regulators check by member and by chemistry: in Round 2 they said scheme-level figures &quot;mean absolutely nothing&quot;</li></ul>
+<p class="govuk-body"><strong>Submissions list</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>One link per row, View submission. The scheme name isn't a link: two links in a row going to two places make people choose, and double the tab stops for keyboard users. Version 3 keeps the scheme name as a link, so research can compare</li></ul>
+<p class="govuk-body"><strong>Submission</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The flags come first, under the status and review by date: they decide whether to accept or query</li><li>Each flag: the type on top, then the member, what was found and the figures, the scheme's reason, and View figures, across the full width</li><li>The organisation details are reached from the Scheme row, with View details</li><li>View member data goes to the member figures</li></ul>
+<p class="govuk-body"><strong>Member figures (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Every member, with the chemistry that changed most on the quarter before, for example &quot;Other: up 0.50 (42%)&quot;. By chemistry, not each member's total, so tonnage moving from one chemistry to another can't hide behind a total that stays the same. Sort by Biggest change to spot swings the flags didn't catch</li><li>Search by name or registration number: with JavaScript, it suggests members as you type, with the letters typed in bold (GOV.UK's accessible autocomplete). Searching filters the list: it never jumps to another page</li><li>Membership: current members first, or former, or all, as version 3</li></ul>
+<p class="govuk-body"><strong>One member (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>About the member first (registration number, membership, when they joined), so clicking a member's name takes you to that member, as clicking a scheme takes you to the scheme</li><li>Their flags, then their figures by chemistry for two quarters, with the change in tonnes and as a percentage, in words. It starts on the submission's quarter compared with the one before; Quarter and Compared with change that</li></ul>
+<p class="govuk-body"><strong>To test with regulators</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>What do they compare first: last quarter, the same quarter last year, the last accepted version, or an average?</li><li>Does a biggest change on the member figures page help them spot problems?</li><li>Is a flag shown as two figures enough to decide whether to query?</li></ul>
+<p class="govuk-body">New words are drafts for content design to review.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4">Submissions list (version 4)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Submission (version 4)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Member figures</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037">One member</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Submissions list, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--list-1020-pixels.png" alt="Submissions list, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submissions list, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--list-320-pixels.png" alt="Submissions list, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--submission-1020-pixels.png" alt="Submission, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission, 320 pixels wide, top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--submission-320-pixels.png" alt="Submission, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Member figures, desktop (1020 pixels wide), top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--member-figures-1020-pixels.png" alt="Member figures, desktop (1020 pixels wide), top of the page" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Member figures, with suggestions after typing &quot;ac&quot;</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--member-search-1020-pixels.png" alt="Member figures, with suggestions after typing &quot;ac&quot;" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">One member, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--member-1020-pixels.png" alt="One member, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">One member, 320 pixels wide, top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--member-320-pixels.png" alt="One member, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+</div>
+
+{% endblock %}

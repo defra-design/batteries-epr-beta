@@ -1,0 +1,97 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (17 November 2026): a copy of version 3. Nothing on this page has
+  changed. Back goes to the version 4 list.
+
+  EB-325: a scheme's organisation details. One page for both versions.
+  You get here from the scheme name on the list of submissions (brief or full).
+  Back goes to that list: the brief one on that quarter, or the full one with
+  its filters (app/routes.js), so you stay in your version.
+  Version 4: Back goes to the version 4 list (app/routes/v4.js).
+
+  Team playback, 16 November 2026:
+  - Reached from the scheme name on the list, not from the submission: these
+    are the details for that quarter (the admin and others can change over time)
+  - The heading starts with the quarter, for example "July to September 2026
+    organisation details", the same as the submission and members pages: the
+    scheme name in the caption, then quarter first, then what the page is
+    (Marie, 16 and 17 November). Was: the quarter in the caption, "BatteryBack,
+    July to September 2026", then a Quarter row, then a Reported row
+  - No Members row: members are reached from the submission, since they're the
+    members in that quarter's return. One way there, not two
+
+  Design session, 10 November 2026: the brief and full versions are now one
+  page, based on the brief version (Mak preferred it).
+  - View only, no Change links: regulators review, they don't edit (decision,
+    21 October). The details come from Companies House (Mak)
+  - No list of other users: that's account management, not reviewing a return (Mak)
+  - Others who can submit: the people with delegated authority, as well as the
+    appropriate person and the admin. Was "People who can submit", which read
+    as if only these people could (someone asked how we decide who to show)
+  - Last updated, so regulators know the details are current (David, Operator
+    mindset). Taken out on 16 November and put back on 17 November: David asked for it
+  - Emails are links
+  - Not here, as agreed on 6 November: conditions of approval, approved and
+    expires, account manager (David asked for this: a research question for
+    Jason), approval number (it's the BCS number)
+
+  The data: app/data/pom-submission-details.js (dummy).
+  The words: app/content/regulator/v4/organisation-details.md
+#}
+
+{% set wordsFile = "regulator/v4/organisation-details" %}
+{% set words = content(wordsFile) %}
+{% set org = organisation %}
+
+{% set heading = quarterText + " " + words.heading %}
+{% set pageName = heading + ", " + org.name %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{% block content %}
+
+{% macro personHtml(p, extra) %}{{ p.name }}{% if extra %}, {{ extra }}{% endif %}<br><a href="mailto:{{ p.email }}" class="govuk-link">{{ p.email }}</a>{% endmacro %}
+
+{% set addressHtml %}{% for line in org.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}{% endset %}
+
+{# Everyone else who can submit: not the appropriate person or the admin, who are shown above #}
+{% set others = [] %}
+{% for p in org.canSubmit %}
+  {% if p.role == "user" %}{% set others = (others.push(p), others) %}{% endif %}
+{% endfor %}
+{% set othersHtml %}
+  <ul class="govuk-list">
+    {% for p in others %}<li>{{ personHtml(p, words.delegatedAuthority) }}</li>{% endfor %}
+  </ul>
+{% endset %}
+
+{% set rows = [
+  { key: { text: words.registeredName }, value: { text: org.registeredName } },
+  { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
+  { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
+  { key: { text: words.bcsNumber }, value: { text: org.bcsNumber } },
+  { key: { text: words.appropriatePerson }, value: { html: personHtml(org.appropriatePerson) } },
+  { key: { text: words.superUser }, value: { html: personHtml(org.superUser) } }
+] %}
+{% if others.length %}
+  {% set rows = (rows.push({ key: { text: words.othersWhoCanSubmit }, value: { html: othersHtml } }), rows) %}
+{% endif %}
+{% set rows = (rows.push({ key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }), rows) %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    <h1 class="govuk-heading-l">{{ heading }}</h1>
+
+    {{ govukSummaryList({ rows: rows }) }}
+
+  </div>
+</div>
+{% endblock %}
