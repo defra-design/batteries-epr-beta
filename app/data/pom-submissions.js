@@ -4,17 +4,22 @@
 //
 // The 4 real compliance schemes, and one submission per scheme per quarter
 // from January to March 2024 to July to September 2026. Everything is
-// "Accepted" except the latest quarter. "Today" is fixed at 5 November 2026,
-// so what's overdue doesn't change as the days go by.
+// "Accepted" except the latest quarter. "Today" is fixed at Monday 23 November
+// 2026, the first day of user research (23 to 25 November), so every date adds
+// up on that day: what's overdue doesn't change as the days go by, and no
+// review date to come is already past.
+// Was 5 November 2026: moved on 17 November, as 12 November would have been in
+// the past by research (David and Steve)
 //
 // The latest quarter shows each review date case once, so research can see
 // them all and nothing looks odd (team playback, 16 November):
-// overdue by 3 days, due today, 7 days left, and accepted (no review date).
+// overdue by 3 days, due today, a date to come (30 November), and accepted
+// (no review date).
 // Was: an escalated return from April to June 2026, overdue by 101 days, which
 // would throw people in research. No dummy return is Query raised or Escalated
 //
 
-const TODAY = '2026-11-05'
+const TODAY = '2026-11-23'
 
 const SCHEMES = [
   { slug: 'batteryback', name: 'BatteryBack' },
@@ -43,9 +48,9 @@ const STATUSES = {
 
 // The latest quarter (July to September 2026): a mix of statuses
 const LATEST = {
-  'recycling-lives': { submitted: '2026-10-23', status: 'Response received' },
-  'erp-uk': { submitted: '2026-10-26', status: 'Under review' },
-  batteryback: { submitted: '2026-11-02', status: 'To review' },
+  'recycling-lives': { submitted: '2026-11-10', status: 'Response received' },
+  'erp-uk': { submitted: '2026-11-13', status: 'Under review' },
+  batteryback: { submitted: '2026-11-20', status: 'To review' },
   valpak: { submitted: '2026-10-16', status: 'Accepted' }
 }
 

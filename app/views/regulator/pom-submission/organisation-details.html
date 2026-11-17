@@ -6,18 +6,14 @@
   Back goes to that list: the brief one on that quarter, or the full one with
   its filters (app/routes.js), so you stay in your version.
 
-  Jen, 16 November 2026: the heading is now "Organisation details", with the
-  quarter in a Reported row at the top of the list. This replaces the
-  quarter-first heading in the playback note below.
-
   Team playback, 16 November 2026:
   - Reached from the scheme name on the list, not from the submission: these
     are the details for that quarter (the admin and others can change over time)
   - The heading starts with the quarter, for example "July to September 2026
     organisation details", the same as the submission and members pages: the
     scheme name in the caption, then quarter first, then what the page is
-    (Marie, 16 November). Was: the quarter in the caption, "BatteryBack, July
-    to September 2026", then a Quarter row in the list
+    (Marie, 16 and 17 November). Was: the quarter in the caption, "BatteryBack,
+    July to September 2026", then a Quarter row, then a Reported row
   - No Members row: members are reached from the submission, since they're the
     members in that quarter's return. One way there, not two
 
@@ -30,7 +26,7 @@
     appropriate person and the admin. Was "People who can submit", which read
     as if only these people could (someone asked how we decide who to show)
   - Last updated, so regulators know the details are current (David, Operator
-    mindset). Removed by Jen, 16 November 2026
+    mindset). Taken out on 16 November and put back on 17 November: David asked for it
   - Emails are links
   - Not here, as agreed on 6 November: conditions of approval, approved and
     expires, account manager (David asked for this: a research question for
@@ -44,7 +40,7 @@
 {% set words = content(wordsFile) %}
 {% set org = organisation %}
 
-{% set heading = words.heading %}
+{% set heading = quarterText + " " + words.heading %}
 {% set pageName = heading + ", " + org.name %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
@@ -72,7 +68,6 @@
 {% endset %}
 
 {% set rows = [
-  { key: { text: words.reported }, value: { text: quarterText } },
   { key: { text: words.registeredName }, value: { text: org.registeredName } },
   { key: { text: words.registeredOfficeAddress }, value: { html: addressHtml } },
   { key: { text: words.companiesHouseNumber }, value: { text: org.companiesHouseNumber } },
@@ -83,6 +78,7 @@
 {% if others.length %}
   {% set rows = (rows.push({ key: { text: words.othersWhoCanSubmit }, value: { html: othersHtml } }), rows) %}
 {% endif %}
+{% set rows = (rows.push({ key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }), rows) %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">

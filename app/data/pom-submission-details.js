@@ -14,7 +14,6 @@ const pom = require('./pom-submissions')
 // so content design can change or add them (app/content/regulator/flags.md)
 const { content } = require('../lib/content')
 
-const TODAY = '2026-11-05'
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 function shortDate (iso) {

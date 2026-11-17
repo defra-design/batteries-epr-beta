@@ -64,7 +64,7 @@ organisation details
 ## Not applicable (only screen readers hear this, in the Review by column once a submission is accepted)
 Not applicable
 
-## Overdue by (bold, under the review by date, after the number of days, for example "3 days overdue")
+## Overdue (bold, in place of the review by date, after the number of days, for example "3 days overdue")
 overdue
 
 ## Day (after the number 1, when it's overdue)
@@ -73,11 +73,5 @@ day
 ## Days (after the number, when it's overdue)
 days
 
-## Due today (under the review by date)
+## Due today (bold, in place of the review by date)
 Due today
-
-## Days left (under the review by date, after the number, for example "3 days left")
-days left
-
-## One day left (after the number 1)
-day left

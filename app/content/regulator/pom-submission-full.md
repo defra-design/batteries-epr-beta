@@ -8,7 +8,7 @@ Done? Select Commit changes. It's live in about 5 minutes.
 Back
 
 ## Heading (after the quarter, for example "July to September 2026 submission")
-
+submission
 ## Status
 Status
 
@@ -21,7 +21,7 @@ Submitted
 ## Review by
 Review by
 
-## Overdue by (bold, under the review by date, after the number of days, for example "3 days overdue")
+## Overdue (bold, in place of the review by date, after the number of days, for example "3 days overdue")
 overdue
 
 ## Day (after the number 1, when it's overdue)
@@ -30,14 +30,8 @@ day
 ## Days (after the number, when it's overdue)
 days
 
-## Due today (under the review by date)
+## Due today (bold, in place of the review by date)
 Due today
-
-## Days left (under the review by date, after the number, for example "3 days left")
-days left
-
-## One day left (after the number 1)
-day left
 
 ## Submitted by
 Submitted by
