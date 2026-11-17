@@ -9,14 +9,21 @@
 //
 //   /regulator/pom-submissions/v4                                  > v4/pom-submissions.html
 //     The submissions for the latest quarter (EB-324, as version 3)
+//
+//   One submission, 5 pages with a sub navigation between them (Marie, 17 November).
+//   Each has the same top (v4/_submission-header.html):
 //   /v4/recycling-lives/2026/3                                     > v4/pom-submission.html
-//     One submission: the flags first, each linking to that member's figures
-//   /v4/recycling-lives/2026/3/organisation-details                > v4/organisation-details.html
-//     From the Scheme row on the submission
+//     Flags: each links to that member's figures
+//   /v4/recycling-lives/2026/3/details                             > v4/details.html
+//     Submission details and supporting documents
+//   /v4/recycling-lives/2026/3/member-figures                      > v4/member-figures.html
+//     Members: every member, with their biggest change, and a search that suggests members
 //   /v4/recycling-lives/2026/3/changes                             > v4/changes.html
 //     Changes to figures since the return was first sent (from Ian's amendment history)
-//   /v4/recycling-lives/2026/3/member-figures                      > v4/member-figures.html
-//     Every member, with their biggest change, and a search that suggests members
+//   /v4/recycling-lives/2026/3/organisation-details                > v4/organisation-details.html
+//     Scheme details: the scheme's organisation details for that quarter
+//   /v4/recycling-lives/2026/3/download                            > a CSV file
+//     The whole return as a spreadsheet: every member's figures, by chemistry
 //   /v4/recycling-lives/2026/3/member-figures/BPRN142037           > v4/member.html
 //     One member: their details, flags, and figures for 2 quarters by chemistry
 //
@@ -33,6 +40,25 @@ const V4 = '/regulator/pom-submissions/v4'
 // One submission's address, for example /regulator/pom-submissions/v4/recycling-lives/2026/3
 function submissionUrl (scheme, year, quarter) {
   return V4 + '/' + scheme + '/' + year + '/' + quarter
+}
+
+// What every page of a submission needs for its top (v4/_submission-header.html):
+// the links in the sub navigation, which one you're on, the download, and
+// Back, which always goes to the list of submissions
+function submissionTabs (scheme, year, quarter, current) {
+  const here = submissionUrl(scheme, year, quarter)
+  return {
+    tabs: {
+      current,
+      flags: here,
+      details: here + '/details',
+      members: here + '/member-figures',
+      changes: here + '/changes',
+      scheme: here + '/organisation-details'
+    },
+    downloadHref: here + '/download',
+    backHref: V4 + '?year=' + year + '&quarter=' + quarter
+  }
 }
 
 // Only keep a value we offer: anything else falls back to the default
@@ -65,7 +91,7 @@ module.exports = (router) => {
     })
   })
 
-  // One submission. Each flag links to that member's figures
+  // One submission: Flags, the first page. Each flag links to that member's figures
   router.get(V4 + '/:scheme/:year/:quarter', (req, res, next) => {
     const { scheme, year, quarter } = req.params
     const submission = details.submission(scheme, year, quarter)
@@ -75,17 +101,53 @@ module.exports = (router) => {
     const flags = submission.flags.map(flag => {
       const member = members.find(m => m.name === flag.producer)
       // To the top of the member's page, not down to the table (Marie, 17 November)
-      return { ...flag, figuresHref: member ? here + '/member-figures/' + member.bprn : null }
+      // ?from=submission: so Back on the member's page comes back here
+      return { ...flag, figuresHref: member ? here + '/member-figures/' + member.bprn + '?from=submission' : null }
     })
     res.render('regulator/v4/pom-submission', {
       submission,
       flags,
-      backHref: V4 + '?year=' + year + '&quarter=' + quarter,
-      memberFiguresHref: here + '/member-figures',
-      organisationHref: here + '/organisation-details',
-      changesHref: here + '/changes',
-      notBuiltHref: notBuilt(req.originalUrl)
+      membersCount: members.length,
+      ...submissionTabs(scheme, year, quarter, 'flags')
     })
+  })
+
+  // Submission details and supporting documents
+  router.get(V4 + '/:scheme/:year/:quarter/details', (req, res, next) => {
+    const { scheme, year, quarter } = req.params
+    const submission = details.submission(scheme, year, quarter)
+    if (!submission) return next()
+    res.render('regulator/v4/details', {
+      submission,
+      downloadName: scheme + '-' + year + '-q' + quarter + '.csv',
+      lastChanged: amendments.lastChanged(scheme, year, quarter),
+      notBuiltHref: notBuilt(req.originalUrl),
+      ...submissionTabs(scheme, year, quarter, 'details')
+    })
+  })
+
+  // The whole return as a spreadsheet (CSV): a row per member, with their
+  // figures by chemistry for this quarter and the one before. Made from the
+  // data, not the scheme's own file (no files kept: Phil, 10 November)
+  router.get(V4 + '/:scheme/:year/:quarter/download', (req, res, next) => {
+    const { scheme, year, quarter } = req.params
+    const submission = details.submission(scheme, year, quarter)
+    const members = details.members(scheme, year, quarter)
+    if (!submission || !members) return next()
+    const key = year + '-' + quarter
+    const compareKey = figures.previousQuarter(key)
+    const cell = (value) => '"' + String(value).replace(/"/g, '""') + '"'
+    const chemistries = figures.comparison(members[0], key, compareKey).rows.map(r => r.chemistry)
+    const head = ['Member', 'Registration number', 'Membership']
+    chemistries.forEach(c => head.push(c + ' ' + figures.quarterName(key, true) + ' (tonnes)', c + ' ' + figures.quarterName(compareKey, true) + ' (tonnes)'))
+    const lines = [head.map(cell).join(',')]
+    members.forEach(m => {
+      const row = [m.name, m.bprn, m.current ? 'Current' : 'Former']
+      figures.comparison(m, key, compareKey).rows.forEach(r => row.push(r.nowText, r.beforeText))
+      lines.push(row.map(cell).join(','))
+    })
+    res.attachment(scheme + '-' + year + '-q' + quarter + '.csv')
+    res.type('text/csv').send(lines.join('\r\n'))
   })
 
   // The scheme's organisation details for that quarter: back to the submission
@@ -96,9 +158,10 @@ module.exports = (router) => {
     if (!organisation || !submission) return next()
     res.render('regulator/v4/organisation-details', {
       organisation,
+      submission,
       quarterText: submission.yearQuarterFull,
-      backHref: submissionUrl(scheme, year, quarter),
-      notBuiltHref: notBuilt(req.originalUrl)
+      notBuiltHref: notBuilt(req.originalUrl),
+      ...submissionTabs(scheme, year, quarter, 'scheme')
     })
   })
 
@@ -112,9 +175,10 @@ module.exports = (router) => {
     res.render('regulator/v4/changes', {
       submission,
       changes: amendments.forReturn(scheme, year, quarter).map(c => ({
-        ...c, href: here + '/member-figures/' + c.bprn
+        // ?from=changes: so Back on the member's page comes back here
+        ...c, href: here + '/member-figures/' + c.bprn + '?from=changes'
       })),
-      backHref: here
+      ...submissionTabs(scheme, year, quarter, 'changes')
     })
   })
 
@@ -141,6 +205,7 @@ module.exports = (router) => {
         m.bprn.toLowerCase().includes(term) ||
         (m.name + ' (' + m.bprn + ')').toLowerCase() === term))
     res.render('regulator/v4/member-figures', {
+      submission,
       org: organisation,
       quarterText: submission.yearQuarterFull,
       compareName: figures.quarterName(compareKey),
@@ -154,7 +219,7 @@ module.exports = (router) => {
       total: all.length,
       filters: { search, status },
       formAction: req.path,
-      backHref: submissionUrl(scheme, year, quarter)
+      ...submissionTabs(scheme, year, quarter, 'members')
     })
   })
 
@@ -173,6 +238,11 @@ module.exports = (router) => {
     const submissionKey = year + '-' + quarter
     const show = pick(req.query.show, keys, submissionKey)
     const compare = pick(req.query.compare, keys, figures.previousQuarter(show) || keys[0])
+    // Back goes where you came from (Marie, 17 November): a flag on the
+    // submission, the changes page, or the member figures list (the default)
+    const from = pick(req.query.from, ['submission', 'changes', 'list'], 'list')
+    const here = submissionUrl(scheme, year, quarter)
+    const backHref = { submission: here, changes: here + '/changes', list: here + '/member-figures' }[from]
     // Newest quarter first in the selects
     const items = (selected) => keys.slice().reverse().map(key => ({
       value: key, text: figures.quarterName(key), selected: key === selected
@@ -185,6 +255,10 @@ module.exports = (router) => {
       flags: show === submissionKey ? submission.flags.filter(f => f.producer === member.name) : [],
       // The chemistry this member's flag is about, to show it against that row
       flaggedChemistry: show === submissionKey ? figures.flaggedChemistry(member) : null,
+      // Each figure changed since the return was first sent, before and
+      // after, only on the submission's own quarter
+      changes: show === submissionKey ? amendments.changesFor(scheme, year, quarter, bprn, figures.tonnes(member, submissionKey)) : [],
+      from,
       showItems: items(show),
       compareItems: items(compare),
       showName: figures.quarterName(show),
@@ -194,7 +268,7 @@ module.exports = (router) => {
       same: show === compare,
       table: figures.comparison(member, show, compare),
       formAction: req.path,
-      backHref: submissionUrl(scheme, year, quarter) + '/member-figures'
+      backHref
     })
   })
 }

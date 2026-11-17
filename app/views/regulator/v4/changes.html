@@ -4,14 +4,16 @@
   VERSION 4 (17 November 2026). EB-366: changes to the figures in a return
   since the scheme first sent it. New page.
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/changes
-  You get here from View changes, in the Version row on the submission.
+  The fourth of the submission's 5 pages, with a sub navigation between them
+  (Flags, Submission details, Members, Changes, Scheme details). The top of the page is the
+  same on all 5: v4/_submission-header.html.
 
   From Ian's "Amendment history" design (alpha, Figma), worked up with Gareth.
   Ian's design had a row for every changed figure, with the figure before and
   after. Here it's a row for each time a member's figures were changed, with
   how many changed, so it still works when a resubmission changes lots of
-  figures (waste will have a lot more). To decide: where regulators see the
-  figures before and after (the member's page compares quarters, not versions).
+  figures (waste will have a lot more). View changes opens the member's page,
+  which lists each of their changed figures before and after.
   Not from Ian's design: regulator estimates (regulators don't edit data in
   the MVP), replies that confirm a figure without changing it, and the filters.
 
@@ -20,13 +22,13 @@
   accepted version" (EB-366 user needs, SV and Caroline).
 
   Top to bottom:
-  - Back to the submission
-  - The scheme name in the caption, then "July to September 2026 changes to figures"
+  - Back to the list of submissions
+  - The top of every page of the submission, then "Changes to figures" (h2)
   - A line saying what the page is
   - The table, 5 columns: member, date, changed by, how many figures changed,
     and View changes (to the member's page). One clear action on every row,
-    as on the flags (Marie, 17 November). The member's page doesn't show the
-    figures before and after a change yet. Dates have a short month, as it's a table.
+    as on the flags (Marie, 17 November). The member's page shows each
+    figure before and after, and Back comes back here. Dates have a short month, as it's a table.
     In a scrollable pane, so it works on a phone
 
   The data: app/data/amendments.js (dummy).
@@ -37,8 +39,7 @@
 {% set words = content(wordsFile) %}
 {% set s = submission %}
 
-{% set heading = s.yearQuarterFull + " " + words.heading %}
-{% set pageName = heading + ", " + s.scheme + " (version 4)" %}
+{% set pageName = words.heading + ", " + s.yearQuarterFull + ", " + s.scheme + " (version 4)" %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -62,10 +63,11 @@
 {% endfor %}
 
 {% block content %}
+{% include "regulator/v4/_submission-header.html" %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">{{ s.scheme }}</span>
-    <h1 class="govuk-heading-l">{{ heading }}</h1>
+    <h2 class="govuk-heading-m">{{ words.heading }}</h2>
     {{ words.intro | paragraphs }}
   </div>
 </div>

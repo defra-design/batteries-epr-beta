@@ -171,4 +171,4 @@ function flaggedChemistry (member) {
   return FLAGGED_CHEMISTRY[member.name] || null
 }
 
-module.exports = { quarters, quarterName, previousQuarter, comparison, biggestChange, about, flaggedChemistry }
+module.exports = { quarters, quarterName, previousQuarter, comparison, biggestChange, about, flaggedChemistry, tonnes }

@@ -7,8 +7,8 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Heading (after the quarter, for example "July to September 2026 member figures")
-member figures
+## Heading
+Member figures
 
 ## Search label
 Name or registration number

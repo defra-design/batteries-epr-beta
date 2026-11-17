@@ -65,7 +65,9 @@ function rememberTableSort () {
 // its label and the form still work. Picking a suggestion fills the box, and
 // Search filters the list to that member (the matching happens in app/routes/v4.js).
 // The letters typed are in bold in each suggestion.
-// Picking doesn't change the page by itself (WCAG 3.2.2). Without JavaScript nothing
+// Picking doesn't change the page by itself (WCAG 3.2.2). Return searches, as in
+// any search box, unless a suggestion is highlighted (then it picks it, and
+// Return again searches). Without JavaScript nothing
 // changes: it's a normal search box.
 //
 // The package is accessible-autocomplete, loaded through app/plugin-proxy.json,
@@ -111,6 +113,20 @@ function suggestMembers () {
       suggestion: (name) => boldTyped(name, typed)
     }
   })
+
+  // Return searches, as in any search box (Marie, 17 November). The component
+  // keeps Return for picking a suggestion, so while suggestions are showing it
+  // would do nothing. When no suggestion is highlighted, search with what's
+  // typed. Listens first (capture), before the component's own handler
+  $container.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter') return
+    if ($container.querySelector('.autocomplete__option--focused')) return
+    const $form = $container.closest('form')
+    if (!$form) return
+    event.preventDefault()
+    if ($form.requestSubmit) $form.requestSubmit()
+    else $form.submit()
+  }, true)
 }
 
 // "Northpower Batteries Ltd" with "north" typed > "<strong>North</strong>power Batteries Ltd".

@@ -7,23 +7,20 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Registration number
+## Registration number (only screen readers hear this, before the number)
 Registration number
 
-## Membership
-Membership
+## Current member (a green tag, in the line under the name)
+Current member
 
-## Joined (when they joined the scheme)
-Joined the scheme
+## Former member (a grey tag, in the line under the name)
+Former member
 
-## Left (when they left the scheme, only if they have)
-Left the scheme
+## Joined (in the line under the name, before the date)
+Joined
 
-## Current
-Current
-
-## Former
-Former
+## Left (in the line under the name, before the date, only if they've left)
+Left
 
 ## Flags heading
 Flags in this submission
@@ -34,8 +31,20 @@ Flag
 ## Reason column (flags table)
 Scheme's reason
 
-## Details heading (above registration number, membership and when they joined)
-Member details
+## Changes heading (each figure changed since the scheme first sent the return)
+Changes to figures
+
+## Date column (changes table)
+Date
+
+## Before column (changes table)
+Before (tonnes)
+
+## After column (changes table)
+After (tonnes)
+
+## Changed by column (changes table)
+Changed by
 
 ## Show label (the quarter to look at)
 Quarter

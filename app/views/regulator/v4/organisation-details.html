@@ -1,8 +1,11 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  VERSION 4 (17 November 2026): a copy of version 3. Nothing on this page has
-  changed. Back goes to the version 4 list.
+  VERSION 4 (17 November 2026): a copy of version 3, now Scheme details, the
+  last of the submission's 5 pages, with a sub navigation between them
+  (Marie, 17 November). The top of the page is the same on all 5:
+  v4/_submission-header.html, then "Scheme details" (h2). Back goes to the
+  version 4 list. Otherwise the same as version 3.
 
   EB-325: a scheme's organisation details. One page for both versions.
   You get here from the scheme name on the list of submissions (brief or full).
@@ -44,8 +47,7 @@
 {% set words = content(wordsFile) %}
 {% set org = organisation %}
 
-{% set heading = quarterText + " " + words.heading %}
-{% set pageName = heading + ", " + org.name %}
+{% set pageName = words.heading + ", " + quarterText + ", " + org.name + " (version 4)" %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -84,11 +86,12 @@
 {% endif %}
 {% set rows = (rows.push({ key: { text: words.lastUpdated }, value: { text: org.lastUpdatedLong } }), rows) %}
 
+{% include "regulator/v4/_submission-header.html" %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    <span class="govuk-caption-l">{{ org.name }}</span>
-    <h1 class="govuk-heading-l">{{ heading }}</h1>
+    <h2 class="govuk-heading-m">{{ words.heading }}</h2>
 
     {{ govukSummaryList({ rows: rows }) }}
 

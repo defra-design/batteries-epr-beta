@@ -1,0 +1,96 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (17 November 2026): the details of one placed on the market
+  submission. The second of 5 pages, with a sub navigation between them
+  (Flags, Submission details, Members, Changes, Scheme details). New page: these details
+  used to sit under the flags (Marie, 17 November).
+  Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/details
+
+  Top to bottom:
+  - The same top as every page of the submission: v4/_submission-header.html
+  - The details, one list: review by first (with "3 days overdue" or "Due
+    today" in bold under it), status, submitted, who submitted it, the
+    scheme, placed on the market, members, and when it was last changed,
+    with View changes to the Changes page. Was "Version 2 of 2", but nobody
+    could say what a version is: what matters is that figures have changed,
+    and when (Marie, 17 November)
+  - Files in this submission (Marie, 17 November): the whole return as a
+    spreadsheet (CSV), made from the data, then the scheme's supporting
+    documents. A summary list: the file name (not a link), its type and
+    size, and Download. No "View": the pages already show the data. Was a
+    Download (CSV) button at the top of every page, as in Alex's prototype,
+    but it's a file like the others, so it sits with them
+
+  The data: app/data/pom-submission-details.js (dummy).
+  The words: app/content/regulator/v4/details.md
+  Prototype only: the documents go to the "not built yet" page.
+#}
+
+{% set wordsFile = "regulator/v4/details" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+
+{% set pageName = words.heading + ", " + s.yearQuarterFull + ", " + s.scheme + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{# Review by: always the date, with "3 days overdue" or "Due today" in bold under it #}
+{% set reviewByHtml %}{{ s.reviewByLong }}{% if s.daysLeft != null and s.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ s.daysLeft | abs }} {% if s.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif s.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endset %}
+{% set statusHtml %}<strong class="govuk-tag {{ s.statusClasses }}">{{ s.status }}</strong>{% endset %}
+
+{# Last changed: the date of the latest change to a figure, and View changes.
+   If nothing has changed since the scheme sent it, it says so #}
+{% set lastChangedRow = { key: { text: words.lastChanged }, value: { text: words.noChanges } } %}
+{% if lastChanged %}
+  {% set lastChangedRow = {
+    key: { text: words.lastChanged },
+    value: { text: lastChanged },
+    actions: { items: [{ href: tabs.changes, text: words.viewChangesLink }] }
+  } %}
+{% endif %}
+
+{% set detailRows = [
+  { key: { text: words.reviewBy }, value: { html: reviewByHtml } },
+  { key: { text: words.status }, value: { html: statusHtml } },
+  { key: { text: words.submitted }, value: { text: s.submittedLong } },
+  { key: { text: words.submittedBy }, value: { html: (s.submittedBy.name | escape) + ", " + (words.superUser | escape) + '<br><a href="mailto:' + s.submittedBy.email + '" class="govuk-link">' + s.submittedBy.email + '</a>' } },
+  { key: { text: words.scheme }, value: { text: s.scheme } },
+  { key: { text: words.placedOnTheMarket }, value: { text: s.tonnes + " " + words.tonnes } },
+  { key: { text: words.members }, value: { text: s.membersInSubmission } },
+  lastChangedRow
+] %}
+
+{# Files in this submission: the return as a spreadsheet first, then the
+   scheme's supporting documents. Download has the file name for screen readers #}
+{% set fileRows = [{
+  key: { text: downloadName },
+  value: { text: words.returnFile },
+  actions: { items: [{ href: downloadHref, text: words.downloadLink, visuallyHiddenText: downloadName }] }
+}] %}
+{% for doc in s.supportingDocuments %}
+  {% set fileRows = (fileRows.push({
+    key: { text: doc.name },
+    value: { text: words.supportingDocument + " (" + doc.type + ", " + doc.size + ")" },
+    actions: { items: [{ href: notBuiltHref, text: words.downloadLink, visuallyHiddenText: doc.name }] }
+  }), fileRows) %}
+{% endfor %}
+
+{% block content %}
+{% include "regulator/v4/_submission-header.html" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">{{ words.heading }}</h2>
+    {{ govukSummaryList({ rows: detailRows }) }}
+
+    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
+    {{ govukSummaryList({ rows: fileRows }) }}
+  </div>
+</div>
+{% endblock %}

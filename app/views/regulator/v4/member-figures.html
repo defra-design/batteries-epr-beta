@@ -4,7 +4,9 @@
   VERSION 4 (17 November 2026). EB-366: every member in a submission, with
   the chemistry that changed most on the quarter before.
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures
-  You get here from View member data on the version 4 submission.
+  The third of the submission's 5 pages, with a sub navigation between them
+  (Flags, Submission details, Members, Changes, Scheme details). The top of the page is the
+  same on all 5: v4/_submission-header.html.
 
   Why: regulators check a return member by member, and by chemistry. Sorting
   by Biggest change is a quick way to spot swings the flags didn't catch
@@ -15,16 +17,16 @@
   action on every row, as on the flags (Marie, 17 November).
 
   Top to bottom:
-  - Back to the submission
-  - The scheme name in the caption, then "July to September 2026 member figures"
+  - Back to the list of submissions
+  - The top of every page of the submission, then "Member figures" (h2)
   - Search by name or registration number, and Membership (Current, the
     default, Former or All, as version 3), with Search and Reset. With
     JavaScript, the search box suggests members as you type, with the letters
     typed in bold (add-on: accessible autocomplete). Search filters this
     list: it never jumps to another page
   - A line saying how many are showing, and what the change is compared with
-  - The table, 5 columns: member (with their flag types in bold under it),
-    registration number, membership, the biggest change in words, and
+  - The table, 5 columns: member, registration number, membership, the
+    biggest change in words (with any flag types in bold under it), and
     View figures.
     Sortable (MOJ sortable table): Biggest change sorts by its size, up or down
   - Members who've left have no figures this quarter, so their biggest change
@@ -40,8 +42,7 @@
 {% set wordsFile = "regulator/v4/member-figures" %}
 {% set words = content(wordsFile) %}
 
-{% set heading = quarterText + " " + words.heading %}
-{% set pageName = heading + ", " + org.name + " (version 4)" %}
+{% set pageName = words.heading + ", " + quarterText + ", " + org.name + " (version 4)" %}
 
 {# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
 {% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
@@ -75,22 +76,24 @@
 
 {% set rows = [] %}
 {% for m in members %}
-  {# The flag types in bold under the name, as on the flags table, not tags (Marie, 17 November) #}
+  {# The flag types in bold under the biggest change, not the name: it's the
+     change that's a variance, not the member (Marie, 17 November). Not tags #}
   {% set tagsHtml %}{% for f in m.flags %}<strong class="govuk-!-display-block">{{ f.type }}</strong>{% endfor %}{% endset %}
   {% set rows = (rows.push([
-    { html: (m.name | escape) + tagsHtml, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
+    { text: m.name, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
     { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
-    { text: m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower), attributes: { "data-sort-value": (m.biggest.diff | abs) }, classes: small },
+    { html: ((m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower)) | escape) + tagsHtml, attributes: { "data-sort-value": (m.biggest.diff | abs) }, classes: small },
     { html: '<a href="' + m.href + '" class="govuk-link">' + (words.viewFiguresLink | escape) + '<span class="govuk-visually-hidden"> ' + (words.viewFiguresFor | escape) + ' ' + (m.name | escape) + '</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
 {% endfor %}
 
 {% block content %}
+{% include "regulator/v4/_submission-header.html" %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-l">{{ org.name }}</span>
-    <h1 class="govuk-heading-l">{{ heading }}</h1>
+    <h2 class="govuk-heading-m">{{ words.heading }}</h2>
   </div>
 </div>
 

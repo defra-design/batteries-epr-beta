@@ -5,31 +5,39 @@
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037
   You get here from View figures (on a flag, or on the member figures list),
   or View changes (changes to figures). It opens at the top of the page.
-  Back goes to the member figures list.
+  Back goes where you came from (Marie, 17 November): the submission, the
+  changes page, or the member figures list. The address says which
+  (?from=submission, ?from=changes), and the form keeps it.
 
   What regulators come for goes first: the flags, then the figures. The
   member's details go last (Marie, 17 November), as on the submission.
 
-  Top to bottom:
-  - Back to the member figures list
-  - The scheme name in the caption, the member's name as the heading
-  - Flags in this submission: a table, as on the submission: the flag (type
-    in bold, then what we found) and the scheme's reason (only when the
-    quarter shown is the submission's quarter, and they have some)
-  - Quarter and Compared with: two selects and a Show button, in a row
-    (add-on: app-filters). A plain form (GET), so it works without JavaScript
-    and nothing changes while someone is still choosing (WCAG 3.2.2).
-    It lands on the submission's quarter, compared with the quarter before
-  - A line saying what's showing, so the table and the selects never disagree
-  - The table: one row per chemistry, then the total, in a scrollable pane
-    (add-on), so it works on a phone. 4 columns: chemistry, the two quarters
-    (tonnes), and the change in tonnes and as a percentage, in words (Up,
-    Down, No change), not colour or arrows. The flag's type shows in bold
-    against the chemistry it's about, so the regulator sees the two figures
-    behind the flag. No tags for flag types (Marie, 17 November)
-  - Member details: registration number, membership, when they joined the
-    scheme, and when they left, if they have
-  - No links under the table: Back at the top is the way back (Marie, 17 November)
+  Top to bottom, in the order a regulator thinks it through (Marie, 17 November):
+  - Back to where you came from
+  - The scheme name in the caption, the member's name as the heading, then
+    one line close under it: a Current member or Former member tag, the
+    registration number, when they joined the scheme, and when they left,
+    if they have. Spaced apart, no dots (Marie, 17 November). Was a
+    Member details section at the bottom, which read as an afterthought.
+    Kept, as regulators copy registration numbers into their risk sheets
+  - Flags in this submission (only if they have some): a table, as on the
+    submission: the flag (type in bold, then what we found) and the
+    scheme's reason. Only on the submission's quarter
+  - Their figures: Quarter and Compared with (two selects and a Show button,
+    a plain form, so it works without JavaScript, WCAG 3.2.2), a line saying
+    what's showing, then the table: one row per chemistry, then the total.
+    4 columns: chemistry, the two quarters (tonnes), and the change in words
+    (Up, Down, No change). The flag's type shows in bold against the
+    chemistry it's about. In a scrollable pane
+  - Changes to figures (only if they have some): each figure changed since
+    the scheme sent the return, newest first: date, chemistry, before and
+    after (tonnes), who changed it. From Ian's amendment history design.
+    After the figures, so you see what's odd, then what's been fixed
+  - No links under the tables: Back at the top is the way back
+
+  One page, not a sub navigation like the submission: the flags, figures and
+  changes explain each other, so regulators need to see them together
+  (Marie, 17 November).
 
   Why two quarters: today regulators compare a return with last quarter's, in
   the EA comparison tool. Two quarters keep the table to 4 columns, and they
@@ -83,16 +91,30 @@
   ]), flagRows) %}
 {% endfor %}
 
+{# Their changes since the return was first sent #}
+{% set changeRows = [] %}
+{% for c in changes %}
+  {% set changeRows = (changeRows.push([
+    { text: c.date, classes: small },
+    { text: c.chemistry, classes: small },
+    { text: c.beforeText, format: "numeric", classes: small },
+    { text: c.afterText, format: "numeric", classes: small },
+    { text: c.madeBy, classes: small }
+  ]), changeRows) %}
+{% endfor %}
+
 {# About the member. Left the scheme only shows if they have #}
-{% set membershipHtml %}<strong class="govuk-tag {{ 'govuk-tag--green' if member.current else 'govuk-tag--grey' }}">{{ words.current if member.current else words.former }}</strong>{% endset %}
-{% set aboutRows = [
-  { key: { text: words.registrationNumber }, value: { text: member.bprn } },
-  { key: { text: words.membership }, value: { html: membershipHtml } },
-  { key: { text: words.joined }, value: { text: about.joined } }
-] %}
-{% if about.left %}
-  {% set aboutRows = (aboutRows.push({ key: { text: words.left }, value: { text: about.left } }), aboutRows) %}
-{% endif %}
+{# The line under the name: membership as a tag (green for current, grey for
+   former, as on the member list), then the registration number and when they
+   joined, and left if they have. Spaced apart, no dots. Each fact wraps as a
+   whole (inline-block), so a date never splits across lines. Screen readers
+   hear "Registration number" before the number #}
+{% set aboutHtml %}
+<strong class="govuk-tag {{ 'govuk-tag--green' if member.current else 'govuk-tag--grey' }} govuk-!-margin-right-3">{{ words.currentMember if member.current else words.formerMember }}</strong>
+<span class="govuk-!-display-inline-block govuk-!-margin-right-3"><span class="govuk-visually-hidden">{{ words.registrationNumber }} </span>{{ member.bprn }}</span>
+<span class="govuk-!-display-inline-block govuk-!-margin-right-3">{{ words.joined }} {{ about.joined }}</span>
+{% if about.left %}<span class="govuk-!-display-inline-block">{{ words.left }} {{ about.left }}</span>{% endif %}
+{% endset %}
 
 {# The table. Numbers are right aligned, as GOV.UK tables do #}
 {% set nowHeading = showShort + " " + words.tonnes %}
@@ -118,10 +140,12 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
 
     <span class="govuk-caption-l">{{ org.name }}</span>
-    <h1 class="govuk-heading-l">{{ member.name }}</h1>
+    {# Less space under the name, so the line below reads as part of it #}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ member.name }}</h1>
+    <p class="govuk-body govuk-!-margin-bottom-7">{{ aboutHtml | safe }}</p>
   </div>
 </div>
 
@@ -145,8 +169,11 @@
       </div>
     {% endif %}
 
+
     {# The selects: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
     <form method="get" action="{{ formAction }}" novalidate>
+      {# Keeps where you came from, so Back still goes there #}
+      <input type="hidden" name="from" value="{{ from }}">
       <div class="app-filters">
         {{ govukSelect({ id: "show", name: "show", label: { text: words.showLabel, classes: "govuk-label--s" }, items: showItems }) }}
         {{ govukSelect({ id: "compare", name: "compare", label: { text: words.compareLabel, classes: "govuk-label--s" }, items: compareItems }) }}
@@ -179,13 +206,25 @@
     }) }}
     </div>
 
-  </div>
-</div>
+    {% if changeRows.length %}
+      <h2 class="govuk-heading-m">{{ words.changesHeading }}</h2>
+      {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.changesHeading }}">
+        {{ govukTable({
+          caption: words.changesHeading,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.dateColumn, classes: small },
+            { text: words.chemistryColumn, classes: small },
+            { text: words.beforeColumn, format: "numeric", classes: small },
+            { text: words.afterColumn, format: "numeric", classes: small },
+            { text: words.changedByColumn, classes: small }
+          ],
+          rows: changeRows
+        }) }}
+      </div>
+    {% endif %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">{{ words.detailsHeading }}</h2>
-    {{ govukSummaryList({ rows: aboutRows }) }}
   </div>
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-Page: changes to the figures in a placed on the market return since it was first sent (EB-366), version 4 (17 November 2026). New page, from Ian's amendment history design. You get here from View changes on the submission.
+Page: changes to the figures in a placed on the market return since it was first sent (EB-366), version 4 (17 November 2026). New page, from Ian's amendment history design. The fourth of the submission's 5 pages (Flags, Submission details, Members, Changes, Scheme details).
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The changes are dummy data: ask Marie to change those.
@@ -7,8 +7,8 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Heading (after the quarter, for example "July to September 2026 changes to figures")
-changes to figures
+## Heading
+Changes to figures
 
 ## Intro (paragraphs welcome)
 Each time the scheme changed a member's figures after first sending this return. The figures first sent are kept as they were.
