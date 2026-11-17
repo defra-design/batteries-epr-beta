@@ -10,8 +10,9 @@
   by Biggest change is a quick way to spot swings the flags didn't catch
   (UN-036, UN-057). It's by chemistry, not each member's total, so tonnage
   moving from one chemistry to another can't hide behind a total that stays
-  the same (Marie, 17 November). Each name opens that member's page
-  (member.html): their details, flags and figures.
+  the same (Marie, 17 November). View figures on each row opens that
+  member's page (member.html): their flags, figures and details. One clear
+  action on every row, as on the flags (Marie, 17 November).
 
   Top to bottom:
   - Back to the submission
@@ -22,8 +23,9 @@
     typed in bold (add-on: accessible autocomplete). Search filters this
     list: it never jumps to another page
   - A line saying how many are showing, and what the change is compared with
-  - The table, 4 columns: member (a link, with their flag types as tags),
-    registration number, membership, and the biggest change in words.
+  - The table, 5 columns: member (with their flag types in bold under it),
+    registration number, membership, the biggest change in words, and
+    View figures.
     Sortable (MOJ sortable table): Biggest change sorts by its size, up or down
   - Members who've left have no figures this quarter, so their biggest change
     is what they reported before ("Other: none this quarter")
@@ -73,12 +75,14 @@
 
 {% set rows = [] %}
 {% for m in members %}
-  {% set tagsHtml %}{% for f in m.flags %} <strong class="govuk-tag govuk-!-font-size-16 {{ f.tagClasses }}">{{ f.type }}</strong>{% endfor %}{% endset %}
+  {# The flag types in bold under the name, as on the flags table, not tags (Marie, 17 November) #}
+  {% set tagsHtml %}{% for f in m.flags %}<strong class="govuk-!-display-block">{{ f.type }}</strong>{% endfor %}{% endset %}
   {% set rows = (rows.push([
-    { html: '<a href="' + m.href + '" class="govuk-link">' + (m.name | escape) + '</a>' + tagsHtml, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
+    { html: (m.name | escape) + tagsHtml, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
     { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
-    { text: m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower), attributes: { "data-sort-value": (m.biggest.diff | abs) }, classes: small }
+    { text: m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower), attributes: { "data-sort-value": (m.biggest.diff | abs) }, classes: small },
+    { html: '<a href="' + m.href + '" class="govuk-link">' + (words.viewFiguresLink | escape) + '<span class="govuk-visually-hidden"> ' + (words.viewFiguresFor | escape) + ' ' + (m.name | escape) + '</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
 {% endfor %}
 
@@ -119,7 +123,8 @@
             { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
             { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.changeColumn, attributes: { "aria-sort": "none" }, classes: small }
+            { text: words.changeColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],
           rows: rows
         }) }}

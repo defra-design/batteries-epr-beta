@@ -61,6 +61,15 @@ Membership
 ## Change column (the chemistry that changed most, for example "Other: up 0.50 (42%)")
 Biggest change
 
+## Action column (only screen readers hear this, it's hidden on screen)
+Action
+
+## View figures link (on each member, goes to their figures)
+View figures
+
+## View figures for (only screen readers hear this, before the member's name, for example "View figures for Acorn Hill Electrical Ltd")
+for
+
 ## Up (before the change, for example "Up 0.50 (42%)")
 Up
 

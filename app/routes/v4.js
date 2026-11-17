@@ -13,6 +13,8 @@
 //     One submission: the flags first, each linking to that member's figures
 //   /v4/recycling-lives/2026/3/organisation-details                > v4/organisation-details.html
 //     From the Scheme row on the submission
+//   /v4/recycling-lives/2026/3/changes                             > v4/changes.html
+//     Changes to figures since the return was first sent (from Ian's amendment history)
 //   /v4/recycling-lives/2026/3/member-figures                      > v4/member-figures.html
 //     Every member, with their biggest change, and a search that suggests members
 //   /v4/recycling-lives/2026/3/member-figures/BPRN142037           > v4/member.html
@@ -24,6 +26,7 @@
 const pom = require('../data/pom-submissions')
 const details = require('../data/pom-submission-details')
 const figures = require('../data/member-figures')
+const amendments = require('../data/amendments')
 
 const V4 = '/regulator/pom-submissions/v4'
 
@@ -71,6 +74,7 @@ module.exports = (router) => {
     const here = submissionUrl(scheme, year, quarter)
     const flags = submission.flags.map(flag => {
       const member = members.find(m => m.name === flag.producer)
+      // To the top of the member's page, not down to the table (Marie, 17 November)
       return { ...flag, figuresHref: member ? here + '/member-figures/' + member.bprn : null }
     })
     res.render('regulator/v4/pom-submission', {
@@ -79,6 +83,7 @@ module.exports = (router) => {
       backHref: V4 + '?year=' + year + '&quarter=' + quarter,
       memberFiguresHref: here + '/member-figures',
       organisationHref: here + '/organisation-details',
+      changesHref: here + '/changes',
       notBuiltHref: notBuilt(req.originalUrl)
     })
   })
@@ -94,6 +99,22 @@ module.exports = (router) => {
       quarterText: submission.yearQuarterFull,
       backHref: submissionUrl(scheme, year, quarter),
       notBuiltHref: notBuilt(req.originalUrl)
+    })
+  })
+
+  // Changes to figures in a return since it was first sent, newest first.
+  // From Ian's amendment history design. Each member links to their figures
+  router.get(V4 + '/:scheme/:year/:quarter/changes', (req, res, next) => {
+    const { scheme, year, quarter } = req.params
+    const submission = details.submission(scheme, year, quarter)
+    if (!submission) return next()
+    const here = submissionUrl(scheme, year, quarter)
+    res.render('regulator/v4/changes', {
+      submission,
+      changes: amendments.forReturn(scheme, year, quarter).map(c => ({
+        ...c, href: here + '/member-figures/' + c.bprn
+      })),
+      backHref: here
     })
   })
 
@@ -162,6 +183,8 @@ module.exports = (router) => {
       about: figures.about(member),
       // This member's flags, only on the submission's own quarter
       flags: show === submissionKey ? submission.flags.filter(f => f.producer === member.name) : [],
+      // The chemistry this member's flag is about, to show it against that row
+      flaggedChemistry: show === submissionKey ? figures.flaggedChemistry(member) : null,
       showItems: items(show),
       compareItems: items(compare),
       showName: figures.quarterName(show),

@@ -58,8 +58,8 @@ Version
 ## Version of (between the numbers, for example "2 of 2")
 of
 
-## View earlier versions link
-View earlier versions
+## View earlier versions link (goes to the changes to figures since the first version)
+View changes
 
 ## Members
 Members
@@ -69,6 +69,18 @@ View member data
 
 ## Flags heading
 Flags
+
+## Member column (flags table)
+Member
+
+## Flag column (flags table: the type of flag in bold, then what we found)
+Flag
+
+## Reason column (flags table)
+Scheme's reason
+
+## Action column (flags table: only screen readers hear this, it's hidden on screen)
+Action
 
 ## View figures link (on each flag)
 View figures

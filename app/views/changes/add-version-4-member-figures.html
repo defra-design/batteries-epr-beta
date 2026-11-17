@@ -20,13 +20,15 @@
 <p class="govuk-body"><strong>Submissions list</strong></p>
 <ul class="govuk-list govuk-list--bullet"><li>One link per row, View submission. The scheme name isn't a link: two links in a row going to two places make people choose, and double the tab stops for keyboard users. Version 3 keeps the scheme name as a link, so research can compare</li></ul>
 <p class="govuk-body"><strong>Submission</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>The flags come first, under the status and review by date: they decide whether to accept or query</li><li>Each flag: the type on top, then the member, what was found and the figures, the scheme's reason, and View figures, across the full width</li><li>The organisation details are reached from the Scheme row, with View details</li><li>View member data goes to the member figures</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>The flags come first, straight under the heading, in a table: Member, Flag, Scheme's reason, and View figures. They're what regulators want to see most, and they decide whether to accept or query. A table keeps them compact, as a return can have lots of flags</li><li>No tags for flag types: the type is in words, in bold, above what was found and the figures. Waste has around 10 checks, too many for tag colours to mean anything</li><li>The member's name isn't a link: each row is a flag, with one clear action, View figures. It opens that member's page at the top, with the flag shown against the chemistry it's about</li><li>Then one list of submission details, Review by first. The organisation details are reached from the Scheme row, with View details</li><li>View member data goes to the member figures</li></ul>
 <p class="govuk-body"><strong>Member figures (new)</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Every member, with the chemistry that changed most on the quarter before, for example &quot;Other: up 0.50 (42%)&quot;. By chemistry, not each member's total, so tonnage moving from one chemistry to another can't hide behind a total that stays the same. Sort by Biggest change to spot swings the flags didn't catch</li><li>Search by name or registration number: with JavaScript, it suggests members as you type, with the letters typed in bold (GOV.UK's accessible autocomplete). Searching filters the list: it never jumps to another page</li><li>Membership: current members first, or former, or all, as version 3</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>Every member, with any flag types in bold under their name, and View figures on each row (one clear action, as on the flags), and the chemistry that changed most on the quarter before, for example &quot;Other: up 0.50 (42%)&quot;. By chemistry, not each member's total, so tonnage moving from one chemistry to another can't hide behind a total that stays the same. Sort by Biggest change to spot swings the flags didn't catch</li><li>Search by name or registration number: with JavaScript, it suggests members as you type, with the letters typed in bold (GOV.UK's accessible autocomplete). Searching filters the list: it never jumps to another page</li><li>Membership: current members first, or former, or all, as version 3</li></ul>
 <p class="govuk-body"><strong>One member (new)</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>About the member first (registration number, membership, when they joined), so clicking a member's name takes you to that member, as clicking a scheme takes you to the scheme</li><li>Their flags, then their figures by chemistry for two quarters, with the change in tonnes and as a percentage, in words. It starts on the submission's quarter compared with the one before; Quarter and Compared with change that</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>What regulators come for goes first, as on the submission: their flags, in a table, then their figures by chemistry for two quarters, with the flag shown against the chemistry it's about, with the change in tonnes and as a percentage, in words. It starts on the submission's quarter compared with the one before; Quarter and Compared with change that</li><li>Then the member details: registration number, membership, when they joined</li></ul>
+<p class="govuk-body"><strong>Changes to figures (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>View changes, in the Version row on the submission, opens a list of each time the scheme changed a member's figures after first sending the return: the member, the date, who changed them, how many figures changed, and View changes. The figures first sent are kept</li><li>From Ian's amendment history design (alpha), worked up with Gareth. Ian's design had a row for every changed figure, with the before and after. Here it's a row for each time a member's figures changed, so it still works when a resubmission changes lots of figures (waste will have a lot more)</li><li>Left out from Ian's design: regulator estimates (regulators don't edit data in the MVP), replies that confirm a figure without changing it, and filters</li><li>Comparing versions is part of EB-366 (Mak, design session, 10 November): regulators need to compare against the last accepted version (SV, Caroline)</li></ul>
 <p class="govuk-body"><strong>To test with regulators</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>What do they compare first: last quarter, the same quarter last year, the last accepted version, or an average?</li><li>Does a biggest change on the member figures page help them spot problems?</li><li>Is a flag shown as two figures enough to decide whether to query?</li></ul>
+<ul class="govuk-list govuk-list--bullet"><li>What do they compare first: last quarter, the same quarter last year, the last accepted version, or an average?</li><li>Does a biggest change on the member figures page help them spot problems?</li><li>Is a flag shown as two figures enough to decide whether to query?</li><li>Is knowing who changed a member's figures, when and how many enough, or do they need the before and after for each figure on this page?</li></ul>
 <p class="govuk-body">New words are drafts for content design to review.</p>
 <h2 class="govuk-heading-m">Pages</h2>
 <ul class="govuk-list">
@@ -34,6 +36,7 @@
 <li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Submission (version 4)</a></li>
 <li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Member figures</a></li>
 <li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037">One member</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/changes">Changes to figures</a></li>
 </ul>
 </div>
 </div>
@@ -83,6 +86,12 @@
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
 <img src="/public/images/changes/add-version-4-member-figures/after--member-320-pixels.png" alt="One member, 320 pixels wide, top of the page" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Changes to figures, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-member-figures/after--changes-1020-pixels.png" alt="Changes to figures, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
 </div>
 </div>
 

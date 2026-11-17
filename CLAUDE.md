@@ -35,6 +35,13 @@ it's too clever. Keep it vanilla.
   saying so. In a new version, new words are drafts for Jen to review.
 - **Repetition is fine.** A little repeated code beats a clever shortcut. Only
   make something reusable when it's on three or more pages.
+- **Every table goes in a scrollable pane and uses small text.** Wrap it in
+  `<div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="...">`
+  so on a phone only the table scrolls, and give every cell and heading
+  `govuk-!-font-size-16` (set as `small` at the top of the page). Up to 6
+  columns.
+- **Dates in tables have a short month**: 10 Nov 2026. Everywhere else, the
+  full month: 10 November 2026.
 - **No new packages without asking Marie first.**
 - **Versions in folders.** Never change a version that's been tested. A new
   version copies the last one into new folders (see the README, "Versions").

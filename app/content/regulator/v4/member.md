@@ -28,6 +28,15 @@ Former
 ## Flags heading
 Flags in this submission
 
+## Flag column (flags table: the type of flag in bold, then what we found)
+Flag
+
+## Reason column (flags table)
+Scheme's reason
+
+## Details heading (above registration number, membership and when they joined)
+Member details
+
 ## Show label (the quarter to look at)
 Quarter
 

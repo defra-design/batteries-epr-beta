@@ -42,6 +42,13 @@ const FLAGGED = {
   }
 }
 
+// The chemistry each flag is about, so the member's page can show the flag
+// against that row. Brightcell's flag is about the whole quarter (estimated)
+const FLAGGED_CHEMISTRY = {
+  'Northpower Batteries Ltd': 'Other',
+  'Cellwise Trading Ltd': 'Other'
+}
+
 // Irregularity: estimated by the scheme in these quarters
 const ESTIMATED = { 'Brightcell Ltd': ['2026-3'] }
 
@@ -159,4 +166,9 @@ function about (member) {
   }
 }
 
-module.exports = { quarters, quarterName, previousQuarter, comparison, biggestChange, about }
+// The chemistry a member's flag is about, or null
+function flaggedChemistry (member) {
+  return FLAGGED_CHEMISTRY[member.name] || null
+}
+
+module.exports = { quarters, quarterName, previousQuarter, comparison, biggestChange, about, flaggedChemistry }
