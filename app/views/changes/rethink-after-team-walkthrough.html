@@ -1,0 +1,129 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "What changed in version 4 after the team walkthrough (EB-366 and EB-367)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">18 November 2026</span>
+<h1 class="govuk-heading-l">What changed in version 4 after the team walkthrough (EB-366 and EB-367)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<p class="govuk-body">Marie showed version 4 to the team on 18 November. Afterwards, she reviewed the whole journey against common usability principles and made a number of changes. This page explains what changed and why. The other change logs from 18 November have more detail.</p>
+<p class="govuk-body"><strong>The decision button is now at the end of each page</strong></p>
+<p class="govuk-body">At the walkthrough, the Make a decision button was at the top of the Flags and Members pages. We had copied this from Alex's regulator prototype, where the Assign button sits at the top of a list. That works for Alex because assigning is the main job on that page. It does not work as well here, because regulators need to check the submission before they decide.</p>
+<p class="govuk-body">Every page of a submission now ends with the same green button: Continue to make a decision. On Flags and Members it sits just below the table, so regulators look first and decide afterwards. These 2 pages start with a short line telling regulators they can select members to query.</p>
+<p class="govuk-body"><strong>Making a decision is now 1 page instead of 2</strong></p>
+<p class="govuk-body">Before, regulators went to a Selected members page and then to the decision page. The Selected members page had a box for a message about each member. No user need asked for this, and the boxes disappeared when a member was unticked, which was confusing.</p>
+<p class="govuk-body">The decision page now lists the selected members at the top. Each one shows why it was selected, for example its flag or its largest change, so regulators do not have to remember when they write their message.</p>
+<p class="govuk-body">On the decision page, regulators can:</p>
+<ul class="govuk-list govuk-list--bullet"><li>accept, query or return the submission</li><li>give a date for the scheme to respond by, if they query it</li><li>write a message to the scheme and attach a file</li><li>add an internal note, which the scheme does not see</li></ul>
+<p class="govuk-body">All 3 decisions are always available, as David asked at the walkthrough. We will decide after research whether any of them should depend on which members are selected.</p>
+<p class="govuk-body">We now say &quot;return&quot; instead of &quot;reject&quot;, because that is the word the Environment Agency uses, and &quot;reject&quot; can sound negative. David and Mak are checking this with the Environment Agency working group.</p>
+<p class="govuk-body">The confirmation page now says in one sentence that the scheme has been emailed.</p>
+<p class="govuk-body"><strong>Messages and notes are shown on Submission details</strong></p>
+<p class="govuk-body">The list of submissions showed &quot;Response received&quot; for one submission, but there was no way to see what had been asked. Submission details now ends with the messages sent to the scheme and any internal notes, newest first. This section only appears when there is something to show.</p>
+<p class="govuk-body"><strong>Other changes</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The pages are now in this order: Flags, Members, Submission details, Changes, Scheme details. This puts the 2 pages where regulators select members next to each other.</li><li>The Members page shows 30 members at a time, and sorting works across the whole list. Phil confirmed the system can do this.</li><li>The column that was called &quot;Biggest change&quot; is now called &quot;Largest change&quot;.</li><li>On a member's page, regulators can tick &quot;Query this member&quot;, then continue to make a decision or go back.</li><li>&quot;Overdue&quot; no longer shows for a submission that has been queried.</li></ul>
+<p class="govuk-body"><strong>What we still need to look at</strong></p>
+<p class="govuk-body">Regulators can select members on 3 pages: Flags, Members and each member's page. It is easy to lose track of who has been selected, and the only way to change the list from the decision page is to go back. Marie is looking at this next.</p>
+<p class="govuk-body">We also need to agree whether the service will send emails to schemes, or whether regulators will keep sending their own. The prototype assumes the service sends them. Mak and David will decide.</p>
+<p class="govuk-body"><strong>More detail</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li><a href="/changes/add-paging-to-members" class="govuk-link">Show 30 members at a time on the Members page</a></li><li><a href="/changes/move-make-a-decision-to-continue" class="govuk-link">Move the decision button to the bottom of every page</a></li><li><a href="/changes/update-decision-options-and-messages" class="govuk-link">Make a decision on one page, and see messages and notes on Submission details</a></li><li>What the team saw at the walkthrough: <a href="/changes/add-version-4-make-a-decision" class="govuk-link">Add version 4: making a decision on a submission</a></li></ul>
+<p class="govuk-body">The wording in the prototype is a draft for content design to review.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Flags</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Members</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/details">Submission details</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Flags</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--flags.png" alt="Before: Flags" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--flags.png" alt="After: Flags" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, the top</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--members.png" alt="Before: Members, the top" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--members.png" alt="After: Members, the top" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">The members you picked: was Selected members, now the top of the decision page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--selected-members.png" alt="Before: The members you picked: was Selected members, now the top of the decision page" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--choosing-members.png" alt="After: The members you picked: was Selected members, now the top of the decision page" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Make a decision, with Query chosen</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--decision.png" alt="Before: Make a decision, with Query chosen" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--decision.png" alt="After: Make a decision, with Query chosen" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">The confirmation, after a query</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--done.png" alt="Before: The confirmation, after a query" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--done.png" alt="After: The confirmation, after a query" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission details</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--details.png" alt="Before: Submission details" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--details.png" alt="After: Submission details" class="app-change-screenshot">
+</div>
+</div>
+<h2 class="govuk-heading-m">A member's page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/before--member.png" alt="Before: A member's page" class="app-change-screenshot">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/rethink-after-team-walkthrough/after--member.png" alt="After: A member's page" class="app-change-screenshot">
+</div>
+</div>
+
+{% endblock %}

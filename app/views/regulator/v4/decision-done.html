@@ -3,7 +3,7 @@
 {#
   VERSION 4 (18 November 2026). EB-367: the confirmation after a decision. New page.
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/decision/done
-  You get here from Continue on Make a decision, once the answers are fine.
+  You get here from Send to the scheme on Make a decision.
 
   One page for all three decisions: its words follow what was decided.
   A panel and what happens next, nothing else (Marie, 18 November). No
@@ -13,18 +13,17 @@
 
   Top to bottom:
   - A GOV.UK panel: what happened ("Submission accepted", "Query sent",
-    "Submission rejected"), then the scheme and the quarter, written out
-  - What happens next: who's been told, and what happens to the submission.
-    For a query: how many members it asks about, and the date to respond by
+    "Submission returned"), then the scheme and the quarter, written out
+  - What happens next: one line. The scheme has been emailed (Mak: by
+    email, for now). For a query, the date to respond by. Nothing about the
+    status on the list of submissions (Marie, 18 November evening: say
+    only what happens next, and say it short)
   - Nothing after that: no button or links. It's the end of the journey,
     and where regulators go next is a question for research (Marie, 18
     November). The header's navigation is still there
 
-  Prototype only: the list doesn't change the submission's status yet.
-  To agree: how the scheme is told (in the service, or by email or phone,
-  UN-059). The words say "We've told", whichever way it is. After a
-  rejection we only say they've been told: what the scheme does next isn't
-  known yet, a question for Mak (Marie, 18 November).
+  Prototype only: the list doesn't change the submission's status, and the
+  decision isn't added to Submission details.
 
   The routes: app/routes/v4-decision.js
   The words: app/content/regulator/v4/decision-done.md
@@ -52,18 +51,13 @@
 
     <h2 class="govuk-heading-m">{{ words.nextHeading }}</h2>
 
+    {# One line: the scheme has been emailed #}
     {% if d == "accept" %}
-      <p class="govuk-body">{{ words.acceptedTold }} {{ s.scheme }} {{ words.acceptedToldAfter }}</p>
-      <p class="govuk-body">{{ words.acceptedStatus }}</p>
+      <p class="govuk-body">{{ words.emailed }} {{ s.scheme }} {{ words.acceptedAfter }}</p>
     {% elif d == "query" %}
-      <p class="govuk-body">
-        {{ s.scheme }}
-        {% if done.count == 1 %}{{ words.queryHasMessageOne }}{% elif done.count > 1 %}{{ words.queryHasMessageBefore }} {{ done.count }} {{ words.queryHasMessageAfter }}{% else %}{{ words.queryHasMessageWhole }}{% endif %}
-        {{ words.queryRespondBy }} {{ done.respondByLong }}.
-      </p>
-      <p class="govuk-body">{{ words.queryStatus }}</p>
+      <p class="govuk-body">{{ words.emailed }} {{ s.scheme }} {{ words.queryAfter }} {{ words.queryRespondBy }} {{ done.respondByLong }}.</p>
     {% else %}
-      <p class="govuk-body">{{ words.rejectedTold }} {{ s.scheme }} {{ words.rejectedToldAfter }}</p>
+      <p class="govuk-body">{{ words.emailed }} {{ s.scheme }} {{ words.returnedAfter }}</p>
     {% endif %}
 
   </div>

@@ -1,0 +1,35 @@
+{#
+  CONTINUE, at the bottom of all 5 pages of a submission (Flags, Submission
+  details, Members, Changes and Scheme details). Marie, 18 November.
+
+  Why: Make a decision sat at the top of Flags and Members, before you'd
+  looked at anything. Now you check first, tick any members you want to
+  ask the scheme about, and Continue at the end, close under the table.
+  The same green button at the bottom of every page, so you always know
+  where to go next. It goes to Selected members if any are ticked, if not
+  straight to Make a decision.
+
+  Two ways to use it:
+  - On Flags and Members, include it INSIDE the form with the ticks, with
+    continueTicks set to true: just the button. The line telling you to
+    tick ("Select any members you want to query.") is at the top of those
+    pages, before the ticks, not here after them (Marie, 18 November)
+  - On the other pages, include it as it is: it makes its own small form.
+    Anyone ticked on Flags or Members is still selected
+
+  The button says "Continue to make a decision", on every page, so it's
+  clear where it goes. No line of text above it (Marie, 18 November).
+  The words: app/content/regulator/v4/continue.md
+#}
+{% set continueWords = content("regulator/v4/continue") %}
+{% set continueButton = govukButton({ text: continueWords.button }) %}
+<div class="app-continue">
+  {% if continueTicks %}
+    {{ continueButton }}
+  {% else %}
+    <form method="post" action="{{ continueAction }}" novalidate>
+      <input type="hidden" name="from" value="{{ continueFrom }}">
+      {{ continueButton }}
+    </form>
+  {% endif %}
+</div>

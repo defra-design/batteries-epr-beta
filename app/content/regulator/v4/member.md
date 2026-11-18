@@ -97,14 +97,14 @@ New this quarter
 ## None this quarter (none in the quarter shown)
 None this quarter
 
-## Select for decision (a tickbox at the bottom of the page)
-Select this member for a decision
+## Select for decision (a small tickbox at the bottom of the page, above Continue. "Query", the same word as "Select any members you want to query" on Flags and Members)
+Query this member
 
-## Back to flags (a button at the bottom, when you came from Flags)
+## Back to flags (a grey button at the bottom, beside Continue, when you came from Flags)
 Back to flags
 
-## Back to members (a button at the bottom, when you came from Members)
+## Back to members (a grey button at the bottom, beside Continue, when you came from Members)
 Back to members
 
-## Go to members (a button at the bottom, when you came from Changes: it goes to Members, where you can make a decision)
-Go to members
+## Back to changes (a grey button at the bottom, beside Continue, when you came from Changes)
+Back to changes

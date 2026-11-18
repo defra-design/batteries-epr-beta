@@ -7,8 +7,8 @@ Done? Select Commit changes. It's live in about 5 minutes.
 ## Back link
 Back
 
-## Heading
-Member figures
+## Heading (the same as the sub navigation)
+Members
 
 ## Search label
 Name or registration number
@@ -25,7 +25,7 @@ Former
 ## All (filter option)
 All
 
-## Search button
+## Search button (green: the main thing you do at the top of this page)
 Search
 
 ## Reset button (goes back to every current member)
@@ -43,20 +43,14 @@ of
 ## Members (after the numbers)
 members
 
-## Compared with (after the numbers, before the quarter, for example "Change is compared with April to June 2026")
-Change is compared with
 
 ## No members
 No members match your search. Check the name or registration number, or reset the search.
 
-## Tick intro (above Make a decision)
-Select any members you want to ask the scheme about, then make a decision.
 
-## Make a decision button (accept, query or reject the submission)
-Make a decision
 
 ## Table caption (only screen readers hear this)
-Member figures
+Members
 
 ## Select column (only screen readers hear this, it's hidden on screen)
 Select
@@ -74,7 +68,7 @@ Registration number
 Membership
 
 ## Change column (the chemistry that changed most, for example "Other: up 0.50 (42%)")
-Biggest change
+Largest change
 
 ## Action column (only screen readers hear this, it's hidden on screen)
 Action
@@ -102,3 +96,6 @@ None this quarter
 
 ## Pagination label (only screen readers hear this, it names the page links under the table)
 Pages of members
+
+## Compare line (first line under the heading: what the Largest change column compares)
+Largest change compares this quarter with the previous one.

@@ -11,7 +11,7 @@ Back
 Changes to figures
 
 ## Intro (paragraphs welcome)
-Each time the scheme changed a member's figures after first sending this return. The figures first sent are kept as they were.
+Changes to the figures in this return.
 
 ## Table caption (only screen readers hear this)
 Changes to figures

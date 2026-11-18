@@ -15,9 +15,12 @@
   content isn't pushed down (Marie, 17 November). Submitted, status and
   version are on Submission details:
   - The scheme in the caption, then "July to September 2026 submission"
-  - The sub navigation (MOJ sub navigation): Flags (with how many), Submission
-    details, Members, Changes and Scheme details. The page you're on is marked for screen
-    readers (aria-current)
+  - The sub navigation (MOJ sub navigation): Flags (with how many), Members,
+    Submission details, Changes and Scheme details. Flags and Members side by
+    side, as both are where you tick members to query; Submission details
+    next to Changes; who the scheme is last (Marie, 18 November evening. Was
+    Flags, Submission details, Members). The page you're on is marked for
+    screen readers (aria-current)
 
   Needs from the route (submissionTabs in app/routes/v4.js): submission and tabs.
   The download of the whole return is in "Files in this submission", on
@@ -38,8 +41,8 @@
   label: hw.subNavigationLabel,
   items: [
     { text: hw.flags + " (" + submission.flags.length + ")", href: tabs.flags, active: tabs.current == "flags" },
-    { text: hw.submissionDetails, href: tabs.details, active: tabs.current == "details" },
     { text: hw.members, href: tabs.members, active: tabs.current == "members" },
+    { text: hw.submissionDetails, href: tabs.details, active: tabs.current == "details" },
     { text: hw.changes, href: tabs.changes, active: tabs.current == "changes" },
     { text: hw.schemeDetails, href: tabs.scheme, active: tabs.current == "scheme" }
   ]

@@ -1,14 +1,26 @@
 {
-  "title": "Show members 30 at a time, sorted on the server (EB-366)",
+  "title": "Show 30 members at a time on the Members page (EB-366)",
   "type": "change",
   "date": "2026-11-18",
-  "why": "Members in version 4 now shows 30 members a page, with page links under the table. Recycling Lives has 281 members: on one page, that's a very long scroll, and over 560 tab stops for a keyboard user (a tickbox and a View figures link on every row).\n\n**Why 30**\n\n- Alex's registration list shows 20. 30 is long enough to scan without changing page all the time, and still short enough to tab through. We can change it if research says so\n\n**Sorted on the server**\n\n- Phil confirmed the APIs page and sort on the server (18 November). So the whole list is sorted, not just the page you're on. The MOJ sortable table we used before only sorted the rows on the page, which doesn't work once there are pages\n- Each column header is a link, with an arrow for the way it's sorted, the same as the Sorting column header in Defra Internal Frontend (Geoff's library). Press it again to turn the order round\n- Biggest change still comes first, biggest at the top. Member, Registration number and Membership sort A to Z first\n- The sort and page are in the address, so Back, bookmarks and sharing a link all work, and it works without JavaScript\n\n**Search and ticks**\n\n- Search and Membership look at every member, not just this page, and go back to page 1\n- Ticks carry across pages: tick on page 1, go to page 2, tick more, then Make a decision. Without JavaScript, ticks save when you press Make a decision, so press it before changing page\n- No Select all on Members, so paging doesn't change what Select all means. Flags has under 30, so it isn't paged\n\n**To test with regulators**\n\n- Is 30 a page right, or do they want more?\n- Do they sort by anything other than Biggest change?",
+  "why": "The Members page now shows 30 members at a time, with links to the other pages underneath. Before, all members were on one page. Recycling Lives has 281 members, so this meant a lot of scrolling. A keyboard user would also have had to press Tab more than 560 times to reach the end, because each row has a tickbox and a link.\n\n**Why 30**\n\nAlex's registration list shows 20 at a time. We chose 30 because it is long enough to scan without changing page too often, but still quick to move through with a keyboard. We can change this if research shows regulators want more or fewer.\n\n**Sorting works across the whole list**\n\nPhil has confirmed that the system can sort long lists and split them into pages itself, on the server. This means sorting puts the whole list in order, not just the members on the current page. The sortable table we used before could only sort what was on the page, so it no longer worked.\n\nEach column heading is a link. Selecting it sorts the list, and selecting it again reverses the order. This works the same way as the sortable column heading in Defra Internal Frontend, Geoff's library of shared components. The list starts with the members whose figures changed most.\n\nThe sort order and page number are in the web address. This means the back button, bookmarks and shared links all work, and the page works without JavaScript.\n\n**Searching and selecting members**\n\nSearch and the membership filter look through all members, not just the current page, and take you back to page 1.\n\nMembers you select stay selected when you move between pages. Without JavaScript, your selections are saved when you select Continue to make a decision, so you need to do this before changing page.\n\nThere is no option to select all members, so paging does not affect that. The Flags page is not split into pages, because there are fewer than 30 flags.\n\n**Questions for research**\n\n- Is 30 members a page the right number?\n- Do regulators sort by anything other than the largest change?",
   "pages": [
-    { "label": "Members, page 1", "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures" },
-    { "label": "Members, page 2, sorted by name", "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures?status=current&sort=member%5Basc%5D&page=2" }
+    {
+      "label": "Members, page 1",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures"
+    },
+    {
+      "label": "Members, page 2, sorted by name",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures?status=current&sort=member%5Basc%5D&page=2"
+    }
   ],
   "beforeAfter": [
-    { "label": "Members, the top of page 1 (1280 pixels wide)", "after": "changes/add-paging-to-members/after--members-top-1280-pixels.png" },
-    { "label": "Members, the page links under the table (1280 pixels wide)", "after": "changes/add-paging-to-members/after--members-pages-1280-pixels.png" }
+    {
+      "label": "Members, the top of page 1 (1280 pixels wide)",
+      "after": "changes/add-paging-to-members/after--members-top-1280-pixels.png"
+    },
+    {
+      "label": "Members, the page links under the table (1280 pixels wide)",
+      "after": "changes/add-paging-to-members/after--members-pages-1280-pixels.png"
+    }
   ]
 }

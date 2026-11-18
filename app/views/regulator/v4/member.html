@@ -61,11 +61,10 @@
 {% set wordsFile = "regulator/v4/member" %}
 {% set words = content(wordsFile) %}
 
-{# The button at the bottom: back to where you came from #}
-{# From Changes, the button goes to Members, where you can tick more and
-   make a decision: Changes has nothing to act on (Marie, 18 November). The
-   Back link at the top still goes to Changes #}
-{% set backText = { submission: words.backToFlags, changes: words.goToMembers, list: words.backToMembers }[from] %}
+{# The grey button at the bottom: back to where you came from, beside
+   Continue (Marie, 18 November evening). Was the only button, and from
+   Changes it went to Members #}
+{% set backText = { submission: words.backToFlags, changes: words.backToChanges, list: words.backToMembers }[from] %}
 
 {% set pageName = member.name + ", " + org.name + " (version 4)" %}
 
@@ -221,7 +220,8 @@
     </div>
 
     {% if changeRows.length %}
-      <h2 class="govuk-heading-m">{{ words.changesHeading }}</h2>
+      {# id: View changes on the Changes page comes straight here #}
+      <h2 class="govuk-heading-m" id="changes">{{ words.changesHeading }}</h2>
       {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways #}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.changesHeading }}">
         {{ govukTable({
@@ -239,21 +239,31 @@
       </div>
     {% endif %}
 
-    {# At the bottom, once you've looked: select this member for a decision,
-       then back to where you came from, where they show as ticked (EB-367).
+    {# At the bottom, once you've looked (EB-367, Marie, 18 November
+       evening): a tickbox (normal size: not small), "Query this member", the same word as
+       "Select any members you want to query" on Flags and Members. Not
+       ticked to start with. Then Continue (green, the same as at the bottom
+       of every page: on to Selected members or Make a decision), or the grey
+       Back button, back to where you came from, where they show as ticked.
        One form. shown: this member, so unticking here removes them. With
        JavaScript the tick saves straight away (add-on: saveTicks); without,
-       the Back button saves it #}
+       either button saves it #}
+    {% set continueWords = content("regulator/v4/continue") %}
     <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}" class="govuk-!-margin-top-6">
       <input type="hidden" name="shown" value="{{ member.bprn }}">
-      <input type="hidden" name="back" value="{{ membersHref if from == 'changes' else backHref }}">
+      <input type="hidden" name="back" value="{{ backHref }}">
+      {# Back on Make a decision comes back to this page #}
+      <input type="hidden" name="from" value="{{ currentUrl }}">
       {{ govukCheckboxes({
         name: "members",
         items: [
           { value: member.bprn, text: words.selectForDecision, checked: selected }
         ]
       }) }}
-      {{ govukButton({ text: backText }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({ text: continueWords.button, name: "next", value: "continue" }) }}
+        {{ govukButton({ text: backText, name: "next", value: "back", classes: "govuk-button--secondary" }) }}
+      </div>
     </form>
 
   </div>

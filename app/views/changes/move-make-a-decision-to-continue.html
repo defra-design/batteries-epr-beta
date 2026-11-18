@@ -1,0 +1,71 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Move the decision button to the bottom of every page (EB-367)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">18 November 2026</span>
+<h1 class="govuk-heading-l">Move the decision button to the bottom of every page (EB-367)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<p class="govuk-body">The Make a decision button used to be at the top of the Flags and Members pages, above the table. This asked regulators to decide before they had looked at anything. In Alex's regulator prototype, the Assign button works at the top because assigning is the main job on that page. Here, regulators need to check the submission first.</p>
+<p class="govuk-body"><strong>The same button at the bottom of every page</strong></p>
+<p class="govuk-body">All 5 pages of a submission now end with the same green button: Continue to make a decision. The pages are Flags, Members, Submission details, Changes and Scheme details. Wherever regulators are, the next step is in the same place.</p>
+<p class="govuk-body">On Flags and Members, the button sits just below the table. A line at the top of these pages says &quot;Select any members you want to query.&quot; We put this line at the top because at the bottom it came after the tickboxes, which was too late.</p>
+<p class="govuk-body">Selecting members is optional. If none are selected, the button goes straight to the decision page. Members selected on Flags stay selected on Members, and the other way round.</p>
+<p class="govuk-body"><strong>The Members page</strong></p>
+<p class="govuk-body">The Members page now starts with 2 short lines: &quot;Select any members you want to query.&quot; and &quot;Largest change compares this quarter with the previous one.&quot; The heading already says which quarter it is, so the second line does not repeat it.</p>
+<p class="govuk-body">We changed &quot;Biggest change&quot; to &quot;Largest change&quot;, because &quot;biggest&quot; did not sound right. We did not use &quot;variance&quot;, because that is already the name of a type of flag.</p>
+<p class="govuk-body">The Search button is now green, because searching is the main thing regulators do at the top of this page. Defra Internal Frontend also uses a green search button. This means the Members page has 2 green buttons.</p>
+<p class="govuk-body"><strong>A member's page</strong></p>
+<p class="govuk-body">At the bottom of a member's page there is now a tickbox, &quot;Query this member&quot;. Below it are the green Continue to make a decision button and a grey button to go back to Flags, Members or Changes, depending on where the regulator came from.</p>
+<p class="govuk-body">Before, the tickbox said &quot;Select this member for a decision&quot;, and there was only one button, which went back to the list.</p>
+<p class="govuk-body">We use the word &quot;query&quot; throughout: &quot;Select any members you want to query&quot;, &quot;Query this member&quot; and &quot;Query the submission&quot;.</p>
+<p class="govuk-body"><strong>Questions for research</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Do regulators find the button at the bottom, or do they look for it at the top?</li><li>On Members, do regulators select members on several pages, or continue straight away?</li></ul>
+<p class="govuk-body">The wording in the prototype is a draft for content design to review.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Flags</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Members</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/details">Submission details</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037?from=submission">One member (from Flags)</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Flags, with Continue under the table (1280 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/move-make-a-decision-to-continue/after--flags-1280-pixels.png" alt="Flags, with Continue under the table (1280 pixels wide)" class="app-change-screenshot" width="640">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, the top: what the table shows, and a green Search (1280 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/move-make-a-decision-to-continue/after--members-top-1280-pixels.png" alt="Members, the top: what the table shows, and a green Search (1280 pixels wide)" class="app-change-screenshot" width="640">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, the bottom: Continue, then the page links (1280 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/move-make-a-decision-to-continue/after--members-bottom-1280-pixels.png" alt="Members, the bottom: Continue, then the page links (1280 pixels wide)" class="app-change-screenshot" width="640">
+</div>
+</div>
+<h2 class="govuk-heading-m">Submission details, the bottom (1280 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/move-make-a-decision-to-continue/after--details-bottom-1280-pixels.png" alt="Submission details, the bottom (1280 pixels wide)" class="app-change-screenshot" width="640">
+</div>
+</div>
+
+{% endblock %}

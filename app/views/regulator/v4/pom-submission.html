@@ -7,18 +7,20 @@
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3
 
   The first of 5 pages of a submission, with a sub navigation between them
-  (Flags, Submission details, Members, Changes, Scheme details). The top of the page is the
+  (Flags, Members, Submission details, Changes, Scheme details). The top of the page is the
   same on all 5: v4/_submission-header.html. Flags come first: they're what
   regulators want to see most, and they decide whether to accept or query
   (Jen, 17 November). Was: the flags, then the submission details under
   them, then View member data, all on this page.
 
   Make a decision (EB-367, Marie, 18 November): tick the members you want
-  to ask about, then Make a decision (a green button, above the table). With
+  to ask about, then Continue (a green button, close under the table, the
+  same at the bottom of all 5 pages: v4/_continue.html; was Make a decision
+  above the table, Marie, 18 November). With
   members ticked it goes to Selected members; with none, straight to Make a
   decision. With JavaScript each tick is saved as you make it, so you can
   tick on Flags, move to Members and tick more (add-on: saveTicks in
-  application.js). Without it, a plain form saves them on Make a decision. Nothing is ticked
+  application.js). Without it, a plain form saves them on Continue. Nothing is ticked
   to start with, but anyone you've already selected stays ticked.
   Select all (add-on: MOJ multi-select): with JavaScript, a checkbox in the
   table's heading ticks every flag. On Flags only, not Members (to test).
@@ -85,20 +87,18 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+    {# What you do here, before the tickboxes (Marie, 18 November). The same
+       line as on Members #}
+    {% if flagRows.length %}
+      {% set continueWords = content("regulator/v4/continue") %}
+      <p class="govuk-body">{{ continueWords.selectLine }}</p>
+    {% endif %}
 
     {# One form: the ticks and Make a decision. shown: the members on this
        page, so unticking one here removes them (app/routes/v4-decision.js) #}
     <form method="post" action="{{ decisionAction }}" novalidate data-app-save-ticks="{{ decisionAction | replace('/start', '/save') }}">
       <input type="hidden" name="from" value="{{ from }}">
       {% for flag in flags %}{% if flag.bprn %}<input type="hidden" name="shown" value="{{ flag.bprn }}">{% endif %}{% endfor %}
-
-      {% if flagRows.length %}
-        <p class="govuk-body">{{ words.tickIntro }}</p>
-      {% endif %}
-
-      {# Make a decision: accept, query or reject. At the top, so it's there
-         without scrolling past every flag (Marie, 18 November) #}
-      {{ govukButton({ text: words.makeADecisionButton }) }}
 
       {% if flagRows.length %}
         {# Add-ons: MOJ scrollable pane (on a phone only the table scrolls
@@ -123,6 +123,10 @@
         <p class="govuk-body">{{ words.noFlags }}</p>
         <p class="govuk-body">{{ words.allPassedBefore }} {{ membersCount }} {{ words.allPassedAfter }}</p>
       {% endif %}
+      {# Continue, close under the table: the same at the bottom of all 5
+         pages (Marie, 18 November). Was Make a decision, above the table #}
+      {% set continueTicks = true %}
+      {% include "regulator/v4/_continue.html" %}
     </form>
   </div>
 </div>

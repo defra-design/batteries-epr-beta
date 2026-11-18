@@ -5,7 +5,7 @@
   since the scheme first sent it. New page.
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/changes
   The fourth of the submission's 5 pages, with a sub navigation between them
-  (Flags, Submission details, Members, Changes, Scheme details). The top of the page is the
+  (Flags, Members, Submission details, Changes, Scheme details). The top of the page is the
   same on all 5: v4/_submission-header.html.
 
   From Ian's "Amendment history" design (alpha, Figma), worked up with Gareth.
@@ -93,6 +93,13 @@
     {% else %}
       <p class="govuk-body">{{ words.noChanges }}</p>
     {% endif %}
+  </div>
+</div>
+
+{# Continue to make a decision: the same at the bottom of all 5 pages (Marie, 18 November) #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% include "regulator/v4/_continue.html" %}
   </div>
 </div>
 {% endblock %}

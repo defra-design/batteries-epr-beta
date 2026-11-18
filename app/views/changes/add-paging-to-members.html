@@ -1,7 +1,7 @@
 {# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
 {% extends "layouts/areas.html" %}
 
-{% set pageName = "Show members 30 at a time, sorted on the server (EB-366)" %}
+{% set pageName = "Show 30 members at a time on the Members page (EB-366)" %}
 {% set area = "changes" %}
 
 {% block beforeContent %}
@@ -12,21 +12,25 @@
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
 <span class="govuk-caption-l">18 November 2026</span>
-<h1 class="govuk-heading-l">Show members 30 at a time, sorted on the server (EB-366)</h1>
+<h1 class="govuk-heading-l">Show 30 members at a time on the Members page (EB-366)</h1>
 <p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
 </div>
 </div>
 <div class="govuk-grid-row">
 <div class="govuk-grid-column-two-thirds">
-<p class="govuk-body">Members in version 4 now shows 30 members a page, with page links under the table. Recycling Lives has 281 members: on one page, that's a very long scroll, and over 560 tab stops for a keyboard user (a tickbox and a View figures link on every row).</p>
+<p class="govuk-body">The Members page now shows 30 members at a time, with links to the other pages underneath. Before, all members were on one page. Recycling Lives has 281 members, so this meant a lot of scrolling. A keyboard user would also have had to press Tab more than 560 times to reach the end, because each row has a tickbox and a link.</p>
 <p class="govuk-body"><strong>Why 30</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Alex's registration list shows 20. 30 is long enough to scan without changing page all the time, and still short enough to tab through. We can change it if research says so</li></ul>
-<p class="govuk-body"><strong>Sorted on the server</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Phil confirmed the APIs page and sort on the server (18 November). So the whole list is sorted, not just the page you're on. The MOJ sortable table we used before only sorted the rows on the page, which doesn't work once there are pages</li><li>Each column header is a link, with an arrow for the way it's sorted, the same as the Sorting column header in Defra Internal Frontend (Geoff's library). Press it again to turn the order round</li><li>Biggest change still comes first, biggest at the top. Member, Registration number and Membership sort A to Z first</li><li>The sort and page are in the address, so Back, bookmarks and sharing a link all work, and it works without JavaScript</li></ul>
-<p class="govuk-body"><strong>Search and ticks</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Search and Membership look at every member, not just this page, and go back to page 1</li><li>Ticks carry across pages: tick on page 1, go to page 2, tick more, then Make a decision. Without JavaScript, ticks save when you press Make a decision, so press it before changing page</li><li>No Select all on Members, so paging doesn't change what Select all means. Flags has under 30, so it isn't paged</li></ul>
-<p class="govuk-body"><strong>To test with regulators</strong></p>
-<ul class="govuk-list govuk-list--bullet"><li>Is 30 a page right, or do they want more?</li><li>Do they sort by anything other than Biggest change?</li></ul>
+<p class="govuk-body">Alex's registration list shows 20 at a time. We chose 30 because it is long enough to scan without changing page too often, but still quick to move through with a keyboard. We can change this if research shows regulators want more or fewer.</p>
+<p class="govuk-body"><strong>Sorting works across the whole list</strong></p>
+<p class="govuk-body">Phil has confirmed that the system can sort long lists and split them into pages itself, on the server. This means sorting puts the whole list in order, not just the members on the current page. The sortable table we used before could only sort what was on the page, so it no longer worked.</p>
+<p class="govuk-body">Each column heading is a link. Selecting it sorts the list, and selecting it again reverses the order. This works the same way as the sortable column heading in Defra Internal Frontend, Geoff's library of shared components. The list starts with the members whose figures changed most.</p>
+<p class="govuk-body">The sort order and page number are in the web address. This means the back button, bookmarks and shared links all work, and the page works without JavaScript.</p>
+<p class="govuk-body"><strong>Searching and selecting members</strong></p>
+<p class="govuk-body">Search and the membership filter look through all members, not just the current page, and take you back to page 1.</p>
+<p class="govuk-body">Members you select stay selected when you move between pages. Without JavaScript, your selections are saved when you select Continue to make a decision, so you need to do this before changing page.</p>
+<p class="govuk-body">There is no option to select all members, so paging does not affect that. The Flags page is not split into pages, because there are fewer than 30 flags.</p>
+<p class="govuk-body"><strong>Questions for research</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Is 30 members a page the right number?</li><li>Do regulators sort by anything other than the largest change?</li></ul>
 <h2 class="govuk-heading-m">Pages</h2>
 <ul class="govuk-list">
 <li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Members, page 1</a></li>

@@ -6,34 +6,32 @@
 // to find and to hand over. Every address starts with the submission's, for
 // example /regulator/pom-submissions/v4/recycling-lives/2026/3
 //
-// The journey (agreed with Marie, 18 November):
+// The journey (Marie, 18 November evening, after a heuristic review):
 //
-//   Flags or Members: tick the members you want to ask about (or none), then
-//   Make a decision. Not on a member's page, but you can select the member
-//   there, at the bottom, then go back
-//     POST .../decision/start       saves the ticks, then:
-//       with members ticked        > .../decision/members  (Selected members)
-//       with none                  > .../decision           (Make a decision)
-//     POST .../decision/select      on a member's page: tick "Select this
-//                                   member for a decision", then Back to
+//   Any page of a submission: tick the members you want to query on Flags or
+//   Members (or none), then Continue at the bottom of the page
+//     POST .../decision/start       saves the ticks, then Make a decision
+//     POST .../decision/select      on a member's page: tick "Query this
+//                                   member", then Continue, or Back to
 //                                   flags, members or changes, where they
 //                                   show as ticked
 //     POST .../decision/save        with JavaScript, each tick is saved as
 //                                   you make it, so ticks on Flags are still
 //                                   there after you move to Members
 //
-//   .../decision/members                                       > v4/selected-members.html
-//     Selected members: each ticked to start with, with what made you look
-//     (a flag, or the biggest change) and an optional short question.
-//     Untick to remove. Continue, or Add more members (back to Members,
-//     keeping what's here)
 //   .../decision                                               > v4/decision.html
-//     Make a decision: accept, query (with a respond by date) or reject, then
-//     a message to the scheme and a file, whatever you choose.
-//     Continue checks the answers, then goes straight to the confirmation
-//     (no check your answers page)
+//     Make a decision, all on one page: the members you selected (Change
+//     members), accept, query (with a respond by date) or return, then a
+//     message to the scheme and a file, and an internal note only
+//     regulators see. Send to the scheme checks the answers, then the
+//     confirmation
 //   .../decision/done                                          > v4/decision-done.html
-//     The confirmation: a panel and what happens next, for the decision made
+//     The confirmation: a panel and one line of what happens next
+//
+//   Was (18 November): Selected members (a message about each member) and
+//   Check your decision as well. Dropped the same evening: no user need asks
+//   for a message about each member, and with everything on one page there's
+//   nothing to check that isn't already on screen
 //
 // What's ticked and typed is kept in the session, one submission at a time
 // (req.session.data.v4Decisions, so Clear data in the footer clears it),
@@ -74,7 +72,7 @@ function decisionFor (req, scheme, year, quarter) {
   const key = scheme + '/' + year + '/' + quarter
   req.session.data = req.session.data || {}
   req.session.data.v4Decisions = req.session.data.v4Decisions || {}
-  req.session.data.v4Decisions[key] = req.session.data.v4Decisions[key] || { members: [], questions: {}, answers: {}, from: null }
+  req.session.data.v4Decisions[key] = req.session.data.v4Decisions[key] || { members: [], answers: {}, from: null }
   return req.session.data.v4Decisions[key]
 }
 
@@ -95,7 +93,6 @@ function load (req) {
     decision: decisionFor(req, scheme, year, quarter),
     urls: {
       start: here + '/decision/start',
-      selected: here + '/decision/members',
       decision: here + '/decision',
       done: here + '/decision/done',
       flags: here,
@@ -104,10 +101,15 @@ function load (req) {
   }
 }
 
-// Where Make a decision goes: Selected members if any are ticked, if not
-// straight to Make a decision (Marie, 18 November)
+// A new decision starts clear: nothing chosen on the decision page (Marie,
+// 18 November)
+function startFresh (s) {
+  s.decision.answers = {}
+}
+
+// Where Continue goes: Make a decision
 function next (s) {
-  return s.decision.members.length ? s.urls.selected : s.urls.decision
+  return s.urls.decision
 }
 
 // "7 December 2026"
@@ -153,6 +155,7 @@ module.exports = (router) => {
     saveTicks(s, req.body)
     // Back from Selected members goes to the page you came from
     s.decision.from = safeBack(req.body.from, s.urls.flags)
+    startFresh(s)
     res.redirect(next(s))
   })
 
@@ -165,6 +168,13 @@ module.exports = (router) => {
     const s = load(req)
     if (!s) return next_()
     saveTicks(s, req.body)
+    // Continue: on to Selected members or Make a decision, as from any
+    // other page. The grey Back button: back where you came from
+    if (req.body.next === 'continue') {
+      s.decision.from = safeBack(req.body.from, s.urls.flags)
+      startFresh(s)
+      return res.redirect(next(s))
+    }
     res.redirect(safeBack(req.body.back, s.urls.flags))
   })
 
@@ -173,51 +183,6 @@ module.exports = (router) => {
     if (!s) return next_()
     saveTicks(s, req.body)
     res.status(204).end()
-  })
-
-  // Selected members
-  router.get(SUBMISSION + '/decision/members', (req, res, next_) => {
-    const s = load(req)
-    if (!s) return next_()
-    if (!s.decision.members.length) return res.redirect(s.urls.decision)
-    const key = s.year + '-' + s.quarter
-    const compareKey = figures.previousQuarter(key)
-    const selected = s.decision.members
-      .map(bprn => s.members.find(m => m.bprn === bprn))
-      .filter(Boolean)
-      .map(m => ({
-        ...m,
-        question: s.decision.questions[m.bprn] || '',
-        // What made you look: the member's flags, or their biggest change
-        flags: s.submission.flags.filter(f => f.producer === m.name),
-        biggest: figures.biggestChange(m, key, compareKey)
-      }))
-    res.render('regulator/v4/selected-members', {
-      submission: s.submission,
-      selected,
-      formAction: s.urls.selected,
-      backHref: s.decision.from || s.urls.flags
-    })
-  })
-
-  // Selected members: keep the ticked ones and their questions. Continue goes
-  // to Make a decision; Add more members goes back to Members (Marie, 18 November)
-  router.post(SUBMISSION + '/decision/members', (req, res, next_) => {
-    const s = load(req)
-    if (!s) return next_()
-    const ticked = new Set(list(req.body.members))
-    s.decision.members = s.decision.members.filter(b => ticked.has(b))
-    const questions = {}
-    s.decision.members.forEach(b => {
-      const q = String(req.body['question-' + b] || '').trim().slice(0, 200)
-      if (q) questions[b] = q
-    })
-    s.decision.questions = questions
-    if (req.body.next === 'add') {
-      s.decision.from = s.urls.members
-      return res.redirect(s.urls.members)
-    }
-    res.redirect(s.urls.decision)
   })
 
   // Make a decision
@@ -230,7 +195,6 @@ module.exports = (router) => {
     ['message', '#message']
   ]
   function renderDecision (req, res, s, errors) {
-    const count = s.decision.members.length
     const words = content('regulator/v4/decision')
     const err = {}
     const errorList = []
@@ -241,24 +205,32 @@ module.exports = (router) => {
     })
     res.render('regulator/v4/decision', {
       submission: s.submission,
-      count,
+      // The members you selected, in the order you picked them, each with
+      // why you picked them, to jog your memory when you write the message
+      // (Marie, 18 November): their flags, or if they have none, their
+      // largest change on the quarter before
+      members: s.decision.members
+        .map(bprn => s.members.find(m => m.bprn === bprn))
+        .filter(Boolean)
+        .map(m => ({
+          name: m.name,
+          bprn: m.bprn,
+          flags: s.submission.flags.filter(f => f.producer === m.name),
+          largest: figures.biggestChange(m, s.year + '-' + s.quarter, figures.previousQuarter(s.year + '-' + s.quarter))
+        })),
       answers: s.decision.answers,
       err,
       errorList,
       formAction: s.urls.decision,
-      // Change, in the line at the top: the members you've selected, or
-      // Members to pick some if there are none
-      changeHref: count ? s.urls.selected : s.urls.members,
-      backHref: count ? s.urls.selected : (s.decision.from || s.urls.flags)
+      backHref: s.decision.from || s.urls.flags
     })
   }
 
-  // The page is clear when you come to it: nothing chosen (Marie, 18
-  // November). Answers only come back after an error, to fix them
+  // Clear when you come from a submission page (startFresh, above). Your
+  // answers are still there when you come back with Change
   router.get(SUBMISSION + '/decision', (req, res, next_) => {
     const s = load(req)
     if (!s) return next_()
-    s.decision.answers = {}
     renderDecision(req, res, s)
   })
 
@@ -266,6 +238,9 @@ module.exports = (router) => {
     const s = load(req)
     if (!s) return next_()
     const b = req.body
+    // All 3 options, whatever's ticked: open for now, firm up the logic in
+    // user stories after research (David, team walkthrough, 18 November).
+    // "reject" is the value; the words say Return (Alice and Caz)
     const decision = ['accept', 'query', 'reject'].includes(b.decision) ? b.decision : ''
     const answers = {
       decision,
@@ -275,7 +250,9 @@ module.exports = (router) => {
       respondByMonth: String(b['respondBy-month'] || '').trim(),
       respondByYear: String(b['respondBy-year'] || '').trim(),
       // Prototype only: without a file upload service, only the file's name comes through
-      file: String(b.file || '').trim()
+      file: String(b.file || '').trim(),
+      // For regulators only: never sent to the scheme (UN-061)
+      note: String(b.note || '').trim().slice(0, 1000)
     }
     s.decision.answers = answers
 
@@ -294,11 +271,11 @@ module.exports = (router) => {
 
     if (Object.keys(errors).length) return renderDecision(req, res, s, errors)
 
-    // Done: straight to the confirmation. No check your answers page:
-    // regulators have just made their choices on this page, and it's an
-    // internal service (Marie, 18 November). What was decided is kept for
-    // the confirmation, and the ticks, questions and answers are cleared, so
-    // the next decision starts fresh
+    // All good: send it. What was decided is kept for the confirmation, and
+    // the ticks and answers are cleared, so the next decision starts fresh.
+    // Prototype only: it isn't added to Submission details, and the status
+    // doesn't change. That would need the status to move on too, which is
+    // more than research needs (Marie, 18 November)
     const date = decision === 'query' ? checkDate(answers.respondByDay, answers.respondByMonth, answers.respondByYear) : null
     s.decision.done = {
       decision,
@@ -306,7 +283,6 @@ module.exports = (router) => {
       respondByLong: date ? longDate(date.iso) : ''
     }
     s.decision.members = []
-    s.decision.questions = {}
     s.decision.answers = {}
     res.redirect(s.urls.done)
   })

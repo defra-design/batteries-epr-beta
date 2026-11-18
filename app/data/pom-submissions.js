@@ -12,8 +12,10 @@
 // the past by research (David and Steve)
 //
 // The latest quarter shows each case once, so research can see them all
-// (18 November): overdue (sent 31 days ago), 10 days ago, 3 days ago, and
-// accepted (just the date).
+// (18 November): overdue (sent 31 days ago), 3 days ago, a query the scheme
+// has answered (no count: the clock stopped when the query was raised), and
+// accepted (just the date). Was: Recycling Lives was both Overdue and
+// Response received, which contradicted itself (Marie, 18 November)
 // Was: an escalated return from April to June 2026, overdue by 101 days, which
 // would throw people in research. No dummy return is Query raised or Escalated
 //
@@ -47,9 +49,11 @@ const STATUSES = {
 
 // The latest quarter (July to September 2026): a mix of statuses
 const LATEST = {
-  // Recycling Lives: sent 31 days before "today", so it shows Overdue
+  // Recycling Lives: queried on 28 October, and the scheme has answered
+  // (see Messages to the scheme and internal notes, on Submission details)
   'recycling-lives': { submitted: '2026-10-23', status: 'Response received' },
-  'erp-uk': { submitted: '2026-11-13', status: 'Under review' },
+  // ERP UK: sent 31 days before "today", so it shows Overdue
+  'erp-uk': { submitted: '2026-10-23', status: 'Under review' },
   batteryback: { submitted: '2026-11-20', status: 'To review' },
   valpak: { submitted: '2026-10-16', status: 'Accepted' }
 }
@@ -101,7 +105,9 @@ function all () {
         // Day 0 is the day it's sent, the next day is "1 day ago" (Mak, 18
         // November). To confirm (Mak is asking): whether the count starts
         // again when a scheme answers a query
-        const counting = open && status !== 'Query raised'
+        // Response received counts as queried too: the clock stopped when the
+        // query went (Marie, 18 November)
+        const counting = open && !['Query raised', 'Response received'].includes(status)
         const daysSince = counting ? daysBetween(submitted, TODAY) : null
         rows.push({
           scheme: scheme.name,

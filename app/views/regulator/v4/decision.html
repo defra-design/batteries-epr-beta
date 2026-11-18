@@ -1,51 +1,51 @@
 {% extends "layouts/regulator.html" %}
 
 {#
-  VERSION 4 (18 November 2026). EB-367: Make a decision. New page.
+  VERSION 4 (18 November 2026). EB-367: Make a decision.
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/decision
-  You get here from Selected members (Continue), or straight from Make a
-  decision on Flags or Members if no members are ticked.
+  You get here from Continue at the bottom of any page of a submission
+  (Flags, Members, Submission details, Changes, Scheme details), or from a
+  member's page.
 
-  Why: the regulator accepts, queries or rejects the whole submission
-  (EB-367, UN-068, UN-069). Agreed with Marie, 18 November.
+  Why: the regulator accepts, queries or returns the whole submission
+  (EB-367, UN-068, UN-069). Everything is on this one page, then Send to
+  the scheme (Marie, 18 November evening, after a heuristic review). Was 3
+  steps: Selected members (with a message about each member), this page,
+  then Check your decision. Dropped: no user need asks for a message about
+  each member, the reveals folded away oddly, and with everything on one
+  page there's nothing to check that isn't already on screen.
 
   Top to bottom:
-  - Back to Selected members, or the page you came from if none are selected
+  - Back to the page you came from
   - The scheme name in the caption, and the quarter, written out, then
-    "decision" as the heading ("July to September 2026 decision"), the same
-    pattern as the submission's own heading (Marie, 18 November)
-  - One line of playback: how many members are selected, with Change (to Selected members, or to Members to pick
-    some if there are none)
-  - "What's your decision?": 3 radios. All 3 are always there, whatever's
-    ticked: regulators are qualified, it's their job, and flexibility is
-    better than locking options away (Marie, 18 November). So you can tick
-    members and still accept. Whether that feels odd is a question for research
-    - Accept the submission
-    - Query 3 members (the number follows the ticks), or "Query the whole
-      submission" with none ticked. The only thing that opens up: Respond by
-      (UN-060), a GOV.UK date input, in the future
-    - Reject the whole submission
-    Not much in reveals: only the date (Marie, 18 November). Was: each
-    option opened its own questions
-  - Message to the scheme: one box, whatever you choose. Optional to accept,
-    required to query or reject (Mak, 18 November; alpha research: accepting
-    shouldn't need a reason). A hint under the label says so, rather than a
-    box that opens up. Was: always required
-  - Attach a file (optional), whatever you choose
-  - No internal notes: taken off (Marie, 18 November). There's a need
-    (UN-061), but nowhere yet to show them again, and too much on the page.
-    A question for research: do regulators need notes, and where would they
-    look for them (a history of the submission?)
-  - The page is clear when you come to it: nothing chosen. Answers only
-    stay after an error, to fix them (Marie, 18 November)
-  - Continue: checks the answers (GOV.UK error summary and messages), then
-    goes straight to the confirmation (v4/decision-done.html). No check your answers page: regulators have just made their choices on
-    this page, and it's an internal service (Marie, 18 November)
+    "decision" as the heading ("July to September 2026 decision")
+  - The members you selected: a summary list, each member with why you
+    picked them (their flags, or their largest change), so you don't have
+    to remember when you write the message (Marie, 18 November). No Change
+    link: Back takes you back. With none: "No members selected." Was a list
+    of names with Change members, which went back to wherever you'd been
+    last, even Changes
+  - "What's your decision?": Accept the submission, Query the submission,
+    Return the submission. All 3, whatever's ticked: very open for now,
+    and research asks whether you'd ever accept after picking members, or
+    query without picking any (David, team walkthrough, 18 November). With
+    members selected, Query has a hint: the email names them. "Return", not
+    "Reject": what the EA (Alice) and Caz call it, to take to the EA working
+    group. The only thing that opens up, under Query: Respond by (UN-060), a
+    GOV.UK date input, set by the regulator, in the future (Mak)
+  - Message to the scheme: optional to accept, required to query or return
+    (Mak; alpha research: accepting shouldn't need a reason). Then Attach a
+    file (optional), which goes with it
+  - Internal note (optional), with a short hint: the scheme won't see it,
+    and you can read it on Submission details (UN-061; regulators keep
+    "agency notes" in NPWD today). The labels say which is which, no extra
+    headings (Marie, 18 November: keep it lean. Was "To the scheme" and
+    "For regulators only" headings)
+  - Send to the scheme (green): the button says what it does. Then the
+    confirmation (v4/decision-done.html)
 
-  Not on this page: how the scheme is told (in the service, or by email or
-  phone, UN-059). That's a preference set up once, for example when the
-  scheme or regulator registers, not asked on every decision (Marie, 18
-  November). A question for research and the team.
+  Prototype only: what you send isn't added to Submission details, and the
+  status on the list doesn't change (Marie, 18 November: keep it simple).
 
   Prototype only: the file upload keeps the file's name, not the file.
 
@@ -57,6 +57,7 @@
 {% set words = content(wordsFile) %}
 {% set s = submission %}
 {% set a = answers %}
+
 {# err: each field's error message; errorList: the error summary (both from app/routes/v4-decision.js) #}
 {% set hasErrors = errorList.length > 0 %}
 
@@ -69,15 +70,24 @@
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
 {% endblock %}
 
+{#
+  A change in words: "up 0.50 (42%)", "down 0.02 (8%)", "no change", "new
+  this quarter" or "none this quarter". The same as on Members
+#}
+{% macro changeText(figure, words) -%}
+  {%- if figure.diff == 0 -%}{{ words.noChange }}
+  {%- elif figure.before == 0 -%}{{ words.newThisQuarter }}
+  {%- elif figure.now == 0 -%}{{ words.noneThisQuarter }}
+  {%- elif figure.diff > 0 -%}{{ words.up }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- else -%}{{ words.down }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- endif -%}
+{%- endmacro %}
+
 {% block content %}
 {# Built inside the block: the GOV.UK macros are only there once the layout has loaded them #}
-{# Query: the label follows how many members are selected #}
-{% if count == 1 %}
-  {% set queryLabel = words.queryBefore + " 1 " + words.member %}
-{% elif count > 1 %}
-  {% set queryLabel = words.queryBefore + " " + count + " " + words.members %}
-{% else %}
-  {% set queryLabel = words.queryWhole %}
+{# Query: with members selected, a hint says the email names them #}
+{% if members.length %}
+  {% set queryHint = words.queryHintBefore + " " + members.length + " " + (words.member if members.length == 1 else words.members) + " " + words.queryHintAfter %}
 {% endif %}
 
 {# Query: the only reveal, the date to respond by #}
@@ -106,11 +116,18 @@
     <span class="govuk-caption-l">{{ s.scheme }}</span>
     <h1 class="govuk-heading-l">{{ s.yearQuarterFull }} {{ words.heading }}</h1>
 
-    {# One line of playback, with Change #}
-    <p class="govuk-body">
-      {% if count == 1 %}1 {{ words.memberSelected }}.{% elif count > 1 %}{{ count }} {{ words.membersSelected }}.{% else %}{{ words.noMembersSelected }}{% endif %}
-      <a href="{{ changeHref }}" class="govuk-link">{{ words.changeLink }}<span class="govuk-visually-hidden"> {{ words.changeHidden }}</span></a>
-    </p>
+    {# The members you selected, each with why: their flags, or their largest change #}
+    {% if members.length %}
+      <p class="govuk-body">{{ members.length }} {{ words.memberSelected if members.length == 1 else words.membersSelected }}:</p>
+      {% set memberRows = [] %}
+      {% for m in members %}
+        {% set whyHtml %}{% if m.flags.length %}{% for f in m.flags %}<span class="govuk-!-display-block">{{ f.type }}: {{ f.found | replace(r/\.$/, "") }}</span>{% endfor %}{% else %}{{ words.largestChange }}: {{ m.largest.chemistry }}, {{ changeText(m.largest, words) | lower }}{% endif %}{% endset %}
+        {% set memberRows = (memberRows.push({ key: { text: m.name }, value: { html: whyHtml } }), memberRows) %}
+      {% endfor %}
+      {{ govukSummaryList({ rows: memberRows }) }}
+    {% else %}
+      <p class="govuk-body">{{ words.noMembersSelected }}</p>
+    {% endif %}
 
     {# Prototype only: a plain form, so the file upload sends the file's name,
        not the file. A real service sends the file #}
@@ -123,12 +140,11 @@
         errorMessage: err.decision,
         items: [
           { value: "accept", text: words.accept, checked: a.decision == "accept" },
-          { value: "query", text: queryLabel, checked: a.decision == "query", hint: { text: words.queryHint } if count else undefined, conditional: { html: queryHtml } },
+          { value: "query", text: words.query, checked: a.decision == "query", hint: { text: queryHint } if queryHint else undefined, conditional: { html: queryHtml } },
           { value: "reject", text: words.reject, checked: a.decision == "reject" }
         ]
       }) }}
 
-      {# One message to the scheme, whatever they choose #}
       {{ govukCharacterCount({
         id: "message",
         name: "message",
@@ -145,7 +161,17 @@
         label: { text: words.fileLabel, classes: "govuk-label--s" }
       }) }}
 
-      {{ govukButton({ text: words.continueButton }) }}
+      {# Only regulators see this: the hint says so #}
+      {{ govukCharacterCount({
+        id: "note",
+        name: "note",
+        value: a.note,
+        maxlength: 1000,
+        label: { text: words.noteLabel, classes: "govuk-label--s" },
+        hint: { text: words.noteHint }
+      }) }}
+
+      {{ govukButton({ text: words.sendButton }) }}
     </form>
 
   </div>

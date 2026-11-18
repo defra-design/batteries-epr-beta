@@ -66,3 +66,27 @@ Supporting document
 
 ## Download link (on each file: the file name is added for screen readers)
 Download
+
+## History heading (at the bottom, only when there's something to show)
+Messages to the scheme and internal notes
+
+## History query (a query sent to the scheme)
+Query sent to the scheme
+
+## History accept (an acceptance sent to the scheme)
+Acceptance sent to the scheme
+
+## History return (a return sent to the scheme: we say "return", not "reject")
+Return sent to the scheme
+
+## History note (an internal note: only regulators see these)
+Internal note
+
+## History about (before the members a query was about, for example "About Northpower Batteries Ltd, Acorn Hill Electrical Ltd.")
+About
+
+## History respond by (before the date)
+Respond by
+
+## History file (before the file's name)
+File:

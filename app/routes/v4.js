@@ -40,6 +40,7 @@ const pom = require('../data/pom-submissions')
 const details = require('../data/pom-submission-details')
 const figures = require('../data/member-figures')
 const amendments = require('../data/amendments')
+const messages = require('../data/submission-messages')
 
 const V4 = '/regulator/pom-submissions/v4'
 
@@ -64,6 +65,11 @@ function submissionTabs (req, scheme, year, quarter, current) {
       scheme: here + '/organisation-details'
     },
     downloadHref: here + '/download',
+    // Continue, at the bottom of all 5 pages (Marie, 18 November): to
+    // Selected members if any are ticked, if not to Make a decision
+    // (app/routes/v4-decision.js). from: so Back comes back to this page
+    continueAction: here + '/decision/start',
+    continueFrom: req.originalUrl,
     backHref: (req.session && req.session.v4ListBack) || V4 + '?year=' + year + '&quarter=' + quarter
   }
 }
@@ -219,6 +225,10 @@ module.exports = (router) => {
       downloadName: scheme + '-' + year + '-q' + quarter + '.csv',
       lastChanged: amendments.lastChanged(scheme, year, quarter),
       notBuiltHref: notBuilt(req.originalUrl),
+      // Messages to the scheme and internal notes, newest first (EB-367,
+      // Marie, 18 November). Dummy history only
+      history: messages.forSubmission(scheme, year, quarter),
+      changesHref: submissionUrl(scheme, year, quarter) + '/changes',
       ...submissionTabs(req, scheme, year, quarter, 'details')
     })
   })
@@ -273,7 +283,8 @@ module.exports = (router) => {
       submission,
       changes: amendments.forReturn(scheme, year, quarter).map(c => ({
         // ?from=changes: so Back on the member's page comes back here
-        ...c, href: here + '/member-figures/' + c.bprn + '?from=changes'
+        // #changes: straight to the member's changes, not the top of the page
+        ...c, href: here + '/member-figures/' + c.bprn + '?from=changes#changes'
       })),
       ...submissionTabs(req, scheme, year, quarter, 'changes')
     })
@@ -395,11 +406,10 @@ module.exports = (router) => {
       table: figures.comparison(member, show, compare),
       formAction: req.path,
       backHref,
-      // At the bottom: select this member for a decision, then back to
-      // where you came from, where they show as ticked (EB-367, Marie, 18
-      // November). The tick is saved by app/routes/v4-decision.js
+      // At the bottom: "Ask the scheme about this member", then Continue, or
+      // Back to where you came from, where they show as ticked (EB-367,
+      // Marie, 18 November). The tick is saved by app/routes/v4-decision.js
       selected: selectedMembers(req, scheme, year, quarter).includes(member.bprn),
-      membersHref: here + '/member-figures',
       selectAction: here + '/decision/select',
       saveAction: here + '/decision/save'
     })

@@ -1,0 +1,67 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Make a decision on one page, and see messages and notes on Submission details (EB-367)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">18 November 2026</span>
+<h1 class="govuk-heading-l">Make a decision on one page, and see messages and notes on Submission details (EB-367)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<p class="govuk-body">After the team walkthrough on 18 November, Marie reviewed the whole journey. These are the changes to making a decision, and why we made them.</p>
+<p class="govuk-body"><strong>Making a decision is now 1 page</strong></p>
+<p class="govuk-body">Regulators select any members they want to query, select Continue to make a decision, and then do everything on one page. Before, there was a separate Selected members page first.</p>
+<p class="govuk-body">We removed the Selected members page because:</p>
+<ul class="govuk-list govuk-list--bullet"><li>it had a box for a message about each member, but no user need asks for this</li><li>the boxes disappeared when a member was unticked, which was confusing</li><li>it added an extra step</li></ul>
+<p class="govuk-body">The decision page lists the selected members at the top. Each member shows why it was selected: its flag, or if it has no flags, its largest change. This helps regulators remember what they wanted to ask when they write their message. There is no Change link, because it was not clear where it would take you. Regulators can use the back link instead.</p>
+<p class="govuk-body">We tried adding a Check your decision page before sending, but took it out. Everything is already on one page, so it would only have repeated it. Instead, the button says what it does: Send to the scheme.</p>
+<p class="govuk-body"><strong>Accept, query or return</strong></p>
+<p class="govuk-body">Regulators can accept, query or return the submission, whichever members they have selected. Mak suggested that Accept should not be available when members are selected. David asked us to keep all 3 open for now and decide after research.</p>
+<p class="govuk-body">If members are selected, the Query option says the email will name them. If regulators query the submission, they must give a date for the scheme to respond by. Mak confirmed that regulators set this date and there is no standard period.</p>
+<p class="govuk-body">We now say &quot;return&quot; instead of &quot;reject&quot;. This is the word the Environment Agency uses, and &quot;reject&quot; can sound negative. David and Mak are checking this with the Environment Agency working group.</p>
+<p class="govuk-body"><strong>What goes to the scheme and what does not</strong></p>
+<p class="govuk-body">Regulators can write a message to the scheme. This is optional if they accept the submission, but they must write one if they query or return it. They can also attach a file.</p>
+<p class="govuk-body">Regulators can also add an internal note. The hint explains that the scheme will not see it, and that it can be read on Submission details. Regulators keep notes like this in the current system, NPWD.</p>
+<p class="govuk-body">We tried using headings to separate the message from the note, but took them out. The labels make the difference clear enough.</p>
+<p class="govuk-body"><strong>The confirmation page</strong></p>
+<p class="govuk-body">The confirmation page now has one sentence under &quot;What happens next&quot;. For example: &quot;We've emailed Recycling Lives Compliance Services Ltd your query. They need to respond by 7 December 2026.&quot; We removed the line about the status changing on the list of submissions.</p>
+<p class="govuk-body"><strong>Messages and notes on Submission details</strong></p>
+<p class="govuk-body">The list of submissions showed &quot;Response received&quot; for one submission, but nowhere showed what had been asked. The ticket needs the full back-and-forth with the scheme to be kept in the system.</p>
+<p class="govuk-body">Submission details now ends with a section called &quot;Messages to the scheme and internal notes&quot;, newest first. Each entry says what it is (Query sent to the scheme, Acceptance sent to the scheme, Return sent to the scheme, or Internal note), when it was sent and who sent it. The section only appears when there is something to show.</p>
+<p class="govuk-body">In the prototype, decisions you make are not added to this section, and the submission's status does not change. Showing them would mean changing the status as well, which research does not need.</p>
+<p class="govuk-body"><strong>Other changes</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The pages are now in this order: Flags, Members, Submission details, Changes, Scheme details. The 2 pages where regulators select members are next to each other, and Submission details is next to Changes.</li><li>The Members page heading is now &quot;Members&quot;, to match the link to it.</li><li>The Changes page now starts with &quot;Changes to the figures in this return.&quot; Selecting View changes takes you straight to that member's changes, not the top of their page.</li><li>&quot;Overdue&quot; no longer shows next to &quot;Response received&quot;. The count of days stops once a query has been sent. ERP UK Ltd is now the example of an overdue submission.</li></ul>
+<p class="govuk-body"><strong>Questions for research</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Would regulators ever accept a submission after selecting members, or query one without selecting any?</li><li>Is it clear what goes to the scheme and what stays with regulators?</li><li>Do regulators look for the history of a submission on Submission details?</li><li>Where do regulators expect to go after sending a decision?</li></ul>
+<p class="govuk-body">The wording in the prototype is a draft for content design to review.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Flags: tick a member, then Continue</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/details">Submission details, with Messages and notes</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Make a decision, with 2 members selected and Query chosen</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/update-decision-options-and-messages/after--decision-1100-pixels.png" alt="Make a decision, with 2 members selected and Query chosen" class="app-change-screenshot" width="550">
+</div>
+</div>
+<h2 class="govuk-heading-m">Messages and notes, at the bottom of Submission details</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/update-decision-options-and-messages/after--messages-and-notes.png" alt="Messages and notes, at the bottom of Submission details" class="app-change-screenshot">
+</div>
+</div>
+
+{% endblock %}

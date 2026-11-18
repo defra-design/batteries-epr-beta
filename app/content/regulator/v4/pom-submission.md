@@ -13,8 +13,6 @@ Flags
 ## Flags heading
 Flags
 
-## Tick intro (above Make a decision, when there are flags)
-Select any members you want to ask the scheme about, then make a decision.
 
 ## Select column (flags table: only screen readers hear this, it's hidden on screen)
 Select
@@ -49,5 +47,3 @@ All
 ## All passed after (after the number of members)
 members passed the checks.
 
-## Make a decision button (accept, query or reject the whole return)
-Make a decision

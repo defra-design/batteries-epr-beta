@@ -1,0 +1,42 @@
+{
+  "title": "Move the decision button to the bottom of every page (EB-367)",
+  "type": "change",
+  "date": "2026-11-18",
+  "why": "The Make a decision button used to be at the top of the Flags and Members pages, above the table. This asked regulators to decide before they had looked at anything. In Alex's regulator prototype, the Assign button works at the top because assigning is the main job on that page. Here, regulators need to check the submission first.\n\n**The same button at the bottom of every page**\n\nAll 5 pages of a submission now end with the same green button: Continue to make a decision. The pages are Flags, Members, Submission details, Changes and Scheme details. Wherever regulators are, the next step is in the same place.\n\nOn Flags and Members, the button sits just below the table. A line at the top of these pages says \"Select any members you want to query.\" We put this line at the top because at the bottom it came after the tickboxes, which was too late.\n\nSelecting members is optional. If none are selected, the button goes straight to the decision page. Members selected on Flags stay selected on Members, and the other way round.\n\n**The Members page**\n\nThe Members page now starts with 2 short lines: \"Select any members you want to query.\" and \"Largest change compares this quarter with the previous one.\" The heading already says which quarter it is, so the second line does not repeat it.\n\nWe changed \"Biggest change\" to \"Largest change\", because \"biggest\" did not sound right. We did not use \"variance\", because that is already the name of a type of flag.\n\nThe Search button is now green, because searching is the main thing regulators do at the top of this page. Defra Internal Frontend also uses a green search button. This means the Members page has 2 green buttons.\n\n**A member's page**\n\nAt the bottom of a member's page there is now a tickbox, \"Query this member\". Below it are the green Continue to make a decision button and a grey button to go back to Flags, Members or Changes, depending on where the regulator came from.\n\nBefore, the tickbox said \"Select this member for a decision\", and there was only one button, which went back to the list.\n\nWe use the word \"query\" throughout: \"Select any members you want to query\", \"Query this member\" and \"Query the submission\".\n\n**Questions for research**\n\n- Do regulators find the button at the bottom, or do they look for it at the top?\n- On Members, do regulators select members on several pages, or continue straight away?\n\nThe wording in the prototype is a draft for content design to review.",
+  "pages": [
+    {
+      "label": "Flags",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3"
+    },
+    {
+      "label": "Members",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures"
+    },
+    {
+      "label": "Submission details",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/details"
+    },
+    {
+      "label": "One member (from Flags)",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures/BPRN142037?from=submission"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Flags, with Continue under the table (1280 pixels wide)",
+      "after": "changes/move-make-a-decision-to-continue/after--flags-1280-pixels.png"
+    },
+    {
+      "label": "Members, the top: what the table shows, and a green Search (1280 pixels wide)",
+      "after": "changes/move-make-a-decision-to-continue/after--members-top-1280-pixels.png"
+    },
+    {
+      "label": "Members, the bottom: Continue, then the page links (1280 pixels wide)",
+      "after": "changes/move-make-a-decision-to-continue/after--members-bottom-1280-pixels.png"
+    },
+    {
+      "label": "Submission details, the bottom (1280 pixels wide)",
+      "after": "changes/move-make-a-decision-to-continue/after--details-bottom-1280-pixels.png"
+    }
+  ]
+}

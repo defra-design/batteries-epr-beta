@@ -16,6 +16,8 @@
  *   - links in the "why": [link text](https://...) opens in a new tab, with
  *     "(opens in new tab)" added to the link text, as GOV.UK asks.
  *     [link text](/changes/...) links to a page in this prototype, same tab
+ *   - "order" (optional, a number): on the same day, a higher order comes
+ *     first. For a summary of a day's changes, so it leads the list
  *   - screenshots show at half size, so phone and desktop are at the same scale
  *   - run it with: npm run changes
  *   - screenshots: for each page, one pair at 1020 pixels wide (desktop) and
@@ -152,7 +154,9 @@ const records = fs.readdirSync(RECORDS).filter(function (f) { return /^[a-z0-9-]
   if (r.slug === 'index') fail('app/data/changes/index.json: "index" is kept for the list of changes. Rename the record.')
   if (!r.title) fail('app/data/changes/' + f + ' has no title')
   return r
-}).sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')) || a.slug.localeCompare(b.slug) })
+// Newest first. On the same day, a higher "order" comes first (optional, for
+// a summary of that day's changes), then A to Z
+}).sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')) || ((b.order || 0) - (a.order || 0)) || a.slug.localeCompare(b.slug) })
 
 // Only replace pages this script made
 function write (file, content) {

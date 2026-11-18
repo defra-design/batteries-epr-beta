@@ -3,7 +3,7 @@
 {#
   VERSION 4 (17 November 2026): the details of one placed on the market
   submission. The second of 5 pages, with a sub navigation between them
-  (Flags, Submission details, Members, Changes, Scheme details). New page: these details
+  (Flags, Members, Submission details, Changes, Scheme details). New page: these details
   used to sit under the flags (Marie, 17 November).
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/details
 
@@ -21,6 +21,16 @@
     size, and Download. No "View": the pages already show the data. Was a
     Download (CSV) button at the top of every page, as in Alex's prototype,
     but it's a file like the others, so it sits with them
+  - Messages to the scheme and internal notes (EB-367, Marie, 18 November
+    evening), newest first: "Query sent to the scheme", "Acceptance sent to
+    the scheme", "Return sent to the scheme" and "Internal note" (only
+    regulators see these, UN-061). Each in plain text: what it is in bold,
+    when and who, then the words. Not there at all when there's nothing to
+    show. A submission is one quarter, so it's a short list, even if it
+    goes back and forth. It's where you see what was asked behind "Response
+    received" (heuristic review, 18 November). What the scheme changed is on
+    Changes, so it isn't repeated. Was an MOJ timeline: too much
+  - Continue to make a decision, as on every page
 
   The data: app/data/pom-submission-details.js (dummy).
   The words: app/content/regulator/v4/details.md
@@ -98,6 +108,31 @@
 
     <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
     {{ govukSummaryList({ rows: fileRows }) }}
+
+    {# Messages to the scheme and internal notes, newest first. Plain text:
+       what it is in bold, then when and who, then the words. Only there
+       when there's something to show #}
+    {% if history.length %}
+      <h2 class="govuk-heading-m">{{ words.historyHeading }}</h2>
+      {% for e in history %}
+        {% set label = { query: words.historyQuery, accept: words.historyAccept, reject: words.historyReturn, note: words.historyNote }[e.kind] %}
+        <div class="govuk-!-margin-bottom-6">
+          <p class="govuk-body govuk-!-margin-bottom-1"><strong>{{ label }}</strong></p>
+          <p class="govuk-body-s govuk-hint govuk-!-margin-bottom-2">{{ e.date | mojDate("date") }}, {{ e.by }}</p>
+          {% if e.members and e.members.length %}<p class="govuk-body govuk-!-margin-bottom-2">{{ words.historyAbout }} {{ e.members | join(", ") }}.</p>{% endif %}
+          {% if e.respondBy %}<p class="govuk-body govuk-!-margin-bottom-2">{{ words.historyRespondBy }} {{ e.respondBy | mojDate("date") }}.</p>{% endif %}
+          {% if e.message %}<p class="govuk-body govuk-!-margin-bottom-2">{{ e.message }}</p>{% endif %}
+          {% if e.file %}<p class="govuk-body govuk-!-margin-bottom-2">{{ words.historyFile }} {{ e.file }}</p>{% endif %}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{# Continue to make a decision: the same at the bottom of all 5 pages (Marie, 18 November) #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% include "regulator/v4/_continue.html" %}
   </div>
 </div>
 {% endblock %}

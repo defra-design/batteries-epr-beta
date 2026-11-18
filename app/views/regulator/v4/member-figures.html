@@ -5,7 +5,7 @@
   the chemistry that changed most on the quarter before.
   Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures
   The third of the submission's 5 pages, with a sub navigation between them
-  (Flags, Submission details, Members, Changes, Scheme details). The top of the page is the
+  (Flags, Members, Submission details, Changes, Scheme details). The top of the page is the
   same on all 5: v4/_submission-header.html.
 
   Why: regulators check a return member by member, and by chemistry. Sorting
@@ -18,22 +18,26 @@
 
   Top to bottom:
   - Back to the list of submissions
-  - The top of every page of the submission, then "Member figures" (h2)
+  - The top of every page of the submission, then "Members" (h2),
+    then a line saying what the biggest change compares, and that biggest
+    changes come first
   - Search by name or registration number, and Membership (Current, the
     default, Former or All, as version 3), with Search and Reset. With
     JavaScript, the search box suggests members as you type, with the letters
     typed in bold (add-on: accessible autocomplete). Search filters this
     list: it never jumps to another page
   - A line saying how many are showing, and what the change is compared with
-  - Make a decision (EB-367, Marie, 18 November): tick the members you want
-    to ask about, then Make a decision (a green button, above the table).
-    With members ticked it goes to Selected members; with none, straight to
-    Make a decision. With JavaScript each tick is saved as you make it, so you can
-  tick on Flags, move to Members and tick more (add-on: saveTicks in
-  application.js). Without it, a plain form saves them on Make a decision. Nothing is
-    ticked to start with, but anyone you've already selected stays ticked,
-    so you can search, tick, search again and tick more. No Select all here
-    (only on Flags, to test). The decision pages: app/routes/v4-decision.js
+  - Continue (EB-367, Marie, 18 November): tick the members you want to
+    ask the scheme about, then Continue (a green button, close under the
+    table, above the page links). The same Continue is at the bottom of all
+    5 pages (v4/_continue.html). With members ticked it goes to Selected
+    members; with none, straight to Make a decision. Was Make a decision
+    above the table. With JavaScript each tick is saved as you make it, so
+    you can tick on Flags, move to Members and tick more (add-on: saveTicks
+    in application.js). Without it, a plain form saves them on Continue.
+    Nothing is ticked to start with, but anyone you've already selected
+    stays ticked. No Select all here (only on Flags)
+  - Search is green: it's the main thing you do at the top of this page
   - The table, 6 columns: a checkbox (to select the member), member, registration number, membership, the
     biggest change in words (with any flag types in bold under it), and
     View figures.
@@ -137,6 +141,12 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">{{ words.heading }}</h2>
+    {# First, what you do here: select members to query (Marie, 18 November:
+       before the tickboxes, not after them). Then what the table shows, in
+       one short line. The heading above already says which quarter #}
+    {% set continueWords = content("regulator/v4/continue") %}
+    <p class="govuk-body">{{ continueWords.selectLine }}</p>
+    <p class="govuk-body">{{ words.compareLine }}</p>
   </div>
 </div>
 
@@ -153,15 +163,17 @@
         {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
         <div class="govuk-button-group">
-          {# Grey: Search changes what you see. Green is for Make a decision, the action that moves you on: one green button per page (Marie, 18 November) #}
-          {{ govukButton({ text: words.searchButton, classes: "govuk-button--secondary" }) }}
+          {# Green: search is the main thing you do at the top of this page, as
+             in Defra Internal Frontend's search (Marie, 18 November). Continue
+             is the other green button, at the bottom #}
+          {{ govukButton({ text: words.searchButton }) }}
           {{ govukButton({ text: words.resetButton, href: formAction, classes: "govuk-button--secondary" }) }}
         </div>
       </div>
     </form>
 
     {# "Showing 1 to 30 of 281 members", or "Showing 3 of 281 members" when it all fits on one page #}
-    <p class="govuk-body">{{ words.showing }} {% if pagination %}{{ showingFrom }} {{ words.to }} {{ showingTo }}{% else %}{{ found }}{% endif %} {{ words.of }} {% if pagination %}{{ found }}{% else %}{{ total }}{% endif %} {{ words.members }}. {{ words.comparedWith }} {{ compareName }}.</p>
+    <p class="govuk-body">{{ words.showing }} {% if pagination %}{{ showingFrom }} {{ words.to }} {{ showingTo }}{% else %}{{ found }}{% endif %} {{ words.of }} {% if pagination %}{{ found }}{% else %}{{ total }}{% endif %} {{ words.members }}.</p>
 
     {% if members.length %}
       {# One form: the ticks and Make a decision. shown: the members on this
@@ -170,9 +182,6 @@
       <form method="post" action="{{ decisionAction }}" novalidate data-app-save-ticks="{{ decisionAction | replace('/start', '/save') }}">
       <input type="hidden" name="from" value="{{ from }}">
       {% for m in members %}<input type="hidden" name="shown" value="{{ m.bprn }}">{% endfor %}
-      <p class="govuk-body">{{ words.tickIntro }}</p>
-      {# At the top, so it's there without scrolling the whole list (Marie, 18 November) #}
-      {{ govukButton({ text: words.makeADecisionButton }) }}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
         {{ govukTable({
           caption: words.tableCaption,
@@ -188,19 +197,20 @@
           rows: rows
         }) }}
       </div>
+      {# Continue, close under the table, then the page links (Marie, 18
+         November). Was Make a decision, above the table #}
+      {% set continueTicks = true %}
+      {% include "regulator/v4/_continue.html" %}
       </form>
-      {# Under the table, inside nothing: the page links are plain links #}
+      {# The page links are plain links, outside the form #}
       {% if pagination %}
         {{ govukPagination({ items: pagination.items, previous: pagination.previous, next: pagination.next, landmarkLabel: words.paginationLabel }) }}
       {% endif %}
     {% else %}
       <p class="govuk-body">{{ words.noMembers }}</p>
-      {# Make a decision is still there, with nothing to tick: you can make a
+      {# Continue is still there, with nothing to tick: you can make a
          decision on the whole submission #}
-      <form method="post" action="{{ decisionAction }}" novalidate>
-        <input type="hidden" name="from" value="{{ from }}">
-        {{ govukButton({ text: words.makeADecisionButton }) }}
-      </form>
+      {% include "regulator/v4/_continue.html" %}
     {% endif %}
 
   </div>
