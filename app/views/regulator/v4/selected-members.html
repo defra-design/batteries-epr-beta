@@ -1,0 +1,115 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (18 November 2026). EB-367: Selected members. New page.
+  Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/decision/members
+  You get here from Make a decision on Flags or Members, with members ticked.
+  With none ticked, Make a decision goes straight to the decision page.
+
+  Why (Marie, 18 November): regulators often query a submission about
+  particular members. This page plays back who they've picked, and lets them
+  add a short question about each one. A query goes to the scheme as one
+  query, with these questions in it. The longer explanation goes on the
+  decision page.
+
+  Top to bottom:
+  - Back to the page you came from (Flags, Members or a member)
+  - The scheme name in the caption, and the quarter, written out, then
+    "selected members" as the heading ("July to September 2026 selected
+    members"), the same pattern as the submission's own heading (Marie, 18
+    November). It doesn't say "query": you can still accept or reject on the
+    next page
+  - A line under it: how to remove a member
+  - One checkbox per member, ticked to start with (GOV.UK checkboxes that
+    reveal a related question). The hint says what made you look: the flag
+    (its type, what we found and the figures), or the member's biggest change
+    if they have no flags. Under each ticked member, "Your question
+    (optional)": one line, a short nudge, not a long box (Marie, 18 November).
+    Untick a member and their question folds away. Without JavaScript every
+    question stays open, and it all still works
+  - Continue (green): saves the page and goes to Make a decision. Unticking
+    everyone is fine: it's a decision on the whole submission, not an error
+  - Add more members (a secondary button): saves the page and goes to
+    Members, to tick more. It's a button, not a link, so nothing you've typed
+    is lost. Update list was dropped: Continue saves everything anyway
+  - Long lists are fine, as with our long tables. How many members
+    regulators pick at once is a question for research
+
+  The routes: app/routes/v4-decision.js
+  The data: app/data/pom-submission-details.js and app/data/member-figures.js (dummy).
+  The words: app/content/regulator/v4/selected-members.md
+#}
+
+{% set wordsFile = "regulator/v4/selected-members" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+
+{% set pageName = s.yearQuarterFull + " " + words.heading + ", " + s.scheme + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{# The change between two figures, in words, the same as on the member figures page #}
+{% macro changeText(figure, words) -%}
+  {%- if figure.diff == 0 -%}{{ words.noChange }}
+  {%- elif figure.before == 0 -%}{{ words.newThisQuarter }}
+  {%- elif figure.now == 0 -%}{{ words.noneThisQuarter }}
+  {%- elif figure.diff > 0 -%}{{ words.up }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- else -%}{{ words.down }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- endif -%}
+{%- endmacro %}
+
+{% block content %}
+{# Built inside the block: the GOV.UK macros are only there once the layout has loaded them #}
+{# One checkbox per member, each revealing a one-line question #}
+{% set items = [] %}
+{% for m in selected %}
+  {# What made you look: each flag on its own line, or the biggest change #}
+  {% set hintHtml %}{% if m.flags.length %}{% for f in m.flags %}<span class="govuk-!-display-block">{{ f.type }}: {{ f.found }}{% if f.figures %}, {{ f.figures }}{% endif %}</span>{% endfor %}{% else %}{{ words.biggestChange }}: {{ m.biggest.chemistry }}, {{ changeText(m.biggest, words) | lower }}{% endif %}{% endset %}
+  {% set questionHtml %}
+    {{ govukInput({
+      id: "question-" + m.bprn,
+      name: "question-" + m.bprn,
+      value: m.question,
+      label: { text: words.questionLabel },
+      attributes: { maxlength: "200" },
+      spellcheck: true
+    }) }}
+  {% endset %}
+  {% set items = (items.push({
+    value: m.bprn,
+    text: m.name,
+    checked: true,
+    hint: { html: hintHtml },
+    conditional: { html: questionHtml }
+  }), items) %}
+{% endfor %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" action="{{ formAction }}" novalidate>
+
+      {# The caption and heading are the fieldset's legend, so screen readers
+         hear them with the checkboxes #}
+      {% set legendHtml %}<span class="govuk-caption-l">{{ s.scheme }}</span><h1 class="govuk-fieldset__heading">{{ s.yearQuarterFull }} {{ words.heading }}</h1>{% endset %}
+      {{ govukCheckboxes({
+        name: "members",
+        fieldset: {
+          legend: { html: legendHtml, classes: "govuk-fieldset__legend--l" }
+        },
+        hint: { text: words.untick },
+        items: items
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({ text: words.continueButton }) }}
+        {{ govukButton({ text: words.addMoreMembersButton, name: "next", value: "add", classes: "govuk-button--secondary" }) }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

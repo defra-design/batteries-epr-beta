@@ -97,3 +97,21 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
     }
   }
 }
+
+// Add-on: a checkbox column in a table (version 4, EB-367, 18 November 2026).
+// WHY: on Flags and Members you tick the members to ask about, then Make a
+// decision. GOV.UK small checkboxes, one in each row. The column is only as
+// wide as the checkbox, and the checkbox lines up with the row's first line
+// of text. The MOJ multi-select (Select all, Flags only) puts its checkbox in
+// this column's heading.
+// USE: add this class to the header and cells of the checkbox column.
+// FOR DEVELOPERS: build this. It's a design decision, not a prototype shortcut.
+.app-table-cell--tick {
+  width: 1%;
+  padding-right: govuk-spacing(2);
+  vertical-align: top;
+
+  .govuk-checkboxes__item {
+    margin: -6px 0 0;
+  }
+}

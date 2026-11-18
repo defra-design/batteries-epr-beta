@@ -13,6 +13,15 @@ Flags
 ## Flags heading
 Flags
 
+## Tick intro (above Make a decision, when there are flags)
+Select any members you want to ask the scheme about, then make a decision.
+
+## Select column (flags table: only screen readers hear this, it's hidden on screen)
+Select
+
+## Select member (only screen readers hear this, before the member's name, for example "Select Northpower Batteries Ltd")
+Select
+
 ## Member column (flags table)
 Member
 

@@ -1,0 +1,71 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (18 November 2026). EB-367: the confirmation after a decision. New page.
+  Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/decision/done
+  You get here from Continue on Make a decision, once the answers are fine.
+
+  One page for all three decisions: its words follow what was decided.
+  A panel and what happens next, nothing else (Marie, 18 November). No
+  playback of what was typed: there's no check your answers page, and the
+  regulator has only just typed it. Ian's alpha page had "What you recorded"
+  (a summary list) as well as what happens next: we've done one, not both.
+
+  Top to bottom:
+  - A GOV.UK panel: what happened ("Submission accepted", "Query sent",
+    "Submission rejected"), then the scheme and the quarter, written out
+  - What happens next: who's been told, and what happens to the submission.
+    For a query: how many members it asks about, and the date to respond by
+  - Nothing after that: no button or links. It's the end of the journey,
+    and where regulators go next is a question for research (Marie, 18
+    November). The header's navigation is still there
+
+  Prototype only: the list doesn't change the submission's status yet.
+  To agree: how the scheme is told (in the service, or by email or phone,
+  UN-059). The words say "We've told", whichever way it is. After a
+  rejection we only say they've been told: what the scheme does next isn't
+  known yet, a question for Mak (Marie, 18 November).
+
+  The routes: app/routes/v4-decision.js
+  The words: app/content/regulator/v4/decision-done.md
+#}
+
+{% set wordsFile = "regulator/v4/decision-done" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+{% set d = done.decision %}
+
+{% set title = words.acceptedTitle if d == "accept" else (words.queryTitle if d == "query" else words.rejectedTitle) %}
+{% set pageName = title + ", " + s.yearQuarterFull + ", " + s.scheme + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {{ govukPanel({
+      titleText: title,
+      text: s.scheme + ", " + s.yearQuarterFull + " " + words.submission
+    }) }}
+
+    <h2 class="govuk-heading-m">{{ words.nextHeading }}</h2>
+
+    {% if d == "accept" %}
+      <p class="govuk-body">{{ words.acceptedTold }} {{ s.scheme }} {{ words.acceptedToldAfter }}</p>
+      <p class="govuk-body">{{ words.acceptedStatus }}</p>
+    {% elif d == "query" %}
+      <p class="govuk-body">
+        {{ s.scheme }}
+        {% if done.count == 1 %}{{ words.queryHasMessageOne }}{% elif done.count > 1 %}{{ words.queryHasMessageBefore }} {{ done.count }} {{ words.queryHasMessageAfter }}{% else %}{{ words.queryHasMessageWhole }}{% endif %}
+        {{ words.queryRespondBy }} {{ done.respondByLong }}.
+      </p>
+      <p class="govuk-body">{{ words.queryStatus }}</p>
+    {% else %}
+      <p class="govuk-body">{{ words.rejectedTold }} {{ s.scheme }} {{ words.rejectedToldAfter }}</p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

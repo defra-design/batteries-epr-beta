@@ -25,7 +25,16 @@
     typed in bold (add-on: accessible autocomplete). Search filters this
     list: it never jumps to another page
   - A line saying how many are showing, and what the change is compared with
-  - The table, 5 columns: member, registration number, membership, the
+  - Make a decision (EB-367, Marie, 18 November): tick the members you want
+    to ask about, then Make a decision (a green button, above the table).
+    With members ticked it goes to Selected members; with none, straight to
+    Make a decision. With JavaScript each tick is saved as you make it, so you can
+  tick on Flags, move to Members and tick more (add-on: saveTicks in
+  application.js). Without it, a plain form saves them on Make a decision. Nothing is
+    ticked to start with, but anyone you've already selected stays ticked,
+    so you can search, tick, search again and tick more. No Select all here
+    (only on Flags, to test). The decision pages: app/routes/v4-decision.js
+  - The table, 6 columns: a checkbox (to select the member), member, registration number, membership, the
     biggest change in words (with any flag types in bold under it), and
     View figures.
     Opens with the biggest change first, by its size in tonnes, up or down,
@@ -81,7 +90,11 @@
   {# The flag types in bold under the biggest change, not the name: it's the
      change that's a variance, not the member (Marie, 17 November). Not tags #}
   {% set tagsHtml %}{% for f in m.flags %}<strong class="govuk-!-display-block">{{ f.type }}</strong>{% endfor %}{% endset %}
+  {# A checkbox to select the member (EB-367). GOV.UK small checkboxes. The
+     label is hidden on screen: screen readers hear "Select Acorn Hill Electrical Ltd" #}
+  {% set tickHtml %}<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes"><div class="govuk-checkboxes__item"><input class="govuk-checkboxes__input" id="select-{{ m.bprn }}" name="members" type="checkbox" value="{{ m.bprn }}"{% if m.selected %} checked{% endif %}><label class="govuk-label govuk-checkboxes__label" for="select-{{ m.bprn }}"><span class="govuk-visually-hidden">{{ words.selectMember }} {{ m.name }}</span></label></div></div>{% endset %}
   {% set rows = (rows.push([
+    { html: tickHtml, classes: small + " app-table-cell--tick" },
     { text: m.name, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
     { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
@@ -119,12 +132,22 @@
     <p class="govuk-body">{{ words.showing }} {{ members.length }} {{ words.of }} {{ total }} {{ words.members }}. {{ words.comparedWith }} {{ compareName }}.</p>
 
     {% if members.length %}
+      {# One form: the ticks and Make a decision. shown: the members on this
+         page, so unticking one here removes them, and anyone selected from
+         another search stays selected (app/routes/v4-decision.js) #}
+      <form method="post" action="{{ decisionAction }}" novalidate data-app-save-ticks="{{ decisionAction | replace('/start', '/save') }}">
+      <input type="hidden" name="from" value="{{ from }}">
+      {% for m in members %}<input type="hidden" name="shown" value="{{ m.bprn }}">{% endfor %}
+      <p class="govuk-body">{{ words.tickIntro }}</p>
+      {# At the top, so it's there without scrolling the whole list (Marie, 18 November) #}
+      {{ govukButton({ text: words.makeADecisionButton }) }}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
           attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "member-figures-v4-biggest-first" },
           head: [
+            { html: '<span class="govuk-visually-hidden">' + (words.selectColumn | escape) + '</span>', classes: small + " app-table-cell--tick" },
             { text: words.memberColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
             { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
@@ -134,8 +157,15 @@
           rows: rows
         }) }}
       </div>
+      </form>
     {% else %}
       <p class="govuk-body">{{ words.noMembers }}</p>
+      {# Make a decision is still there, with nothing to tick: you can make a
+         decision on the whole submission #}
+      <form method="post" action="{{ decisionAction }}" novalidate>
+        <input type="hidden" name="from" value="{{ from }}">
+        {{ govukButton({ text: words.makeADecisionButton }) }}
+      </form>
     {% endif %}
 
   </div>

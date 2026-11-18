@@ -1,0 +1,128 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Add version 4: making a decision on a submission (EB-367)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">18 November 2026</span>
+<h1 class="govuk-heading-l">Add version 4: making a decision on a submission (EB-367)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--green">New</strong></p>
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-full">
+<h2 class="govuk-heading-m">How the journey works</h2>
+<img src="/public/images/changes/add-version-4-make-a-decision/journey.png" alt="The make a decision journey. Tick members on Flags or Members, then Make a decision. With members ticked it goes to Selected members, then the decision page. With none, straight to the decision page. Then one of 3 confirmations: accepted, query sent, rejected. The same journey is described in words below." class="app-change-screenshot" width="960">
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<p class="govuk-body">EB-367: regulators accept, query or reject a placed on the market submission. Most of the time they go back and forth with the scheme before accepting, so querying is the main job, and a query is often about particular members. Designed and built on 18 November, in version 4, after EB-366.</p>
+<p class="govuk-body"><strong>The journey, in words</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>On Flags or Members, tick the members you want to ask the scheme about, then Make a decision. The member page has Make a decision too, with nothing to tick</li><li>With members ticked: Selected members, then the decision page. With none ticked: straight to the decision page</li><li>The decision page: accept, query or reject. Then one of 3 confirmations</li><li>No check your answers page: regulators have just made their choices on one page, and it's an internal service</li></ul>
+<p class="govuk-body"><strong>Flags and Members: tick members (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>A tickbox on each row (GOV.UK small checkboxes). Nothing ticked to start with</li><li>Select all on Flags only, in the table heading (MOJ multi-select, with JavaScript). Not on Members, where it would tick hundreds: to test</li><li>Make a decision (green button) at the top, above the table, so it's there without scrolling. Was at the bottom of Flags</li><li>Ticks save as you make them, so you can tick on Flags, move to Members, tick more, and they all come through. Anyone you've ticked stays ticked when you come back. Without JavaScript, ticks save when you press Make a decision</li><li>A line above the button explains the tickboxes: for content design to check</li></ul>
+<p class="govuk-body"><strong>Selected members (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Heading: &quot;July to September 2026 selected members&quot;, the same pattern as the submission's heading. It doesn't say &quot;query&quot;: you can still accept or reject on the next page</li><li>Each member is a tickbox, ticked to start with. Untick to remove (GOV.UK checkboxes that reveal a related question)</li><li>The hint says why they're there: their flag, or their biggest change if they were picked from Members</li><li>Under each one, &quot;Your question to the scheme (optional)&quot;: one line, a short nudge. It says it goes to the scheme, so it's clear where it goes</li><li>Continue, or Add more members, which keeps what you've typed and goes back to Members. Update list was dropped: Continue saves everything anyway</li><li>Long lists are fine, as with our long tables. How many members regulators pick at once is a question for research</li></ul>
+<p class="govuk-body"><strong>The decision page (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Heading: &quot;July to September 2026 decision&quot;. A line under it says how many members are selected, with Change</li><li>Accept the submission, Query 3 members (&quot;Query the whole submission&quot; with none ticked), or Reject the whole submission</li><li>All 3 are always there, whatever's ticked: regulators are qualified, and it's their job, so flexibility is better than locking options away. You can tick members and still accept</li><li>Not much in reveals: only Respond by, a date, under Query (UN-060). We started with a reveal under each option, and it was too much</li><li>Message to the scheme: one box, whatever the decision, always required. One rule, so nobody has to work out when it's needed. We tried &quot;required only to reject or query the whole submission&quot;, but it needed a hint to explain</li><li>Attach a file (optional), whatever the decision. To align with the Rural Payments document upload: David is putting us in touch</li><li>The page is clear when you come to it. Answers only stay after an error, to fix them</li></ul>
+<p class="govuk-body"><strong>Confirmation (new)</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>One page, its words follow the decision: Submission accepted, Query sent, or Submission rejected</li><li>A panel and What happens next, nothing else. Ian's alpha page also played back what was recorded (a summary list): we've done one, not both</li><li>No button or links: it's the end of the journey, and where regulators go next is a question for research</li><li>After a rejection it only says we've told the scheme why. What the scheme does next isn't known yet</li></ul>
+<p class="govuk-body"><strong>Left out, and why</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>How the scheme is told (in the service, or by email or phone, UN-059): a preference set up once, for example at registration, not asked on every decision</li><li>Internal notes (UN-061): there's a need, but nowhere yet to show them again, and too much on the page. A question for research</li><li>Check your answers: see above</li><li>Refer to account manager (Ian's alpha): not one of our decisions</li><li>A date picker for Respond by: parked. First, find out whether regulators choose the date at all</li></ul>
+<p class="govuk-body"><strong>Questions for the team</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Who gets the query: the scheme's main contact, or whoever submitted? (Mak)</li><li>Do regulators choose the respond by date, or is there a standard time, like 14 or 28 days? (Mak)</li><li>How is the scheme told about a decision, and is it set up at registration? (Mak, Rich)</li><li>After a rejection, what does the scheme do? (Mak)</li><li>Attach a file: align with the Rural Payments document upload team (David)</li></ul>
+<p class="govuk-body"><strong>To test with regulators</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>How many members do they tick at once? Do they want Select all on Members too?</li><li>Do they query about particular members, or the whole submission?</li><li>Does anyone tick members and then accept? Does that feel odd?</li><li>Is a one-line question for each member enough?</li><li>Do they need internal notes, and where would they look for them? Would they use a history of the submission?</li><li>After a decision, where do they go next? Do they expect the status on the list to change straight away?</li></ul>
+<p class="govuk-body"><strong>Prototype only</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>The list doesn't change a submission's status after a decision</li><li>The file upload keeps only the file's name</li><li>Ticks and answers last until the browser closes: use a fresh private window for each research participant</li></ul>
+<p class="govuk-body">New words are drafts for content design to review. The full list for Jen is in the Regulator journey doc, EB-367 tab.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Flags (tick members, then Make a decision)</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Members</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/decision">Decision (with nothing ticked)</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Flags, with 2 members ticked, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--flags-1020-pixels.png" alt="Flags, with 2 members ticked, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Flags, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--flags-320-pixels.png" alt="Flags, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, with one more member ticked, top of the page</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--members-1020-pixels.png" alt="Members, with one more member ticked, top of the page" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Selected members, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--selected-1020-pixels.png" alt="Selected members, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Selected members, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--selected-320-pixels.png" alt="Selected members, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Decision, with Query chosen, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--decision-1020-pixels.png" alt="Decision, with Query chosen, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Decision, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--decision-320-pixels.png" alt="Decision, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Decision, with error messages</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--decision-errors-1020-pixels.png" alt="Decision, with error messages" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Confirmation: query sent, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--query-sent-1020-pixels.png" alt="Confirmation: query sent, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Confirmation: query sent, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--query-sent-320-pixels.png" alt="Confirmation: query sent, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Confirmation: submission accepted</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--accepted-1020-pixels.png" alt="Confirmation: submission accepted" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Confirmation: submission rejected</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-4-make-a-decision/after--rejected-1020-pixels.png" alt="Confirmation: submission rejected" class="app-change-screenshot" width="510">
+</div>
+</div>
+
+{% endblock %}

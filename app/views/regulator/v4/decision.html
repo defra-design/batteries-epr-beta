@@ -1,0 +1,152 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 4 (18 November 2026). EB-367: Make a decision. New page.
+  Address: /regulator/pom-submissions/v4/recycling-lives/2026/3/decision
+  You get here from Selected members (Continue), or straight from Make a
+  decision on Flags, Members or a member's page if no members are ticked.
+
+  Why: the regulator accepts, queries or rejects the whole submission
+  (EB-367, UN-068, UN-069). Agreed with Marie, 18 November.
+
+  Top to bottom:
+  - Back to Selected members, or the page you came from if none are selected
+  - The scheme name in the caption, and the quarter, written out, then
+    "decision" as the heading ("July to September 2026 decision"), the same
+    pattern as the submission's own heading (Marie, 18 November)
+  - One line of playback: how many members are selected, with Change (to Selected members, or to Members to pick
+    some if there are none)
+  - "What's your decision?": 3 radios. All 3 are always there, whatever's
+    ticked: regulators are qualified, it's their job, and flexibility is
+    better than locking options away (Marie, 18 November). So you can tick
+    members and still accept. Whether that feels odd is a question for research
+    - Accept the submission
+    - Query 3 members (the number follows the ticks), or "Query the whole
+      submission" with none ticked. The only thing that opens up: Respond by
+      (UN-060), a GOV.UK date input, in the future
+    - Reject the whole submission
+    Not much in reveals: only the date (Marie, 18 November). Was: each
+    option opened its own questions
+  - Message to the scheme: one box, whatever you choose, always required.
+    One rule, so nobody has to work out when it's needed. To accept, it can
+    be short (Marie, 18 November). Was: required only to reject or to query
+    the whole submission, which needed a hint to explain
+  - Attach a file (optional), whatever you choose
+  - No internal notes: taken off (Marie, 18 November). There's a need
+    (UN-061), but nowhere yet to show them again, and too much on the page.
+    A question for research: do regulators need notes, and where would they
+    look for them (a history of the submission?)
+  - The page is clear when you come to it: nothing chosen. Answers only
+    stay after an error, to fix them (Marie, 18 November)
+  - Continue: checks the answers (GOV.UK error summary and messages), then
+    goes straight to the confirmation (v4/decision-done.html). No check your answers page: regulators have just made their choices on
+    this page, and it's an internal service (Marie, 18 November)
+
+  Not on this page: how the scheme is told (in the service, or by email or
+  phone, UN-059). That's a preference set up once, for example when the
+  scheme or regulator registers, not asked on every decision (Marie, 18
+  November). A question for research and the team.
+
+  Prototype only: the file upload keeps the file's name, not the file.
+
+  The routes: app/routes/v4-decision.js
+  The words: app/content/regulator/v4/decision.md
+#}
+
+{% set wordsFile = "regulator/v4/decision" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+{% set a = answers %}
+{# err: each field's error message; errorList: the error summary (both from app/routes/v4-decision.js) #}
+{% set hasErrors = errorList.length > 0 %}
+
+{% set pageName = ("Error: " if hasErrors else "") + s.yearQuarterFull + " " + words.heading + ", " + s.scheme + " (version 4)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{% block content %}
+{# Built inside the block: the GOV.UK macros are only there once the layout has loaded them #}
+{# Query: the label follows how many members are selected #}
+{% if count == 1 %}
+  {% set queryLabel = words.queryBefore + " 1 " + words.member %}
+{% elif count > 1 %}
+  {% set queryLabel = words.queryBefore + " " + count + " " + words.members %}
+{% else %}
+  {% set queryLabel = words.queryWhole %}
+{% endif %}
+
+{# Query: the only reveal, the date to respond by #}
+{% set queryHtml %}
+  {{ govukDateInput({
+    id: "respondBy",
+    namePrefix: "respondBy",
+    fieldset: { legend: { text: words.respondByLegend, classes: "govuk-fieldset__legend--s" } },
+    hint: { text: words.respondByHint },
+    errorMessage: err.respondBy,
+    items: [
+      { name: "day", label: words.day, value: a.respondByDay, classes: "govuk-input--width-2" + (" govuk-input--error" if err.respondBy else "") },
+      { name: "month", label: words.month, value: a.respondByMonth, classes: "govuk-input--width-2" + (" govuk-input--error" if err.respondBy else "") },
+      { name: "year", label: words.year, value: a.respondByYear, classes: "govuk-input--width-4" + (" govuk-input--error" if err.respondBy else "") }
+    ]
+  }) }}
+{% endset %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if hasErrors %}
+      {{ govukErrorSummary({ titleText: words.errorSummaryTitle, errorList: errorList }) }}
+    {% endif %}
+
+    <span class="govuk-caption-l">{{ s.scheme }}</span>
+    <h1 class="govuk-heading-l">{{ s.yearQuarterFull }} {{ words.heading }}</h1>
+
+    {# One line of playback, with Change #}
+    <p class="govuk-body">
+      {% if count == 1 %}1 {{ words.memberSelected }}.{% elif count > 1 %}{{ count }} {{ words.membersSelected }}.{% else %}{{ words.noMembersSelected }}{% endif %}
+      <a href="{{ changeHref }}" class="govuk-link">{{ words.changeLink }}<span class="govuk-visually-hidden"> {{ words.changeHidden }}</span></a>
+    </p>
+
+    {# Prototype only: a plain form, so the file upload sends the file's name,
+       not the file. A real service sends the file #}
+    <form method="post" action="{{ formAction }}" novalidate>
+
+      {{ govukRadios({
+        name: "decision",
+        idPrefix: "decision",
+        fieldset: { legend: { text: words.decisionLegend, classes: "govuk-fieldset__legend--m" } },
+        errorMessage: err.decision,
+        items: [
+          { value: "accept", text: words.accept, checked: a.decision == "accept" },
+          { value: "query", text: queryLabel, checked: a.decision == "query", hint: { text: words.queryHint } if count else undefined, conditional: { html: queryHtml } },
+          { value: "reject", text: words.reject, checked: a.decision == "reject" }
+        ]
+      }) }}
+
+      {# One message to the scheme, whatever they choose #}
+      {{ govukCharacterCount({
+        id: "message",
+        name: "message",
+        value: a.message,
+        maxlength: 1000,
+        label: { text: words.messageLabel, classes: "govuk-label--s" },
+        errorMessage: err.message
+      }) }}
+
+      {{ govukFileUpload({
+        id: "file",
+        name: "file",
+        label: { text: words.fileLabel, classes: "govuk-label--s" }
+      }) }}
+
+      {{ govukButton({ text: words.continueButton }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

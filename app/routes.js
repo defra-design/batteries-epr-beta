@@ -208,6 +208,10 @@ router.get('/regulator/pom-submissions/full/:scheme/:year/:quarter/organisation-
 
 require('./routes/v4')(router)
 
+// Version 4 (18 November 2026): EB-367, making a decision on a submission
+// (accept, query or reject). In its own file: app/routes/v4-decision.js
+require('./routes/v4-decision')(router)
+
 // A holding page for links to pages we haven't built yet
 router.get('/regulator/not-built', (req, res) => {
   const back = String(req.query.back || '')

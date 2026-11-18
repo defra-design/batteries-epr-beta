@@ -6,6 +6,7 @@
 window.GOVUKPrototypeKit.documentReady(() => {
   rememberTableSort()
   suggestMembers()
+  saveTicks()
 })
 
 //
@@ -138,4 +139,44 @@ function boldTyped (name, typed) {
   if (start === -1) return escape(name)
   const end = start + typed.length
   return escape(name.slice(0, start)) + '<strong>' + escape(name.slice(start, end)) + '</strong>' + escape(name.slice(end))
+}
+
+//
+// Add-on: save ticks as you go. Version 4, Flags and Members (18 November
+// 2026, EB-367).
+//
+// Why: you tick members on Flags, move to Members with the sub navigation
+// and tick more, then Make a decision. The sub navigation is a link, so
+// without this the ticks on Flags were lost (Marie, 18 November).
+//
+// How: a form with data-app-save-ticks="<address>" sends its ticks to that
+// address each time one changes, including Select all (which ticks the boxes
+// without a change event, so clicks are listened to as well). The page doesn't
+// change. The route keeps them (app/routes/v4-decision.js, /decision/save),
+// and the pages show them ticked when you come back.
+// Without JavaScript: ticks are saved when you press Make a decision.
+//
+// To remove this add-on: delete this function, the line that calls it and
+// the data-app-save-ticks attributes, and the /decision/save route.
+//
+function saveTicks () {
+  document.querySelectorAll('form[data-app-save-ticks]').forEach(($form) => {
+    const address = $form.getAttribute('data-app-save-ticks')
+    let timer = null
+    const save = () => {
+      window.clearTimeout(timer)
+      timer = window.setTimeout(() => {
+        const body = new URLSearchParams()
+        $form.querySelectorAll('input[name="shown"]').forEach(($i) => body.append('shown', $i.value))
+        $form.querySelectorAll('input[name="members"]:checked').forEach(($i) => body.append('members', $i.value))
+        window.fetch(address, { method: 'POST', body, credentials: 'same-origin' }).catch(() => {})
+      }, 150)
+    }
+    // Pressing Make a decision sends the ticks itself: don't send them twice
+    $form.addEventListener('submit', () => window.clearTimeout(timer))
+    $form.addEventListener('change', save)
+    $form.addEventListener('click', (event) => {
+      if (event.target.matches('input[type="checkbox"]')) save()
+    })
+  })
 }

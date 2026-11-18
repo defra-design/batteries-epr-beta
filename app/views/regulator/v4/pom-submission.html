@@ -13,16 +13,24 @@
   (Jen, 17 November). Was: the flags, then the submission details under
   them, then View member data, all on this page.
 
-  Then Make a decision (a green button): accept, query or reject the whole
-  return. It's where Rich's producer figures page puts it, and goes to his
-  "Make a decision" page (the next ticket). Not built yet.
+  Make a decision (EB-367, Marie, 18 November): tick the members you want
+  to ask about, then Make a decision (a green button, above the table). With
+  members ticked it goes to Selected members; with none, straight to Make a
+  decision. With JavaScript each tick is saved as you make it, so you can
+  tick on Flags, move to Members and tick more (add-on: saveTicks in
+  application.js). Without it, a plain form saves them on Make a decision. Nothing is ticked
+  to start with, but anyone you've already selected stays ticked.
+  Select all (add-on: MOJ multi-select): with JavaScript, a checkbox in the
+  table's heading ticks every flag. On Flags only, not Members (to test).
+  A member with two flags has two rows: ticking either selects them. The
+  decision pages: app/routes/v4-decision.js
 
   With no flags, the page says so and how many members passed the checks,
   so you don't land on an empty page (Marie, 17 November).
 
   Flags (Marie, 17 November):
-  - A table, one row per flag, 4 columns: Member, Flag, Scheme's reason, and
-    View figures. Compact and easy to scan, as a return can have lots of flags.
+  - A table, one row per flag, 5 columns: a checkbox (to select the member,
+    EB-367), Member, Flag, Scheme's reason, and View figures. Compact and easy to scan, as a return can have lots of flags.
     In a scrollable pane, so it works on a phone. Was: a block per flag, with
     a line between each, which spread the flags down the page
   - No tags: the flag type is plain text, in bold, above what was found.
@@ -54,12 +62,16 @@
   {{ govukBackLink({ text: words.backLink, href: backHref }) }}
 {% endblock %}
 
-{# Flags: one row each #}
+{# Flags: one row each, with a checkbox to select the member (EB-367).
+   GOV.UK small checkboxes. The label is hidden on screen: screen readers
+   hear "Select Northpower Batteries Ltd" #}
 {% set flagRows = [] %}
 {% for flag in flags %}
+  {% set tickHtml %}{% if flag.bprn %}<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes"><div class="govuk-checkboxes__item"><input class="govuk-checkboxes__input" id="select-{{ loop.index }}" name="members" type="checkbox" value="{{ flag.bprn }}"{% if flag.selected %} checked{% endif %}><label class="govuk-label govuk-checkboxes__label" for="select-{{ loop.index }}"><span class="govuk-visually-hidden">{{ words.selectMember }} {{ flag.producer }}</span></label></div></div>{% endif %}{% endset %}
   {% set flagHtml %}<strong class="govuk-!-display-block">{{ flag.type }}</strong>{{ flag.found }}{% if (flag.found | last) != "." %}.{% endif %}{% if flag.figures %} {{ flag.figures }}{% if (flag.figures | last) != "." %}.{% endif %}{% endif %}{% endset %}
   {% set linkHtml %}{% if flag.figuresHref %}<a href="{{ flag.figuresHref }}" class="govuk-link">{{ words.viewFiguresLink }}<span class="govuk-visually-hidden"> {{ words.viewFiguresFor }} {{ flag.producer }}</span></a>{% endif %}{% endset %}
   {% set flagRows = (flagRows.push([
+    { html: tickHtml, classes: small + " app-table-cell--tick" },
     { text: flag.producer, classes: small + " app-table-cell--wrap" },
     { html: flagHtml, classes: small + " app-table-cell--wrap" },
     { text: flag.reason, classes: small + " app-table-cell--wrap" },
@@ -73,29 +85,45 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
-    {% if flagRows.length %}
-      {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways #}
-      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsHeading }}">
-        {{ govukTable({
-          caption: words.flagsHeading,
-          captionClasses: "govuk-visually-hidden",
-          head: [
-            { text: words.memberColumn, classes: small + " app-table-cell--wrap" },
-            { text: words.flagColumn, classes: small + " app-table-cell--wrap" },
-            { text: words.reasonColumn, classes: small + " app-table-cell--wrap" },
-            { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
-          ],
-          rows: flagRows
-        }) }}
-      </div>
-    {% else %}
-      <p class="govuk-body">{{ words.noFlags }}</p>
-      <p class="govuk-body">{{ words.allPassedBefore }} {{ membersCount }} {{ words.allPassedAfter }}</p>
-    {% endif %}
 
-    {# Make a decision on the whole return: accept, query or reject. The next
-       ticket (Rich's screen 4, "Make a decision"): not built yet #}
-    {{ govukButton({ text: words.makeADecisionButton, href: decisionHref }) }}
+    {# One form: the ticks and Make a decision. shown: the members on this
+       page, so unticking one here removes them (app/routes/v4-decision.js) #}
+    <form method="post" action="{{ decisionAction }}" novalidate data-app-save-ticks="{{ decisionAction | replace('/start', '/save') }}">
+      <input type="hidden" name="from" value="{{ from }}">
+      {% for flag in flags %}{% if flag.bprn %}<input type="hidden" name="shown" value="{{ flag.bprn }}">{% endif %}{% endfor %}
+
+      {% if flagRows.length %}
+        <p class="govuk-body">{{ words.tickIntro }}</p>
+      {% endif %}
+
+      {# Make a decision: accept, query or reject. At the top, so it's there
+         without scrolling past every flag (Marie, 18 November) #}
+      {{ govukButton({ text: words.makeADecisionButton }) }}
+
+      {% if flagRows.length %}
+        {# Add-ons: MOJ scrollable pane (on a phone only the table scrolls
+           sideways) and MOJ multi-select (Select all, in the first heading,
+           with JavaScript) #}
+        <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsHeading }}">
+          {{ govukTable({
+            caption: words.flagsHeading,
+            captionClasses: "govuk-visually-hidden",
+            attributes: { "data-module": "moj-multi-select", "data-multi-select-checkbox": "#select-all" },
+            head: [
+              { html: '<span class="govuk-visually-hidden">' + (words.selectColumn | escape) + '</span>', attributes: { id: "select-all" }, classes: small + " app-table-cell--tick" },
+              { text: words.memberColumn, classes: small + " app-table-cell--wrap" },
+              { text: words.flagColumn, classes: small + " app-table-cell--wrap" },
+              { text: words.reasonColumn, classes: small + " app-table-cell--wrap" },
+              { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
+            ],
+            rows: flagRows
+          }) }}
+        </div>
+      {% else %}
+        <p class="govuk-body">{{ words.noFlags }}</p>
+        <p class="govuk-body">{{ words.allPassedBefore }} {{ membersCount }} {{ words.allPassedAfter }}</p>
+      {% endif %}
+    </form>
   </div>
 </div>
 {% endblock %}

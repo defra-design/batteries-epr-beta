@@ -30,6 +30,9 @@
 //   /v4/recycling-lives/2026/3/member-figures/BPRN142037           > v4/member.html
 //     One member: their details, flags, and figures for 2 quarters by chemistry
 //
+//   Make a decision (EB-367, 18 November): tick members on Flags or Members,
+//   then Make a decision. Those pages are in app/routes/v4-decision.js
+//
 // Called from app/routes.js.
 //
 
@@ -68,6 +71,14 @@ function submissionTabs (req, scheme, year, quarter, current) {
 // Only keep a value we offer: anything else falls back to the default
 function pick (value, allowed, fallback) {
   return allowed.includes(value) ? value : fallback
+}
+
+// The members already selected for a decision on this submission (EB-367,
+// app/routes/v4-decision.js keeps them), so they stay ticked when you come back
+function selectedMembers (req, scheme, year, quarter) {
+  const all = req.session.v4Decisions || {}
+  const d = all[scheme + '/' + year + '/' + quarter]
+  return d ? d.members : []
 }
 
 // The "not built yet" page, coming back to this address
@@ -138,13 +149,18 @@ module.exports = (router) => {
       // ?from=submission: so Back on the member's page comes back here
       return { ...flag, figuresHref: member ? here + '/member-figures/' + member.bprn + '?from=submission' : null }
     })
+    // Tick members to ask about, then Make a decision (EB-367, Marie, 18
+    // November): app/routes/v4-decision.js. Anyone already selected stays ticked
+    const selected = selectedMembers(req, scheme, year, quarter)
     res.render('regulator/v4/pom-submission', {
       submission,
-      flags,
+      flags: flags.map(f => {
+        const member = members.find(m => m.name === f.producer)
+        return { ...f, bprn: member ? member.bprn : null, selected: !!member && selected.includes(member.bprn) }
+      }),
       membersCount: members.length,
-      // Make a decision: accept, query or reject the whole return (next ticket,
-      // Rich's screen 4). Not built yet
-      decisionHref: notBuilt(req.originalUrl),
+      decisionAction: here + '/decision/start',
+      from: req.originalUrl,
       ...submissionTabs(req, scheme, year, quarter, 'flags')
     })
   })
@@ -241,8 +257,13 @@ module.exports = (router) => {
         m.name.toLowerCase().includes(term) ||
         m.bprn.toLowerCase().includes(term) ||
         (m.name + ' (' + m.bprn + ')').toLowerCase() === term))
+    const selected = selectedMembers(req, scheme, year, quarter)
     res.render('regulator/v4/member-figures', {
       submission,
+      // Tick members to ask about, then Make a decision (EB-367):
+      // app/routes/v4-decision.js. Anyone already selected stays ticked
+      decisionAction: submissionUrl(scheme, year, quarter) + '/decision/start',
+      from: req.originalUrl,
       org: organisation,
       quarterText: submission.yearQuarterFull,
       compareName: figures.quarterName(compareKey),
@@ -250,7 +271,8 @@ module.exports = (router) => {
         ...m,
         href: submissionUrl(scheme, year, quarter) + '/member-figures/' + m.bprn,
         biggest: figures.biggestChange(m, key, compareKey),
-        flags: submission.flags.filter(f => f.producer === m.name)
+        flags: submission.flags.filter(f => f.producer === m.name),
+        selected: selected.includes(m.bprn)
       }))
         // Biggest change first, by size in tonnes, up or down: what looks
         // wrong comes first (Marie, 18 November). Was name order, A to Z
@@ -308,8 +330,10 @@ module.exports = (router) => {
       same: show === compare,
       table: figures.comparison(member, show, compare),
       formAction: req.path,
-      // Make a decision on the whole return, as on Flags. Not built yet
-      decisionHref: notBuilt(req.originalUrl),
+      // Make a decision, as on Flags (EB-367): with no ticks here, it goes to
+      // Selected members if you've ticked some elsewhere, or straight to
+      // Make a decision. Back comes back to this page
+      decisionHref: here + '/decision/start?from=' + encodeURIComponent(req.originalUrl),
       backHref
     })
   })

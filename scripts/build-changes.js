@@ -14,11 +14,16 @@
  *   - a new page (no before screenshot) shows just the screenshot, without
  *     "Before" and "After"
  *   - links in the "why": [link text](https://...) opens in a new tab, with
- *     "(opens in new tab)" added to the link text, as GOV.UK asks
+ *     "(opens in new tab)" added to the link text, as GOV.UK asks.
+ *     [link text](/changes/...) links to a page in this prototype, same tab
  *   - screenshots show at half size, so phone and desktop are at the same scale
  *   - run it with: npm run changes
  *   - screenshots: for each page, one pair at 1020 pixels wide (desktop) and
  *     one at 320 pixels wide, from the top of the page to the end of the content
+ *   - diagrams (18 November 2026): a record can have "diagrams", a list of
+ *     { "label", "image", "alt" }. Each shows under the title, full width,
+ *     before the "why", so the journey comes first. The "why" must still say
+ *     everything the diagram shows, in words, for people who can't see it
  *
  * build-pages.js — turn change records into pages the GOV.UK Prototype Kit
  * serves by itself, with no routes:
@@ -72,6 +77,8 @@ function inline (s) {
   return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/`([^`]+)`/g, '<code>$1</code>')
     // Links: [text](https://...) only, so a typo can't become a broken or unsafe link
     .replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)/g, '<a href="$2" class="govuk-link" rel="noreferrer noopener" target="_blank">$1 (opens in new tab)</a>')
+    // A page in this prototype, for example [another change](/changes/...): same tab (18 November 2026)
+    .replace(/\[([^\]]+)\]\((\/(?![\/\\])[\w\/-]*)\)/g, '<a href="$2" class="govuk-link">$1</a>')
 }
 // Screenshots show at half their size, so a 320 pixel phone screenshot and a
 // 1020 pixel desktop one are at the same scale. The size comes from the file
@@ -161,6 +168,17 @@ records.forEach(function (r) {
     '<span class="govuk-caption-l">' + longDate(r.date) + '</span>\n' +
     '<h1 class="govuk-heading-l">' + esc(r.title) + '</h1>\n' +
     (tags(r) ? '<p class="govuk-body">' + tags(r) + '</p>\n' : '') +
+    '</div>\n</div>\n'
+  // Diagrams: full width, under the title. The "why" says the same in words
+  ;(r.diagrams || []).forEach(function (d) {
+    const src = imageSrc(d.image)
+    if (!src) return
+    body += '<div class="govuk-grid-row">\n<div class="govuk-grid-column-full">\n' +
+      '<h2 class="govuk-heading-m">' + esc(d.label) + '</h2>\n' +
+      '<img src="' + src + '" alt="' + esc(d.alt || d.label) + '" class="app-change-screenshot" width="960">\n' +
+      '</div>\n</div>\n'
+  })
+  body += '<div class="govuk-grid-row">\n<div class="govuk-grid-column-two-thirds">\n' +
     markdown(r.why) + '\n'
   const pages = (r.pages || []).filter(function (p) { return p && pageHref(p.url) })
   if (pages.length) {

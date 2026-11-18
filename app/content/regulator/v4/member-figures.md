@@ -46,8 +46,20 @@ Change is compared with
 ## No members
 No members match your search. Check the name or registration number, or reset the search.
 
+## Tick intro (above Make a decision)
+Select any members you want to ask the scheme about, then make a decision.
+
+## Make a decision button (accept, query or reject the submission)
+Make a decision
+
 ## Table caption (only screen readers hear this)
 Member figures
+
+## Select column (only screen readers hear this, it's hidden on screen)
+Select
+
+## Select member (only screen readers hear this, before the member's name, for example "Select Acorn Hill Electrical Ltd")
+Select
 
 ## Member column
 Member

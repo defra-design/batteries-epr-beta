@@ -172,6 +172,8 @@ module.exports = {
   YEARS: ['2024', '2025', '2026'],
   LATEST_YEAR: String(LATEST_YEAR),
   LATEST_QUARTER: String(LATEST_QUARTER),
+  // The prototype's "today", fixed for research (version 4 decision checks dates against it)
+  TODAY,
   all,
   byDue,
   byScheme,
