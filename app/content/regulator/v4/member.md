@@ -96,3 +96,15 @@ New this quarter
 
 ## None this quarter (none in the quarter shown)
 None this quarter
+
+## Select for decision (a tickbox at the bottom of the page)
+Select this member for a decision
+
+## Back to flags (a button at the bottom, when you came from Flags)
+Back to flags
+
+## Back to members (a button at the bottom, when you came from Members)
+Back to members
+
+## Back to changes (a button at the bottom, when you came from Changes)
+Back to changes

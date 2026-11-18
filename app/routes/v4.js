@@ -330,7 +330,13 @@ module.exports = (router) => {
       same: show === compare,
       table: figures.comparison(member, show, compare),
       formAction: req.path,
-      backHref
+      backHref,
+      // At the bottom: select this member for a decision, then back to
+      // where you came from, where they show as ticked (EB-367, Marie, 18
+      // November). The tick is saved by app/routes/v4-decision.js
+      selected: selectedMembers(req, scheme, year, quarter).includes(member.bprn),
+      selectAction: here + '/decision/select',
+      saveAction: here + '/decision/save'
     })
   })
 }

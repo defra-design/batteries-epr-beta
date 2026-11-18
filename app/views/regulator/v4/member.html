@@ -33,9 +33,13 @@
     the scheme sent the return, newest first: date, chemistry, before and
     after (tonnes), who changed it. From Ian's amendment history design.
     After the figures, so you see what's odd, then what's been fixed
-  - No Make a decision button: there's nothing to tick here, so you make a
-    decision from Flags or Members, where you can tick members (Marie, 18
-    November). Was: a Make a decision button, the same as on Flags
+  - No Make a decision button: you make a decision from Flags or Members
+    (Marie, 18 November). Instead, at the bottom, once you've looked:
+    "Select this member for a decision" (a tickbox, ticked if they're already
+    selected), then Back to flags, Back to members or Back to changes (where
+    you came from, a green button), where they show as ticked. So the page isn't a dead end,
+    and you can pick a member at the moment you spot something. The button
+    saves the tick, so it works without JavaScript
   - No links under the tables: Back at the top is the way back
 
   One page, not a sub navigation like the submission: the flags, figures and
@@ -56,6 +60,9 @@
 
 {% set wordsFile = "regulator/v4/member" %}
 {% set words = content(wordsFile) %}
+
+{# The button at the bottom: back to where you came from #}
+{% set backText = { submission: words.backToFlags, changes: words.backToChanges, list: words.backToMembers }[from] %}
 
 {% set pageName = member.name + ", " + org.name + " (version 4)" %}
 
@@ -181,7 +188,8 @@
         {{ govukSelect({ id: "show", name: "show", label: { text: words.showLabel, classes: "govuk-label--s" }, items: showItems }) }}
         {{ govukSelect({ id: "compare", name: "compare", label: { text: words.compareLabel, classes: "govuk-label--s" }, items: compareItems }) }}
         <div class="govuk-button-group">
-          {{ govukButton({ text: words.showButton }) }}
+          {# Grey: it changes what you see. Green is for the action that moves you on (Marie, 18 November) #}
+          {{ govukButton({ text: words.showButton, classes: "govuk-button--secondary" }) }}
         </div>
       </div>
     </form>
@@ -227,6 +235,23 @@
         }) }}
       </div>
     {% endif %}
+
+    {# At the bottom, once you've looked: select this member for a decision,
+       then back to where you came from, where they show as ticked (EB-367).
+       One form. shown: this member, so unticking here removes them. With
+       JavaScript the tick saves straight away (add-on: saveTicks); without,
+       the Back button saves it #}
+    <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}" class="govuk-!-margin-top-6">
+      <input type="hidden" name="shown" value="{{ member.bprn }}">
+      <input type="hidden" name="back" value="{{ backHref }}">
+      {{ govukCheckboxes({
+        name: "members",
+        items: [
+          { value: member.bprn, text: words.selectForDecision, checked: selected }
+        ]
+      }) }}
+      {{ govukButton({ text: backText }) }}
+    </form>
 
   </div>
 </div>

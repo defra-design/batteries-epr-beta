@@ -9,10 +9,15 @@
 // The journey (agreed with Marie, 18 November):
 //
 //   Flags or Members: tick the members you want to ask about (or none), then
-//   Make a decision. Not on a member's page: there's nothing to tick there
+//   Make a decision. Not on a member's page, but you can select the member
+//   there, at the bottom, then go back
 //     POST .../decision/start       saves the ticks, then:
 //       with members ticked        > .../decision/members  (Selected members)
 //       with none                  > .../decision           (Make a decision)
+//     POST .../decision/select      on a member's page: tick "Select this
+//                                   member for a decision", then Back to
+//                                   flags, members or changes, where they
+//                                   show as ticked
 //     POST .../decision/save        with JavaScript, each tick is saved as
 //                                   you make it, so ticks on Flags are still
 //                                   there after you move to Members
@@ -154,6 +159,15 @@ module.exports = (router) => {
   // Save the ticks as you go, so you can tick on Flags, move to Members and
   // tick more (Marie, 18 November). Sent by application.js (saveTicks) each
   // time a tick changes, with JavaScript. Nothing to show: no content (204)
+  // A member's page: "Select this member for a decision", then Back to
+  // flags, members or changes (a button, so it saves without JavaScript)
+  router.post(SUBMISSION + '/decision/select', (req, res, next_) => {
+    const s = load(req)
+    if (!s) return next_()
+    saveTicks(s, req.body)
+    res.redirect(safeBack(req.body.back, s.urls.flags))
+  })
+
   router.post(SUBMISSION + '/decision/save', (req, res, next_) => {
     const s = load(req)
     if (!s) return next_()

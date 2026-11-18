@@ -123,7 +123,8 @@
         {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
         <div class="govuk-button-group">
-          {{ govukButton({ text: words.searchButton }) }}
+          {# Grey: Search changes what you see. Green is for Make a decision, the action that moves you on: one green button per page (Marie, 18 November) #}
+          {{ govukButton({ text: words.searchButton, classes: "govuk-button--secondary" }) }}
           {{ govukButton({ text: words.resetButton, href: formAction, classes: "govuk-button--secondary" }) }}
         </div>
       </div>
