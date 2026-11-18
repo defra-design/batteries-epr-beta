@@ -251,7 +251,10 @@ module.exports = (router) => {
         href: submissionUrl(scheme, year, quarter) + '/member-figures/' + m.bprn,
         biggest: figures.biggestChange(m, key, compareKey),
         flags: submission.flags.filter(f => f.producer === m.name)
-      })),
+      }))
+        // Biggest change first, by size in tonnes, up or down: what looks
+        // wrong comes first (Marie, 18 November). Was name order, A to Z
+        .sort((a, b) => Math.abs(b.biggest.diff) - Math.abs(a.biggest.diff)),
       suggestions: all.map(m => m.name + ' (' + m.bprn + ')'),
       total: all.length,
       filters: { search, status },

@@ -28,7 +28,9 @@
   - The table, 5 columns: member, registration number, membership, the
     biggest change in words (with any flag types in bold under it), and
     View figures.
-    Sortable (MOJ sortable table): Biggest change sorts by its size, up or down
+    Opens with the biggest change first, by its size in tonnes, up or down,
+    so what looks wrong comes first (Marie, 18 November). Was name order.
+    Sortable (MOJ sortable table): any column, Biggest change by its size
   - Members who've left have no figures this quarter, so their biggest change
     is what they reported before ("Other: none this quarter")
 
@@ -121,12 +123,12 @@
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
-          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "member-figures-v4" },
+          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "member-figures-v4-biggest-first" },
           head: [
-            { text: words.memberColumn, attributes: { "aria-sort": "ascending" }, classes: small + " app-table-cell--wrap" },
+            { text: words.memberColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
             { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
             { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.changeColumn, attributes: { "aria-sort": "none" }, classes: small },
+            { text: words.changeColumn, attributes: { "aria-sort": "descending" }, classes: small },
             { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],
           rows: rows
