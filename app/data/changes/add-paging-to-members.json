@@ -1,0 +1,14 @@
+{
+  "title": "Show members 30 at a time, sorted on the server (EB-366)",
+  "type": "change",
+  "date": "2026-11-18",
+  "why": "Members in version 4 now shows 30 members a page, with page links under the table. Recycling Lives has 281 members: on one page, that's a very long scroll, and over 560 tab stops for a keyboard user (a tickbox and a View figures link on every row).\n\n**Why 30**\n\n- Alex's registration list shows 20. 30 is long enough to scan without changing page all the time, and still short enough to tab through. We can change it if research says so\n\n**Sorted on the server**\n\n- Phil confirmed the APIs page and sort on the server (18 November). So the whole list is sorted, not just the page you're on. The MOJ sortable table we used before only sorted the rows on the page, which doesn't work once there are pages\n- Each column header is a link, with an arrow for the way it's sorted, the same as the Sorting column header in Defra Internal Frontend (Geoff's library). Press it again to turn the order round\n- Biggest change still comes first, biggest at the top. Member, Registration number and Membership sort A to Z first\n- The sort and page are in the address, so Back, bookmarks and sharing a link all work, and it works without JavaScript\n\n**Search and ticks**\n\n- Search and Membership look at every member, not just this page, and go back to page 1\n- Ticks carry across pages: tick on page 1, go to page 2, tick more, then Make a decision. Without JavaScript, ticks save when you press Make a decision, so press it before changing page\n- No Select all on Members, so paging doesn't change what Select all means. Flags has under 30, so it isn't paged\n\n**To test with regulators**\n\n- Is 30 a page right, or do they want more?\n- Do they sort by anything other than Biggest change?",
+  "pages": [
+    { "label": "Members, page 1", "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures" },
+    { "label": "Members, page 2, sorted by name", "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures?status=current&sort=member%5Basc%5D&page=2" }
+  ],
+  "beforeAfter": [
+    { "label": "Members, the top of page 1 (1280 pixels wide)", "after": "changes/add-paging-to-members/after--members-top-1280-pixels.png" },
+    { "label": "Members, the page links under the table (1280 pixels wide)", "after": "changes/add-paging-to-members/after--members-pages-1280-pixels.png" }
+  ]
+}

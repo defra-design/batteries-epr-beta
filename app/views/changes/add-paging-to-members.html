@@ -1,0 +1,50 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Show members 30 at a time, sorted on the server (EB-366)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">18 November 2026</span>
+<h1 class="govuk-heading-l">Show members 30 at a time, sorted on the server (EB-366)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<p class="govuk-body">Members in version 4 now shows 30 members a page, with page links under the table. Recycling Lives has 281 members: on one page, that's a very long scroll, and over 560 tab stops for a keyboard user (a tickbox and a View figures link on every row).</p>
+<p class="govuk-body"><strong>Why 30</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Alex's registration list shows 20. 30 is long enough to scan without changing page all the time, and still short enough to tab through. We can change it if research says so</li></ul>
+<p class="govuk-body"><strong>Sorted on the server</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Phil confirmed the APIs page and sort on the server (18 November). So the whole list is sorted, not just the page you're on. The MOJ sortable table we used before only sorted the rows on the page, which doesn't work once there are pages</li><li>Each column header is a link, with an arrow for the way it's sorted, the same as the Sorting column header in Defra Internal Frontend (Geoff's library). Press it again to turn the order round</li><li>Biggest change still comes first, biggest at the top. Member, Registration number and Membership sort A to Z first</li><li>The sort and page are in the address, so Back, bookmarks and sharing a link all work, and it works without JavaScript</li></ul>
+<p class="govuk-body"><strong>Search and ticks</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Search and Membership look at every member, not just this page, and go back to page 1</li><li>Ticks carry across pages: tick on page 1, go to page 2, tick more, then Make a decision. Without JavaScript, ticks save when you press Make a decision, so press it before changing page</li><li>No Select all on Members, so paging doesn't change what Select all means. Flags has under 30, so it isn't paged</li></ul>
+<p class="govuk-body"><strong>To test with regulators</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Is 30 a page right, or do they want more?</li><li>Do they sort by anything other than Biggest change?</li></ul>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures">Members, page 1</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3/member-figures?status=current&amp;sort=member%5Basc%5D&amp;page=2">Members, page 2, sorted by name</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, the top of page 1 (1280 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-paging-to-members/after--members-top-1280-pixels.png" alt="Members, the top of page 1 (1280 pixels wide)" class="app-change-screenshot" width="640">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, the page links under the table (1280 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-paging-to-members/after--members-pages-1280-pixels.png" alt="Members, the page links under the table (1280 pixels wide)" class="app-change-screenshot" width="640">
+</div>
+</div>
+
+{% endblock %}

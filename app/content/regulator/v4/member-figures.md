@@ -31,10 +31,13 @@ Search
 ## Reset button (goes back to every current member)
 Reset
 
-## Showing (before the numbers, for example "Showing 3 of 281 members")
+## Showing (before the numbers, for example "Showing 1 to 30 of 281 members")
 Showing
 
-## Of (between the numbers)
+## To (between the first two numbers, for example "1 to 30")
+to
+
+## Of (before the total)
 of
 
 ## Members (after the numbers)
@@ -96,3 +99,6 @@ New this quarter
 
 ## None this quarter (none in the quarter shown)
 None this quarter
+
+## Pagination label (only screen readers hear this, it names the page links under the table)
+Pages of members

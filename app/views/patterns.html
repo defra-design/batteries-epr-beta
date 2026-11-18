@@ -87,8 +87,14 @@
           [
             { html: '<a href="https://design-patterns.service.justice.gov.uk/components/sortable-table/" class="govuk-link">Sortable table</a>', classes: "app-table-cell--wrap" },
             { text: "MOJ Design System", classes: "app-table-cell--wrap" },
-            { html: '<a href="' + v4Submission + '/member-figures" class="govuk-link">Members</a> (biggest change first) and the <a href="' + v4 + '/all" class="govuk-link">list of all submissions</a>. It sorts in the browser, and we remember the sort', classes: "app-table-cell--wrap" },
-            { html: yes + '<a href="' + libraryDocs + 'sorting-column-header.md" class="govuk-link">Sorting column header</a>. It sorts on the server, not in the browser: to talk through with Geoff', classes: "app-table-cell--wrap" }
+            { html: 'The <a href="' + v4 + '/all" class="govuk-link">list of all submissions</a>. It sorts in the browser, and we remember the sort. Fine for short lists that aren\'t paged', classes: "app-table-cell--wrap" },
+            { html: yes + '<a href="' + libraryDocs + 'sorting-column-header.md" class="govuk-link">Sorting column header</a> sorts on the server instead: see the next row', classes: "app-table-cell--wrap" }
+          ],
+          [
+            { text: "Sort and page on the server", classes: "app-table-cell--wrap" },
+            { text: "Defra Internal Frontend, and GOV UK pagination", classes: "app-table-cell--wrap" },
+            { html: '<a href="' + v4Submission + '/member-figures" class="govuk-link">Members</a>: 30 a page, biggest change first. Column headers are links that sort the whole list, and the sort and page are in the address. Phil confirmed the APIs page and sort on the server (18 November). Our copy of the header until we install the library', classes: "app-table-cell--wrap" },
+            { html: yes + '<a href="' + libraryDocs + 'sorting-column-header.md" class="govuk-link">Sorting column header</a>, with GOV UK pagination', classes: "app-table-cell--wrap" }
           ],
           [
             { html: '<a href="https://design-patterns.service.justice.gov.uk/components/multi-select/" class="govuk-link">Multi-select</a> (Select all), with GOV.UK small checkboxes in each row', classes: "app-table-cell--wrap" },

@@ -39,12 +39,21 @@
     View figures.
     Opens with the biggest change first, by its size in tonnes, up or down,
     so what looks wrong comes first (Marie, 18 November). Was name order.
-    Sortable (MOJ sortable table): any column, Biggest change by its size
+    Sorted on the server (Marie, 18 November): each column header is a link,
+    as Defra Internal Frontend's Sorting column header, so the whole list
+    is in order, not just this page. Was the MOJ sortable table
+  - 30 members a page, with GOV UK pagination under the table (Marie, 18
+    November; Phil: the APIs page and sort on the server). Ticks on this
+    page save as you make them (with JavaScript), so tick, go to page 2,
+    tick more. Without JavaScript, press Make a decision before changing
+    page
   - Members who've left have no figures this quarter, so their biggest change
     is what they reported before ("Other: none this quarter")
 
-  Add-ons: accessible autocomplete, MOJ sortable table, MOJ scrollable pane,
-  the filters in a row (app-filters). See the README.
+  Add-ons: accessible autocomplete, MOJ scrollable pane, the filters in a
+  row (app-filters), and the sort headers (app-sort-header, a copy of
+  Defra Internal Frontend's Sorting column header until we install that
+  library). See the README.
 
   The data: app/data/pom-submission-details.js and app/data/member-figures.js (dummy).
   The words: app/content/regulator/v4/member-figures.md
@@ -85,6 +94,25 @@
   { value: "all", text: words.all, selected: filters.status == "all" }
 ] %}
 
+{#
+  A column header you can sort by: a link that sorts the whole list on the
+  server. The same markup as Defra Internal Frontend's Sorting column header
+  (wrcSortingColumnHeader): ?sort=member[asc], an arrow for the way it's
+  sorted, and aria-sort on the header so screen readers hear it. Pressing it
+  again turns the order round. Each column has the way it sorts first
+  (defaultDirection): A to Z, or biggest change first
+#}
+{% macro sortHeader(column, label, defaultDirection, sort) -%}
+  {%- set isSorted = sort.column == column -%}
+  {%- set next = ('desc' if sort.direction == 'asc' else 'asc') if isSorted else defaultDirection -%}
+  <a class="govuk-link govuk-link--no-visited-state app-sort-header" href="{{ sort.baseUrl }}&amp;sort={{ column }}[{{ next }}]">{{ label }}<svg width="22" height="22" focusable="false" aria-hidden="true" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {%- if isSorted and sort.direction == 'asc' -%}<path d="M6.5625 15.5L11 6.63125L15.4375 15.5H6.5625Z" fill="currentColor"></path>
+  {%- elif isSorted -%}<path d="M15.4375 7L11 15.8687L6.5625 7L15.4375 7Z" fill="currentColor"></path>
+  {%- else -%}<path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path><path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+  {%- endif -%}</svg></a>
+{%- endmacro %}
+{% macro ariaSort(column, sort) -%}{{ (sort.direction + 'ending') if sort.column == column else 'none' }}{%- endmacro %}
+
 {% set rows = [] %}
 {% for m in members %}
   {# The flag types in bold under the biggest change, not the name: it's the
@@ -95,10 +123,10 @@
   {% set tickHtml %}<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes"><div class="govuk-checkboxes__item"><input class="govuk-checkboxes__input" id="select-{{ m.bprn }}" name="members" type="checkbox" value="{{ m.bprn }}"{% if m.selected %} checked{% endif %}><label class="govuk-label govuk-checkboxes__label" for="select-{{ m.bprn }}"><span class="govuk-visually-hidden">{{ words.selectMember }} {{ m.name }}</span></label></div></div>{% endset %}
   {% set rows = (rows.push([
     { html: tickHtml, classes: small + " app-table-cell--tick" },
-    { text: m.name, attributes: { "data-sort-value": m.name }, classes: small + " app-table-cell--wrap" },
+    { text: m.name, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
-    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', attributes: { "data-sort-value": ("1" if m.current else "2") }, classes: small },
-    { html: ((m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower)) | escape) + tagsHtml, attributes: { "data-sort-value": (m.biggest.diff | abs) }, classes: small },
+    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', classes: small },
+    { html: ((m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower)) | escape) + tagsHtml, classes: small },
     { html: '<a href="' + m.href + '" class="govuk-link">' + (words.viewFiguresLink | escape) + '<span class="govuk-visually-hidden"> ' + (words.viewFiguresFor | escape) + ' ' + (m.name | escape) + '</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
 {% endfor %}
@@ -120,6 +148,8 @@
       <div class="app-filters">
         {# Add-on: accessible autocomplete. data-app-suggestions is every member,
            "Name (BPRN)", for the suggestions (see application.js) #}
+        {# Keeps the sort when you search. Search goes back to page 1 #}
+        <input type="hidden" name="sort" value="{{ sort.text }}">
         {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
         {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
         <div class="govuk-button-group">
@@ -130,7 +160,8 @@
       </div>
     </form>
 
-    <p class="govuk-body">{{ words.showing }} {{ members.length }} {{ words.of }} {{ total }} {{ words.members }}. {{ words.comparedWith }} {{ compareName }}.</p>
+    {# "Showing 1 to 30 of 281 members", or "Showing 3 of 281 members" when it all fits on one page #}
+    <p class="govuk-body">{{ words.showing }} {% if pagination %}{{ showingFrom }} {{ words.to }} {{ showingTo }}{% else %}{{ found }}{% endif %} {{ words.of }} {% if pagination %}{{ found }}{% else %}{{ total }}{% endif %} {{ words.members }}. {{ words.comparedWith }} {{ compareName }}.</p>
 
     {% if members.length %}
       {# One form: the ticks and Make a decision. shown: the members on this
@@ -146,19 +177,22 @@
         {{ govukTable({
           caption: words.tableCaption,
           captionClasses: "govuk-visually-hidden",
-          attributes: { "data-module": "moj-sortable-table", "data-app-remember-sort": "member-figures-v4-biggest-first" },
           head: [
             { html: '<span class="govuk-visually-hidden">' + (words.selectColumn | escape) + '</span>', classes: small + " app-table-cell--tick" },
-            { text: words.memberColumn, attributes: { "aria-sort": "none" }, classes: small + " app-table-cell--wrap" },
-            { text: words.bprnColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.statusColumn, attributes: { "aria-sort": "none" }, classes: small },
-            { text: words.changeColumn, attributes: { "aria-sort": "descending" }, classes: small },
+            { html: sortHeader("member", words.memberColumn, "asc", sort), attributes: { "aria-sort": ariaSort("member", sort) }, classes: small + " app-table-cell--wrap" },
+            { html: sortHeader("bprn", words.bprnColumn, "asc", sort), attributes: { "aria-sort": ariaSort("bprn", sort) }, classes: small },
+            { html: sortHeader("status", words.statusColumn, "asc", sort), attributes: { "aria-sort": ariaSort("status", sort) }, classes: small },
+            { html: sortHeader("change", words.changeColumn, "desc", sort), attributes: { "aria-sort": ariaSort("change", sort) }, classes: small },
             { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],
           rows: rows
         }) }}
       </div>
       </form>
+      {# Under the table, inside nothing: the page links are plain links #}
+      {% if pagination %}
+        {{ govukPagination({ items: pagination.items, previous: pagination.previous, next: pagination.next, landmarkLabel: words.paginationLabel }) }}
+      {% endif %}
     {% else %}
       <p class="govuk-body">{{ words.noMembers }}</p>
       {# Make a decision is still there, with nothing to tick: you can make a

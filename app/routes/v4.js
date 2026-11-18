@@ -73,6 +73,50 @@ function pick (value, allowed, fallback) {
   return allowed.includes(value) ? value : fallback
 }
 
+// Members, paged and sorted on the server (Marie, 18 November). 30 a page:
+// long enough to scan, short enough to tab through with a keyboard
+const MEMBERS_PER_PAGE = 30
+
+// The columns you can sort Members by. Each sorts A to Z, or smallest first;
+// [desc] turns it round. Biggest change sorts by its size in tonnes, up or
+// down, and opens biggest first, so what looks wrong comes first
+const byName = (a, b) => a.name.localeCompare(b.name)
+const MEMBER_SORTS = {
+  member: byName,
+  bprn: (a, b) => a.bprn.localeCompare(b.bprn),
+  status: (a, b) => (b.current - a.current) || byName(a, b),
+  change: (a, b) => (Math.abs(a.biggest.diff) - Math.abs(b.biggest.diff)) || byName(b, a)
+}
+
+// ?sort=change[desc], the way Defra Internal Frontend writes it. Anything
+// else falls back to biggest change first
+function memberSort (text) {
+  const match = String(text || '').match(/^([a-z]+)\[(asc|desc)\]$/)
+  if (match && MEMBER_SORTS[match[1]]) return { column: match[1], direction: match[2] }
+  return { column: 'change', direction: 'desc' }
+}
+
+// The GOV UK pagination component's previous, next and page links. With lots
+// of pages it shows the first, the last and the ones either side of this
+// one, with "…" between, as the GOV UK Design System says
+function paginationFor (page, pages, baseUrl) {
+  if (pages < 2) return null
+  const href = n => baseUrl + '&page=' + n
+  const items = []
+  for (let n = 1; n <= pages; n++) {
+    if (n === 1 || n === pages || Math.abs(n - page) <= 1) {
+      items.push({ number: n, href: href(n), current: n === page })
+    } else if (items.length && !items[items.length - 1].ellipsis) {
+      items.push({ ellipsis: true })
+    }
+  }
+  return {
+    items,
+    previous: page > 1 ? { href: href(page - 1) } : null,
+    next: page < pages ? { href: href(page + 1) } : null
+  }
+}
+
 // The members already selected for a decision on this submission (EB-367,
 // app/routes/v4-decision.js keeps them), so they stay ticked when you come back
 function selectedMembers (req, scheme, year, quarter) {
@@ -239,7 +283,14 @@ module.exports = (router) => {
   // the quarter before. Search by name or registration number, and filter
   // by membership (current members first, as version 3). The search filters
   // this list: it never jumps to another page. A suggestion picked from the
-  // list is "Name (BPRN)", so that matches too
+  // list is "Name (BPRN)", so that matches too.
+  //
+  // Paged, 30 at a time, and sorted on the server, so the whole list is in
+  // order, not just the page you're on (Marie, 18 November; Phil: the APIs
+  // page and sort on the server). The address carries it all, as Defra
+  // Internal Frontend does: ?sort=change[desc]&page=2. Search and
+  // Membership go back to page 1. Was every member on one page, sorted in
+  // the browser (MOJ sortable table)
   router.get(V4 + '/:scheme/:year/:quarter/member-figures', (req, res, next) => {
     const { scheme, year, quarter } = req.params
     const organisation = details.organisation(scheme)
@@ -258,6 +309,23 @@ module.exports = (router) => {
         m.bprn.toLowerCase().includes(term) ||
         (m.name + ' (' + m.bprn + ')').toLowerCase() === term))
     const selected = selectedMembers(req, scheme, year, quarter)
+    const sort = memberSort(req.query.sort)
+    const rows = found.map(m => ({
+      ...m,
+      href: submissionUrl(scheme, year, quarter) + '/member-figures/' + m.bprn,
+      biggest: figures.biggestChange(m, key, compareKey),
+      flags: submission.flags.filter(f => f.producer === m.name),
+      selected: selected.includes(m.bprn)
+    })).sort(MEMBER_SORTS[sort.column])
+    if (sort.direction === 'desc') rows.reverse()
+    const pages = Math.max(1, Math.ceil(rows.length / MEMBERS_PER_PAGE))
+    const page = Math.min(pages, Math.max(1, parseInt(req.query.page, 10) || 1))
+    const shown = rows.slice((page - 1) * MEMBERS_PER_PAGE, page * MEMBERS_PER_PAGE)
+    // The address without sort or page, for the column headers and the pages
+    const baseQuery = new URLSearchParams({ status })
+    if (search) baseQuery.set('search', search)
+    const baseUrl = req.path + '?' + baseQuery.toString()
+    const sortText = sort.column + '[' + sort.direction + ']'
     res.render('regulator/v4/member-figures', {
       submission,
       // Tick members to ask about, then Make a decision (EB-367):
@@ -267,16 +335,12 @@ module.exports = (router) => {
       org: organisation,
       quarterText: submission.yearQuarterFull,
       compareName: figures.quarterName(compareKey),
-      members: found.map(m => ({
-        ...m,
-        href: submissionUrl(scheme, year, quarter) + '/member-figures/' + m.bprn,
-        biggest: figures.biggestChange(m, key, compareKey),
-        flags: submission.flags.filter(f => f.producer === m.name),
-        selected: selected.includes(m.bprn)
-      }))
-        // Biggest change first, by size in tonnes, up or down: what looks
-        // wrong comes first (Marie, 18 November). Was name order, A to Z
-        .sort((a, b) => Math.abs(b.biggest.diff) - Math.abs(a.biggest.diff)),
+      members: shown,
+      found: rows.length,
+      showingFrom: shown.length ? (page - 1) * MEMBERS_PER_PAGE + 1 : 0,
+      showingTo: (page - 1) * MEMBERS_PER_PAGE + shown.length,
+      sort: { ...sort, baseUrl, text: sortText },
+      pagination: paginationFor(page, pages, baseUrl + '&sort=' + encodeURIComponent(sortText)),
       suggestions: all.map(m => m.name + ' (' + m.bprn + ')'),
       total: all.length,
       filters: { search, status },

@@ -124,3 +124,13 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
     padding-right: 0;
   }
 }
+
+// Sort headers on Members (version 4, 18 November): a link with an arrow,
+// as Defra Internal Frontend's Sorting column header (its styles, copied
+// until we install the library). The whole list sorts on the server
+.app-sort-header {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  text-decoration: none;
+}
