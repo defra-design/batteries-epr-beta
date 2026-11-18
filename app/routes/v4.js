@@ -76,7 +76,7 @@ function pick (value, allowed, fallback) {
 // The members already selected for a decision on this submission (EB-367,
 // app/routes/v4-decision.js keeps them), so they stay ticked when you come back
 function selectedMembers (req, scheme, year, quarter) {
-  const all = req.session.v4Decisions || {}
+  const all = (req.session.data && req.session.data.v4Decisions) || {}
   const d = all[scheme + '/' + year + '/' + quarter]
   return d ? d.members : []
 }

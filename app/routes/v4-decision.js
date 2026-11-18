@@ -32,7 +32,8 @@
 //     The confirmation: a panel and what happens next, for the decision made
 //
 // What's ticked and typed is kept in the session, one submission at a time
-// (req.session.v4Decisions), so it works without JavaScript: every page is
+// (req.session.data.v4Decisions, so Clear data in the footer clears it),
+// so it works without JavaScript: every page is
 // a plain form. Nothing is ticked to start with on Flags or Members, but a
 // member you've already selected stays ticked when you come back to add more.
 //
@@ -63,11 +64,14 @@ function safeBack (url, fallback) {
 }
 
 // This submission's decision so far, kept in the session
+// Kept in the kit's own data (req.session.data), so Clear data, in the
+// footer, clears it between research sessions (Marie, 18 November)
 function decisionFor (req, scheme, year, quarter) {
   const key = scheme + '/' + year + '/' + quarter
-  req.session.v4Decisions = req.session.v4Decisions || {}
-  req.session.v4Decisions[key] = req.session.v4Decisions[key] || { members: [], questions: {}, answers: {}, from: null }
-  return req.session.v4Decisions[key]
+  req.session.data = req.session.data || {}
+  req.session.data.v4Decisions = req.session.data.v4Decisions || {}
+  req.session.data.v4Decisions[key] = req.session.data.v4Decisions[key] || { members: [], questions: {}, answers: {}, from: null }
+  return req.session.data.v4Decisions[key]
 }
 
 // Everything a decision page needs about the submission, or null if there's no such submission
