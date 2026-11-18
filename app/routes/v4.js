@@ -330,10 +330,6 @@ module.exports = (router) => {
       same: show === compare,
       table: figures.comparison(member, show, compare),
       formAction: req.path,
-      // Make a decision, as on Flags (EB-367): with no ticks here, it goes to
-      // Selected members if you've ticked some elsewhere, or straight to
-      // Make a decision. Back comes back to this page
-      decisionHref: here + '/decision/start?from=' + encodeURIComponent(req.originalUrl),
       backHref
     })
   })

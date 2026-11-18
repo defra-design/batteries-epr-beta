@@ -33,9 +33,9 @@
     the scheme sent the return, newest first: date, chemistry, before and
     after (tonnes), who changed it. From Ian's amendment history design.
     After the figures, so you see what's odd, then what's been fixed
-  - Make a decision (a green button): the same as on Flags (EB-367, 18
-    November). No ticks on this page: it goes to Selected members if you've
-    ticked some on Flags or Members, or straight to Make a decision
+  - No Make a decision button: there's nothing to tick here, so you make a
+    decision from Flags or Members, where you can tick members (Marie, 18
+    November). Was: a Make a decision button, the same as on Flags
   - No links under the tables: Back at the top is the way back
 
   One page, not a sub navigation like the submission: the flags, figures and
@@ -227,10 +227,6 @@
         }) }}
       </div>
     {% endif %}
-
-    {# Make a decision, as on Flags: you're often looking at a member when
-       you decide (EB-367, app/routes/v4-decision.js) #}
-    {{ govukButton({ text: words.makeADecisionButton, href: decisionHref }) }}
 
   </div>
 </div>

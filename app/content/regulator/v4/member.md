@@ -96,6 +96,3 @@ New this quarter
 
 ## None this quarter (none in the quarter shown)
 None this quarter
-
-## Make a decision button (accept, query or reject the whole return, the same as on Flags)
-Make a decision

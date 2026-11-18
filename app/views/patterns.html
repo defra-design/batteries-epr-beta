@@ -1,12 +1,22 @@
 {% extends "layouts/areas.html" %}
 
 {#
-  Patterns: components and patterns we're trying out, and the regulator toolkit prototype we align with.
-  Anything here from outside the GOV.UK Design System is also listed in the README, "Add-ons".
+  Patterns: the shared components and patterns we align with, and the ones
+  we use from outside the GOV.UK Design System.
+  Updated 18 November 2026 for version 4 (EB-366 and EB-367), and Geoff
+  Kaile's shared component library, Defra Internal Frontend.
+  Anything here from outside the GOV.UK Design System is also listed in the
+  README, "Add-ons".
 #}
 
 {% set pageName = "Patterns" %}
 {% set area = "patterns" %}
+
+{% set libraryUrl = "https://github.com/DEFRA/waste-regulator-components-fe" %}
+{% set libraryDocs = "https://github.com/DEFRA/waste-regulator-components-fe/blob/main/docs/components/" %}
+{% set toolkitUrl = "https://regulator-responsibility-app-359d82a07820.herokuapp.com/docs/design-patterns/patterns/patterns" %}
+{% set v4 = "/regulator/pom-submissions/v4" %}
+{% set v4Submission = "/regulator/pom-submissions/v4/recycling-lives/2026/3" %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -14,19 +24,30 @@
 
     <h1 class="govuk-heading-xl">Patterns</h1>
 
-    <p class="govuk-body-l">Patterns, components and experiments we're trying out for Batteries EPR.</p>
+    <p class="govuk-body-l">The shared components we align with, and what we use from outside the GOV.UK Design System.</p>
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-8">Defra Internal Frontend</h2>
+
+    <p class="govuk-body">A shared library of components for Defra internal services, such as regulator services, built on GOV.UK Frontend. It's maintained by the EPR Regulators team. Geoff Kaile is the front-end developer.</p>
+
+    <p class="govuk-body">Developers build regulator pages from this library, so where it has a component, we use it, or something that matches it. When we need something it doesn't have, we tell Geoff.</p>
+
+    <ul class="govuk-list">
+      <li><a href="{{ libraryDocs }}index.md" class="govuk-link" rel="noreferrer noopener" target="_blank">Defra Internal Frontend: components (opens in new tab)</a></li>
+      <li><a href="{{ libraryUrl }}" class="govuk-link" rel="noreferrer noopener" target="_blank">Defra Internal Frontend on GitHub (opens in new tab)</a></li>
+    </ul>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-8">Regulator toolkit prototype</h2>
 
-    <p class="govuk-body">The regulator toolkit team own the shared design for regulator services across EPR. On regulator pages, we use their patterns and stay aligned with them. Anything new we design for regulators, we add to their prototype.</p>
+    <p class="govuk-body">The regulator toolkit team own the shared design for regulator services across EPR. On regulator pages, we use their patterns and stay aligned with them. Anything new we design for regulators, we share with them.</p>
 
     <p class="govuk-body">Alex Colbeck is their interaction designer. Ask Marie or Alex for the password.</p>
 
-    <p class="govuk-body"><a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/docs/design-patterns/patterns/patterns" class="govuk-link">Regulator toolkit prototype: caseworking design patterns</a></p>
+    <p class="govuk-body"><a href="{{ toolkitUrl }}" class="govuk-link" rel="noreferrer noopener" target="_blank">Regulator toolkit prototype: caseworking design patterns (opens in new tab)</a></p>
 
     <h2 class="govuk-heading-m govuk-!-margin-top-8">From outside the GOV.UK Design System</h2>
 
-    <p class="govuk-body">We use these because the GOV.UK Design System doesn't have what we need yet.</p>
+    <p class="govuk-body">We use these because the GOV.UK Design System doesn't have what we need yet. The last column says whether Defra Internal Frontend has it.</p>
 
   </div>
 </div>
@@ -34,37 +55,81 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
-    {{ govukTable({
-      caption: "From outside the GOV.UK Design System",
-      captionClasses: "govuk-visually-hidden",
-      firstCellIsHeader: true,
-      head: [
-        { text: "Component" },
-        { text: "From" },
-        { text: "Where we use it" },
-        { text: "Where else it's used" }
-      ],
-      rows: [
-        [
-          { html: '<a href="https://design-patterns.service.justice.gov.uk/components/sortable-table/" class="govuk-link">Sortable table</a>' },
-          { text: "MOJ Design System" },
-          { html: '<a href="/regulators" class="govuk-link">Regulators</a> (the list of prototypes), <a href="/regulator/pom-submissions/full/recycling-lives/2026/3/members" class="govuk-link">members of a scheme</a> and <a href="/regulator/pom-submissions/all-submissions" class="govuk-link">placed on the market submissions</a> (all submissions)' },
-          { html: 'Regulator toolkit prototype: <a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/v4/regulator-index--dashboard?persona=basic-user" class="govuk-link">regulator dashboard</a> (every To action and Completed table)' }
+    {# The tag on its own line, the words under it #}
+    {% set yes = '<strong class="govuk-tag govuk-tag--green govuk-!-margin-bottom-2">Yes</strong><br>' %}
+    {% set no = '<strong class="govuk-tag govuk-tag--grey govuk-!-margin-bottom-2">Not yet</strong><br>' %}
+
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="From outside the GOV.UK Design System">
+      {{ govukTable({
+        caption: "From outside the GOV.UK Design System",
+        captionClasses: "govuk-visually-hidden",
+        firstCellIsHeader: true,
+        classes: "govuk-!-font-size-16",
+        head: [
+          { text: "Component", classes: "app-table-cell--wrap" },
+          { text: "From", classes: "app-table-cell--wrap" },
+          { text: "Where we use it", classes: "app-table-cell--wrap" },
+          { text: "In Defra Internal Frontend", classes: "app-table-cell--wrap" }
         ],
-        [
-          { html: '<a href="https://design-patterns.service.justice.gov.uk/components/scrollable-pane/" class="govuk-link">Scrollable pane</a>' },
-          { text: "MOJ Design System (copied exactly, as the version of MOJ Frontend this kit can use doesn't have it)" },
-          { html: 'Every wide table: <a href="/regulators" class="govuk-link">Regulators</a>, <a href="/regulator/pom-submissions/latest-quarter" class="govuk-link">placed on the market submissions</a> (both versions), the flags table on the submission (full version) and members of a scheme' },
-          { html: 'Regulator toolkit prototype: <a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/v4/regulator-index--dashboard?persona=basic-user" class="govuk-link">regulator dashboard</a> and <a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/v4/certificates-of-compliance/basic-user/certificate-details?orgId=100105" class="govuk-link">certificate of compliance details</a>' }
-        ],
-        [
-          { html: '<a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/docs/design-patterns/patterns/patterns" class="govuk-link">Defra internal header, service navigation and footer</a>' },
-          { text: "Regulator toolkit prototype" },
-          { text: "Every regulator page in the prototype. Not agreed for the build yet" },
-          { html: 'Regulator toolkit prototype: every page, for example the <a href="https://regulator-responsibility-app-359d82a07820.herokuapp.com/v4/regulator-index--dashboard?persona=basic-user" class="govuk-link">regulator dashboard</a>' }
+        rows: [
+          [
+            { html: '<a href="https://design-patterns.service.justice.gov.uk/components/sub-navigation/" class="govuk-link">Sub navigation</a>', classes: "app-table-cell--wrap" },
+            { text: "MOJ Design System", classes: "app-table-cell--wrap" },
+            { html: 'Moving between the 5 pages of a <a href="' + v4Submission + '" class="govuk-link">submission</a> (version 4)', classes: "app-table-cell--wrap" },
+            { html: yes + '<a href="' + libraryDocs + 'producer-subnavigation.md" class="govuk-link">Producer subnavigation</a>, the same component. To ask Geoff: could it be called "Sub navigation", so every team can use it?', classes: "app-table-cell--wrap" }
+          ],
+          [
+            { html: '<a href="https://design-patterns.service.justice.gov.uk/components/scrollable-pane/" class="govuk-link">Scrollable pane</a>', classes: "app-table-cell--wrap" },
+            { text: "MOJ Design System (copied exactly, as the version of MOJ Frontend this kit uses doesn't have it)", classes: "app-table-cell--wrap" },
+            { text: "Every table, so on a phone only the table scrolls sideways. One column of names can wrap, so tables fit a desktop", classes: "app-table-cell--wrap" },
+            { html: yes + '<a href="' + libraryDocs + 'moj-scrollable-pane.md" class="govuk-link">Scrollable pane</a>, including letting text wrap', classes: "app-table-cell--wrap" }
+          ],
+          [
+            { html: '<a href="https://design-patterns.service.justice.gov.uk/components/sortable-table/" class="govuk-link">Sortable table</a>', classes: "app-table-cell--wrap" },
+            { text: "MOJ Design System", classes: "app-table-cell--wrap" },
+            { html: '<a href="' + v4Submission + '/member-figures" class="govuk-link">Members</a> (biggest change first) and the <a href="' + v4 + '/all" class="govuk-link">list of all submissions</a>. It sorts in the browser, and we remember the sort', classes: "app-table-cell--wrap" },
+            { html: yes + '<a href="' + libraryDocs + 'sorting-column-header.md" class="govuk-link">Sorting column header</a>. It sorts on the server, not in the browser: to talk through with Geoff', classes: "app-table-cell--wrap" }
+          ],
+          [
+            { html: '<a href="https://design-patterns.service.justice.gov.uk/components/multi-select/" class="govuk-link">Multi-select</a> (Select all), with GOV.UK small checkboxes in each row', classes: "app-table-cell--wrap" },
+            { text: "MOJ Design System", classes: "app-table-cell--wrap" },
+            { html: 'Ticking members on <a href="' + v4Submission + '" class="govuk-link">Flags</a> (with Select all) and Members (without), to make a decision (EB-367). Ticks save as you go', classes: "app-table-cell--wrap" },
+            { html: no + 'Same pattern as Alex\'s registration page. To raise with Geoff', classes: "app-table-cell--wrap" }
+          ],
+          [
+            { html: '<a href="https://alphagov.github.io/accessible-autocomplete/" class="govuk-link">Accessible autocomplete</a>', classes: "app-table-cell--wrap" },
+            { text: "GOV.UK (a separate package, not in the Design System)", classes: "app-table-cell--wrap" },
+            { html: 'The search on <a href="' + v4Submission + '/member-figures" class="govuk-link">Members</a>: suggests members as you type. Without JavaScript, a normal search box', classes: "app-table-cell--wrap" },
+            { html: no + 'The library has a plain <a href="' + libraryDocs + 'search.md" class="govuk-link">Search</a>. To raise with Geoff', classes: "app-table-cell--wrap" }
+          ],
+          [
+            { html: '<a href="' + toolkitUrl + '" class="govuk-link">Defra internal header, service navigation and footer</a>', classes: "app-table-cell--wrap" },
+            { text: "Regulator toolkit prototype", classes: "app-table-cell--wrap" },
+            { text: "Every regulator page in the prototype", classes: "app-table-cell--wrap" },
+            { html: yes + '<a href="' + libraryDocs + 'defra-internal-header.md" class="govuk-link">Header</a>, <a href="' + libraryDocs + 'defra-internal-service-header.md" class="govuk-link">service header</a> and <a href="' + libraryDocs + 'defra-internal-footer.md" class="govuk-link">footer</a>. Ours are copied from Alex\'s prototype: check they still match', classes: "app-table-cell--wrap" }
+          ]
         ]
-      ]
-    }) }}
+      }) }}
+    </div>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Small things we've added</h2>
+
+    <p class="govuk-body">Not components: small additions to make the pages work. Each is explained in the README, "Add-ons", with how to remove it.</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Words files: the words for each page live in app/content/, so content design can change them without touching the code</li>
+      <li>Filters in a row: search boxes, dropdowns and buttons side by side, wrapping on a phone</li>
+      <li>A checkbox column in a table, only as wide as the checkbox</li>
+      <li>Remember a table's sort, when you come back to the page</li>
+      <li>Save ticks as you go, so you can tick on Flags and Members before making a decision</li>
+      <li>Record a change: the <a href="/changes" class="govuk-link">What's changed</a> pages, with screenshots and journey diagrams</li>
+    </ul>
 
   </div>
 </div>
