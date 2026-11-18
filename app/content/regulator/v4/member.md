@@ -106,5 +106,5 @@ Back to flags
 ## Back to members (a button at the bottom, when you came from Members)
 Back to members
 
-## Back to changes (a button at the bottom, when you came from Changes)
-Back to changes
+## Go to members (a button at the bottom, when you came from Changes: it goes to Members, where you can make a decision)
+Go to members

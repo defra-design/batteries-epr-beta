@@ -62,7 +62,10 @@
 {% set words = content(wordsFile) %}
 
 {# The button at the bottom: back to where you came from #}
-{% set backText = { submission: words.backToFlags, changes: words.backToChanges, list: words.backToMembers }[from] %}
+{# From Changes, the button goes to Members, where you can tick more and
+   make a decision: Changes has nothing to act on (Marie, 18 November). The
+   Back link at the top still goes to Changes #}
+{% set backText = { submission: words.backToFlags, changes: words.goToMembers, list: words.backToMembers }[from] %}
 
 {% set pageName = member.name + ", " + org.name + " (version 4)" %}
 
@@ -243,7 +246,7 @@
        the Back button saves it #}
     <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}" class="govuk-!-margin-top-6">
       <input type="hidden" name="shown" value="{{ member.bprn }}">
-      <input type="hidden" name="back" value="{{ backHref }}">
+      <input type="hidden" name="back" value="{{ membersHref if from == 'changes' else backHref }}">
       {{ govukCheckboxes({
         name: "members",
         items: [

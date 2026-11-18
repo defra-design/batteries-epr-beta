@@ -27,10 +27,10 @@
     - Reject the whole submission
     Not much in reveals: only the date (Marie, 18 November). Was: each
     option opened its own questions
-  - Message to the scheme: one box, whatever you choose, always required.
-    One rule, so nobody has to work out when it's needed. To accept, it can
-    be short (Marie, 18 November). Was: required only to reject or to query
-    the whole submission, which needed a hint to explain
+  - Message to the scheme: one box, whatever you choose. Optional to accept,
+    required to query or reject (Mak, 18 November; alpha research: accepting
+    shouldn't need a reason). A hint under the label says so, rather than a
+    box that opens up. Was: always required
   - Attach a file (optional), whatever you choose
   - No internal notes: taken off (Marie, 18 November). There's a need
     (UN-061), but nowhere yet to show them again, and too much on the page.
@@ -135,6 +135,7 @@
         value: a.message,
         maxlength: 1000,
         label: { text: words.messageLabel, classes: "govuk-label--s" },
+        hint: { text: words.messageHint },
         errorMessage: err.message
       }) }}
 

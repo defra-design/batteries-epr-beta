@@ -286,10 +286,11 @@ module.exports = (router) => {
       const date = checkDate(answers.respondByDay, answers.respondByMonth, answers.respondByYear)
       if (date.error) errors.respondBy = { missing: 'errorRespondByMissing', invalid: 'errorRespondByInvalid', past: 'errorRespondByPast' }[date.error]
     }
-    // A message to the scheme, always: one rule, whatever the decision. To
-    // accept, it can be short (Marie, 18 November). Was: required only to
-    // reject or to query the whole submission
-    if (!answers.message) errors.message = 'errorMessage'
+    // A message to the scheme: optional to accept, required to query or
+    // reject (Mak, 18 November, and alpha research: accepting shouldn't need a
+    // reason). The hint under the box says so
+    if (decision === 'query' && !answers.message) errors.message = 'errorMessageQuery'
+    if (decision === 'reject' && !answers.message) errors.message = 'errorMessageReject'
 
     if (Object.keys(errors).length) return renderDecision(req, res, s, errors)
 

@@ -335,6 +335,7 @@ module.exports = (router) => {
       // where you came from, where they show as ticked (EB-367, Marie, 18
       // November). The tick is saved by app/routes/v4-decision.js
       selected: selectedMembers(req, scheme, year, quarter).includes(member.bprn),
+      membersHref: here + '/member-figures',
       selectAction: here + '/decision/select',
       saveAction: here + '/decision/save'
     })

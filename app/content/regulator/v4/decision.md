@@ -64,8 +64,11 @@ Year
 ## Reject
 Reject the whole submission
 
-## Message label (one box, whatever the decision, always required)
+## Message label (one box, whatever the decision)
 Message to the scheme
+
+## Message hint (under the label)
+Optional if you're accepting the submission.
 
 ## File label
 Attach a file (optional)
@@ -88,5 +91,8 @@ Respond by must be a real date
 ## Error respond by past (the prototype's "today" is 23 November 2026)
 Respond by must be in the future
 
-## Error message (when the message is empty)
-Enter a message to the scheme
+## Error message query (when querying with no message)
+Enter what you want the scheme to explain
+
+## Error message reject (when rejecting with no message)
+Enter why you're rejecting the submission
