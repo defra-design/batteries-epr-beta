@@ -18,20 +18,17 @@ Submission details
 ## Submitted
 Submitted
 
-## Review by
-Review by
+## Overdue (bold, under the submitted date, 28 days or more after it was sent, until it's accepted or queried)
+Overdue
 
-## Overdue (bold, in place of the review by date, after the number of days, for example "3 days overdue")
-overdue
+## Day ago (under the submitted date, after the number 1)
+day ago
 
-## Day (after the number 1, when it's overdue)
-day
+## Days ago (under the submitted date, after the number of days, for example "12 days ago")
+days ago
 
-## Days (after the number, when it's overdue)
-days
-
-## Due today (bold, in place of the review by date)
-Due today
+## Submitted today (under the submitted date, on the day it's sent)
+Today
 
 ## Submitted by
 Submitted by

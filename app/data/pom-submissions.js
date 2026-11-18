@@ -11,10 +11,9 @@
 // Was 5 November 2026: moved on 17 November, as 12 November would have been in
 // the past by research (David and Steve)
 //
-// The latest quarter shows each review date case once, so research can see
-// them all and nothing looks odd (team playback, 16 November):
-// overdue by 3 days, due today, a date to come (30 November), and accepted
-// (no review date).
+// The latest quarter shows each case once, so research can see them all
+// (18 November): overdue (sent 31 days ago), 10 days ago, 3 days ago, and
+// accepted (just the date).
 // Was: an escalated return from April to June 2026, overdue by 101 days, which
 // would throw people in research. No dummy return is Query raised or Escalated
 //
@@ -48,7 +47,8 @@ const STATUSES = {
 
 // The latest quarter (July to September 2026): a mix of statuses
 const LATEST = {
-  'recycling-lives': { submitted: '2026-11-10', status: 'Response received' },
+  // Recycling Lives: sent 31 days before "today", so it shows Overdue
+  'recycling-lives': { submitted: '2026-10-23', status: 'Response received' },
   'erp-uk': { submitted: '2026-11-13', status: 'Under review' },
   batteryback: { submitted: '2026-11-20', status: 'To review' },
   valpak: { submitted: '2026-10-16', status: 'Accepted' }
@@ -93,8 +93,16 @@ function all () {
           submitted = addDays(quarterEnd, 9 + i * 4)
           status = 'Accepted'
         }
-        const due = addDays(submitted, 10)
+        // 28 consecutive days to review it (David, 18 November). Was 10
+        const due = addDays(submitted, 28)
         const open = status !== 'Accepted'
+        // Days since it was sent: shown until it's accepted or queried, when
+        // the status says where it's at (Mak and David, 18 November).
+        // Day 0 is the day it's sent, the next day is "1 day ago" (Mak, 18
+        // November). To confirm (Mak is asking): whether the count starts
+        // again when a scheme answers a query
+        const counting = open && status !== 'Query raised'
+        const daysSince = counting ? daysBetween(submitted, TODAY) : null
         rows.push({
           scheme: scheme.name,
           schemeSlug: scheme.slug,
@@ -111,7 +119,9 @@ function all () {
           reviewByText: shortDate(due),
           reviewBySort: due,
           dueSort: open ? due : '',
-          overdue: open && due < TODAY,
+          // Overdue: 28 days or more since it was sent, and not accepted or queried
+          overdue: counting && daysSince >= 28,
+          daysSince,
           // Time left to review it (team playback, 16 November): 3 is 3 days
           // left, 0 is due today, -3 is overdue by 3 days. Nothing once accepted
           daysLeft: open ? daysBetween(TODAY, due) : null,

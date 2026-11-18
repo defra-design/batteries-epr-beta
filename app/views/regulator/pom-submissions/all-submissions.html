@@ -9,7 +9,7 @@
   Design session, 10 November 2026:
   - "Show" not "Apply filters" (Phil, Mak), and "Reset" not "Clear filters":
     it goes back to the defaults, it doesn't empty the selects (Kieran, Ashley)
-  - Lands sorted by Review by, so what needs action comes first (Jen, Rich, David).
+  - Lands sorted by Submitted (oldest still to review first), so what needs action comes first (Jen, Rich, David).
     Was newest quarter first
   - Status sorts in workflow order, Accepted last, not alphabetically (Kieran).
     Sorting is stable, so within a column's ties the rows keep the order they
@@ -83,31 +83,21 @@
 {% set small = "govuk-!-font-size-16" %}
 {% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status }}</strong>{% endmacro %}
 {#
-  Review by: the date the regulator needs to review it by (10 days after it
-  was submitted), on one line. In place of the date: "Due today" or
-  "3 days overdue", both in bold, so what needs doing now stands out. Bold
-  black, not red: in GOV.UK services red text means an error (agreed with
-  Jen, 6 November). One date column, so the team can see at a glance what
-  needs doing first. The Submitted date is on the submission.
-  Accepted: nothing to review, so the cell is empty on screen, and screen
-  readers hear "Not applicable" (as the regulator toolkit does).
-  History: team playback, 16 November: one date column (was Submitted and
-  Review by), with the time left under the date. Jen, 16 November: one line,
-  the date or how overdue it is. Marie, 17 November: Due today in bold too
-  Option A, Marie, 17 November: always the review by date, with "3 days
-  overdue" or "Due today" in bold under it. Accepted returns show their
-  review by date too, so there's always a date and older returns show when
-  they were due. Was (Jen, 16 November): the warning in place of the date,
-  so the date disappeared when it mattered most, and an empty cell once accepted.
+  Submitted (Mak and David, 18 November): the date it was sent, with how long
+  ago under it ("12 days ago", "Today"), so anyone working to 10 days can see
+  it at a glance without counting. 28 consecutive days or more: Overdue in
+  bold, in place of the days. Once it's accepted or queried: just the date,
+  as the status says where it's at. Was: the review by date, 10 days after it
+  was sent, with "3 days overdue" or "Due today" under it.
 #}
-{% macro reviewBy(row, words, dateText) %}{{ dateText }}{% if row.daysLeft != null and row.daysLeft < 0 %}<strong class="govuk-!-display-block">{{ row.daysLeft | abs }} {% if row.daysLeft == -1 %}{{ words.day }}{% else %}{{ words.days }}{% endif %} {{ words.overdue }}</strong>{% elif row.daysLeft == 0 %}<strong class="govuk-!-display-block">{{ words.dueToday }}</strong>{% endif %}{% endmacro %}
+{% macro submittedWhen(row, words, dateText) %}{{ dateText }}{% if row.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% elif row.daysSince != null %}<span class="govuk-!-display-block">{% if row.daysSince == 0 %}{{ words.submittedToday }}{% elif row.daysSince == 1 %}1 {{ words.dayAgo }}{% else %}{{ row.daysSince }} {{ words.daysAgo }}{% endif %}</span>{% endif %}{% endmacro %}
 
 {% set tableRows = [] %}
 {% for row in rows %}
   {% set tableRows = (tableRows.push([
     { html: '<a href="' + row.organisationHref + '" class="govuk-link">' + (row.scheme | escape) + '<span class="govuk-visually-hidden">, ' + (words.organisationDetails | escape) + ', ' + row.quarterText + '</span></a>', attributes: { "data-sort-value": row.scheme }, classes: small + " app-table-cell--wrap" },
     { text: row.quarterText, attributes: { "data-sort-value": row.quarterSort }, classes: small },
-    { html: reviewBy(row, words, row.reviewByText), attributes: { "data-sort-value": row.dueSort or ("z" + row.reviewBySort) }, classes: small },
+    { html: submittedWhen(row, words, row.submittedText), attributes: { "data-sort-value": row.dueSort or ("z" + row.reviewBySort) }, classes: small },
     { html: statusTag(row), attributes: { "data-sort-value": row.statusSort }, classes: small },
     { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ', ' + row.quarterText + ')</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), tableRows) %}

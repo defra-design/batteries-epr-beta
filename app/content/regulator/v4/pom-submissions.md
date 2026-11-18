@@ -31,8 +31,8 @@ Submissions of batteries placed on the market
 ## Scheme column
 Scheme
 
-## Due column
-Review by
+## Due column (the date it was sent, with how long ago under it)
+Submitted
 
 ## Status column
 Status
@@ -49,17 +49,17 @@ organisation details
 ## Not applicable (only screen readers hear this, in the Review by column once a submission is accepted)
 Not applicable
 
-## Overdue (bold, in place of the review by date, after the number of days, for example "3 days overdue")
-overdue
+## Overdue (bold, under the submitted date, 28 days or more after it was sent, until it's accepted or queried)
+Overdue
 
-## Day (after the number 1, when it's overdue)
-day
+## Day ago (under the submitted date, after the number 1)
+day ago
 
-## Days (after the number, when it's overdue)
-days
+## Days ago (under the submitted date, after the number of days, for example "12 days ago")
+days ago
 
-## Due today (bold, in place of the review by date)
-Due today
+## Submitted today (under the submitted date, on the day it's sent)
+Today
 
 ## Switch link (prototype only, at the bottom, goes to version 4B: every submission, with filters)
 Switch to alternative version

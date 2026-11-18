@@ -1,0 +1,42 @@
+{
+  "title": "Show the submitted date and how long ago, with Overdue after 28 days",
+  "type": "update",
+  "date": "2026-11-18",
+  "why": "Mak asked us to make it easy to see how long it's been since a return was sent, for the few EA users who review within 10 days. David confirmed regulators have 28 consecutive days.\n\n**What changed (versions 3, 3B, 4 and 4B)**\n\n- The lists' Review by column is now Submitted: the date the return was sent, with how long ago under it, for example \"12 days ago\" or \"Today\". Anyone working to 10 days can see it at a glance without counting\n- 28 days or more after it was sent: Overdue in bold, in place of the days\n- Once it's accepted or queried: just the date, as the status says where it's at\n- On the submission, Review by and Submitted are now one row, Submitted, with the same line under the date\n- Still what needs action first: the oldest return still to review comes first\n- Dummy data: reviews are due 28 days after a return is sent (was 10). Recycling Lives' latest return was sent on 23 October, so research sees one that's Overdue\n\n**Confirmed by Mak (18 November)**\n\n- Overdue is just a label\n- The count starts on the day it's sent (\"Today\"); the next day is \"1 day ago\"\n- The count stops when the status moves on from Response received\n\n**To confirm (Mak is asking)**\n\n- If a return is queried and the scheme answers, does the count start again?",
+  "pages": [
+    {
+      "label": "Submissions list, version 3",
+      "url": "/regulator/pom-submissions/latest-quarter"
+    },
+    {
+      "label": "All submissions, version 3B",
+      "url": "/regulator/pom-submissions/all-submissions"
+    },
+    {
+      "label": "Submission, version 3",
+      "url": "/regulator/pom-submissions/brief/recycling-lives/2026/3"
+    },
+    {
+      "label": "Submissions list, version 4",
+      "url": "/regulator/pom-submissions/v4"
+    },
+    {
+      "label": "Submission details, version 4",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3/details"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Submissions list, version 3, desktop (1020 pixels wide)",
+      "after": "changes/show-days-since-submitted/after--list-1020-pixels.png"
+    },
+    {
+      "label": "Submissions list, version 3, 320 pixels wide",
+      "after": "changes/show-days-since-submitted/after--list-320-pixels.png"
+    },
+    {
+      "label": "Submission, version 3, desktop (1020 pixels wide), top of the page",
+      "after": "changes/show-days-since-submitted/after--submission-1020-pixels.png"
+    }
+  ]
+}
