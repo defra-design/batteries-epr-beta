@@ -111,7 +111,16 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   padding-right: govuk-spacing(2);
   vertical-align: top;
 
+  // Keep the (visually hidden) label on the same line as the checkbox: in a
+  // narrow column it wrapped underneath, and made every row taller
+  // (Marie, 18 November). The checkbox keeps its 44 pixel touch area, and
+  // sits inside the cell's padding, so rows are as tall as the text in them
   .govuk-checkboxes__item {
-    margin: -6px 0 0;
+    flex-wrap: nowrap;
+    margin: -10px 0;
+  }
+
+  .govuk-checkboxes__label {
+    padding-right: 0;
   }
 }
