@@ -15,12 +15,44 @@
   ],
   "beforeAfter": [
     {
-      "label": "Make a decision, with 2 members selected and Query chosen",
-      "after": "changes/update-decision-options-and-messages/after--decision-1100-pixels.png"
+      "label": "Before, the Selected members page; now, the decision page, desktop (1020 pixels wide)",
+      "before": "changes/update-decision-options-and-messages/before--selected-members-1020-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--decision-1020-pixels.png"
     },
     {
-      "label": "Messages and notes, at the bottom of Submission details",
-      "after": "changes/update-decision-options-and-messages/after--messages-and-notes.png"
+      "label": "Before, the Selected members page; now, the decision page, 320 pixels wide",
+      "before": "changes/update-decision-options-and-messages/before--selected-members-320-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--decision-320-pixels.png"
+    },
+    {
+      "label": "Make a decision, with Query chosen, desktop (1020 pixels wide)",
+      "before": "changes/update-decision-options-and-messages/before--decision-1020-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--decision-1020-pixels.png"
+    },
+    {
+      "label": "Make a decision, with Query chosen, 320 pixels wide",
+      "before": "changes/update-decision-options-and-messages/before--decision-320-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--decision-320-pixels.png"
+    },
+    {
+      "label": "The confirmation after a query, desktop (1020 pixels wide)",
+      "before": "changes/update-decision-options-and-messages/before--done-1020-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--done-1020-pixels.png"
+    },
+    {
+      "label": "The confirmation after a query, 320 pixels wide",
+      "before": "changes/update-decision-options-and-messages/before--done-320-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--done-320-pixels.png"
+    },
+    {
+      "label": "Submission details, with messages to the scheme and internal notes at the bottom, desktop (1020 pixels wide)",
+      "before": "changes/update-decision-options-and-messages/before--details-1020-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--details-1020-pixels.png"
+    },
+    {
+      "label": "Submission details, with messages to the scheme and internal notes at the bottom, 320 pixels wide",
+      "before": "changes/update-decision-options-and-messages/before--details-320-pixels.png",
+      "after": "changes/update-decision-options-and-messages/after--details-320-pixels.png"
     }
   ]
 }

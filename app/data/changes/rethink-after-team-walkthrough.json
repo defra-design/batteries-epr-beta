@@ -20,39 +20,74 @@
   ],
   "beforeAfter": [
     {
-      "label": "Flags",
-      "before": "changes/rethink-after-team-walkthrough/before--flags.png",
-      "after": "changes/rethink-after-team-walkthrough/after--flags.png"
+      "label": "Flags, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--flags-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--flags-1020-pixels.png"
     },
     {
-      "label": "Members, the top",
-      "before": "changes/rethink-after-team-walkthrough/before--members.png",
-      "after": "changes/rethink-after-team-walkthrough/after--members.png"
+      "label": "Flags, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--flags-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--flags-320-pixels.png"
     },
     {
-      "label": "The members you picked: was Selected members, now the top of the decision page",
-      "before": "changes/rethink-after-team-walkthrough/before--selected-members.png",
-      "after": "changes/rethink-after-team-walkthrough/after--choosing-members.png"
+      "label": "Members, top of the page, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--members-top-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--members-top-1020-pixels.png"
     },
     {
-      "label": "Make a decision, with Query chosen",
-      "before": "changes/rethink-after-team-walkthrough/before--decision.png",
-      "after": "changes/rethink-after-team-walkthrough/after--decision.png"
+      "label": "Members, top of the page, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--members-top-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--members-top-320-pixels.png"
     },
     {
-      "label": "The confirmation, after a query",
-      "before": "changes/rethink-after-team-walkthrough/before--done.png",
-      "after": "changes/rethink-after-team-walkthrough/after--done.png"
+      "label": "The members you picked: before, the Selected members page; now, the top of the decision page, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--selected-members-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--decision-1020-pixels.png"
     },
     {
-      "label": "Submission details",
-      "before": "changes/rethink-after-team-walkthrough/before--details.png",
-      "after": "changes/rethink-after-team-walkthrough/after--details.png"
+      "label": "The members you picked: before, the Selected members page; now, the top of the decision page, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--selected-members-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--decision-320-pixels.png"
     },
     {
-      "label": "A member's page",
-      "before": "changes/rethink-after-team-walkthrough/before--member.png",
-      "after": "changes/rethink-after-team-walkthrough/after--member.png"
+      "label": "Make a decision, with Query chosen, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--decision-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--decision-1020-pixels.png"
+    },
+    {
+      "label": "Make a decision, with Query chosen, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--decision-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--decision-320-pixels.png"
+    },
+    {
+      "label": "The confirmation after a query, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--done-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--done-1020-pixels.png"
+    },
+    {
+      "label": "The confirmation after a query, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--done-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--done-320-pixels.png"
+    },
+    {
+      "label": "Submission details, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--details-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--details-1020-pixels.png"
+    },
+    {
+      "label": "Submission details, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--details-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--details-320-pixels.png"
+    },
+    {
+      "label": "A member's page, desktop (1020 pixels wide)",
+      "before": "changes/rethink-after-team-walkthrough/before--member-1020-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--member-1020-pixels.png"
+    },
+    {
+      "label": "A member's page, 320 pixels wide",
+      "before": "changes/rethink-after-team-walkthrough/before--member-320-pixels.png",
+      "after": "changes/rethink-after-team-walkthrough/after--member-320-pixels.png"
     }
   ]
 }

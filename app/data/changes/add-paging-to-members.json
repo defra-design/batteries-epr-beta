@@ -15,12 +15,22 @@
   ],
   "beforeAfter": [
     {
-      "label": "Members, the top of page 1 (1280 pixels wide)",
-      "after": "changes/add-paging-to-members/after--members-top-1280-pixels.png"
+      "label": "Members, top of the page, desktop (1020 pixels wide)",
+      "before": "changes/add-paging-to-members/before--members-top-1020-pixels.png",
+      "after": "changes/add-paging-to-members/after--members-top-1020-pixels.png"
     },
     {
-      "label": "Members, the page links under the table (1280 pixels wide)",
-      "after": "changes/add-paging-to-members/after--members-pages-1280-pixels.png"
+      "label": "Members, top of the page, 320 pixels wide",
+      "before": "changes/add-paging-to-members/before--members-top-320-pixels.png",
+      "after": "changes/add-paging-to-members/after--members-top-320-pixels.png"
+    },
+    {
+      "label": "Members, the whole of page 1, with the page links at the bottom, desktop (1020 pixels wide)",
+      "after": "changes/add-paging-to-members/after--members-1020-pixels.png"
+    },
+    {
+      "label": "Members, the whole of page 1, with the page links at the bottom, 320 pixels wide",
+      "after": "changes/add-paging-to-members/after--members-320-pixels.png"
     }
   ]
 }

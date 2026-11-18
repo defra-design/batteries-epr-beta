@@ -23,20 +23,34 @@
   ],
   "beforeAfter": [
     {
-      "label": "Flags, with Continue under the table (1280 pixels wide)",
-      "after": "changes/move-make-a-decision-to-continue/after--flags-1280-pixels.png"
+      "label": "Flags, desktop (1020 pixels wide)",
+      "before": "changes/move-make-a-decision-to-continue/before--flags-1020-pixels.png",
+      "after": "changes/move-make-a-decision-to-continue/after--flags-1020-pixels.png"
     },
     {
-      "label": "Members, the top: what the table shows, and a green Search (1280 pixels wide)",
-      "after": "changes/move-make-a-decision-to-continue/after--members-top-1280-pixels.png"
+      "label": "Flags, 320 pixels wide",
+      "before": "changes/move-make-a-decision-to-continue/before--flags-320-pixels.png",
+      "after": "changes/move-make-a-decision-to-continue/after--flags-320-pixels.png"
     },
     {
-      "label": "Members, the bottom: Continue, then the page links (1280 pixels wide)",
-      "after": "changes/move-make-a-decision-to-continue/after--members-bottom-1280-pixels.png"
+      "label": "Submission details, desktop (1020 pixels wide)",
+      "before": "changes/move-make-a-decision-to-continue/before--details-1020-pixels.png",
+      "after": "changes/move-make-a-decision-to-continue/after--details-1020-pixels.png"
     },
     {
-      "label": "Submission details, the bottom (1280 pixels wide)",
-      "after": "changes/move-make-a-decision-to-continue/after--details-bottom-1280-pixels.png"
+      "label": "Submission details, 320 pixels wide",
+      "before": "changes/move-make-a-decision-to-continue/before--details-320-pixels.png",
+      "after": "changes/move-make-a-decision-to-continue/after--details-320-pixels.png"
+    },
+    {
+      "label": "A member's page, desktop (1020 pixels wide)",
+      "before": "changes/move-make-a-decision-to-continue/before--member-1020-pixels.png",
+      "after": "changes/move-make-a-decision-to-continue/after--member-1020-pixels.png"
+    },
+    {
+      "label": "A member's page, 320 pixels wide",
+      "before": "changes/move-make-a-decision-to-continue/before--member-320-pixels.png",
+      "after": "changes/move-make-a-decision-to-continue/after--member-320-pixels.png"
     }
   ]
 }
