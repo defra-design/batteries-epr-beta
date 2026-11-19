@@ -22,7 +22,7 @@ Then open http://localhost:3000.
 | Pages | `app/views/` (the web address matches the file: `/regulator/indicative-obligation/option-a-table` is `app/views/regulator/indicative-obligation/option-a-table.html`) |
 | Words and dummy figures for each page | `app/content/` (see "Add-ons") |
 | Answers a journey remembers | the kit's session data (`app/data/session-data-defaults.js` for starting values) |
-| Branching between pages | `app/routes.js`. Version 4 has its own file, `app/routes/v4.js`, called from `app/routes.js` |
+| Branching between pages | `app/routes.js`. Versions 4 and 5 have their own files in `app/routes/` (for example `v5.js` and `v5-decision.js`), called from `app/routes.js` |
 | Dummy data | `app/data/`: the submissions (`pom-submissions.js`), one submission and its scheme (`pom-submission-details.js`), and members' figures (`member-figures.js`) |
 | Homepage | `app/views/index.html`: one section per area (Regulators, Compliance schemes, Treatment operators, Producers), each with a link to its page |
 | Area pages | `app/views/regulators.html` and so on: one sortable table of all the area's work, newest first. To add work, add it to the top of the list in the page |
@@ -43,11 +43,12 @@ version, with its date, status and Jira ticket.
 |---|---|---|---|---|
 | 3 | The placed on the market submissions journey, as played back on 16 November 2026 (EB-324 to EB-326) | `app/views/regulator/pom-submissions/` and `app/views/regulator/pom-submission/` | `app/content/regulator/` | `/regulator/pom-submissions/latest-quarter`, `/regulator/pom-submissions/brief/` |
 | 3B | An alternative to version 3: every quarter on one list, and a fuller submission page. Was called "full" (version 3 was "brief") | the same folders as version 3 (`all-submissions.html`, `full.html`) | `app/content/regulator/` (the `-full` files) | `/regulator/pom-submissions/all-submissions`, `/regulator/pom-submissions/full/` |
-| 4 | EB-366: checking a member's figures, and the journey to them. A copy of version 3, with one link per row on the list, the flags first on the submission, and two new pages: member figures (every member, with their biggest change by chemistry) and one member (their details, flags and figures by chemistry) | `app/views/regulator/v4/` | `app/content/regulator/v4/` | `/regulator/pom-submissions/v4` |
+| 4 | EB-366 and EB-367: checking a member's figures, and the journey to them. A copy of version 3, with one link per row on the list, the flags first on the submission, and two new pages: member figures (every member, with their biggest change by chemistry) and one member (their details, flags and figures by chemistry) | `app/views/regulator/v4/` | `app/content/regulator/v4/` | `/regulator/pom-submissions/v4` |
+| 5 | The version to use now (EB-366 and EB-367). A copy of version 4 with a simpler way to query members: regulators pick a member to query only on that member's own page, check them on "Members you're querying", then make the decision. Flags and Members are just for looking | `app/views/regulator/v5/` | `app/content/regulator/v5/` | `/regulator/pom-submissions/v5` |
 
 To start a new version: copy the last version's pages and words into new
-`v5` folders, give it its own routes file (`app/routes/v5.js`, called from
-`app/routes.js`), and add it to the top of the list on the Regulators page.
+`v6` folders, give it its own routes files (`app/routes/v6.js` and
+`app/routes/v6-decision.js`, called from `app/routes.js`), and add it to the top of the list on the Regulators page.
 Version 3 and 3B keep their old addresses (with "brief" and "full" in them),
 as people already have links to them.
 
