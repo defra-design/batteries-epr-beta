@@ -1,0 +1,49 @@
+{#
+  VERSION 5 (19 November 2026), a copy of version 4 (17 November 2026): the top of every page of a submission.
+  Included by pom-submission.html (Flags), details.html (Submission details),
+  member-figures.html (Members), changes.html (Changes) and
+  organisation-details.html (Scheme details).
+
+  Why (Marie, 17 November): the submission details used to sit under the
+  flags, as an afterthought, and lots of flags pushed them down the page.
+  Now each part of the submission is its own page, and you move between them
+  with a sub navigation, as in Alex's regulator prototype (organisation view).
+  Each page has its own address, so Back and bookmarks work, and it all
+  works without JavaScript.
+
+  Top to bottom, the same on every page, kept short so the page's own
+  content isn't pushed down (Marie, 17 November). Submitted, status and
+  version are on Submission details:
+  - The scheme in the caption, then "July to September 2026 submission"
+  - The sub navigation (MOJ sub navigation): Flags (with how many), Members,
+    Submission details, Changes and Scheme details. Flags and Members side by
+    side, as both are where you tick members to query; Submission details
+    next to Changes; who the scheme is last (Marie, 18 November evening. Was
+    Flags, Submission details, Members). The page you're on is marked for
+    screen readers (aria-current)
+
+  Needs from the route (submissionTabs in app/routes/v5.js): submission and tabs.
+  The download of the whole return is in "Files in this submission", on
+  Submission details (Marie, 17 November).
+  The words: app/content/regulator/v5/submission-header.md
+#}
+{% set hw = content("regulator/v5/submission-header") %}
+{% set hs = submission %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <span class="govuk-caption-l">{{ hs.scheme }}</span>
+    <h1 class="govuk-heading-l">{{ hs.yearQuarterFull }} {{ hw.heading }}</h1>
+  </div>
+</div>
+
+{{ mojSubNavigation({
+  label: hw.subNavigationLabel,
+  items: [
+    { text: hw.flags + " (" + submission.flags.length + ")", href: tabs.flags, active: tabs.current == "flags" },
+    { text: hw.members, href: tabs.members, active: tabs.current == "members" },
+    { text: hw.submissionDetails, href: tabs.details, active: tabs.current == "details" },
+    { text: hw.changes, href: tabs.changes, active: tabs.current == "changes" },
+    { text: hw.schemeDetails, href: tabs.scheme, active: tabs.current == "scheme" }
+  ]
+}) }}

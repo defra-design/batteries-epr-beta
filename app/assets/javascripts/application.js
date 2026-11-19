@@ -169,9 +169,16 @@ function saveTicks () {
         const body = new URLSearchParams()
         $form.querySelectorAll('input[name="shown"]').forEach(($i) => body.append('shown', $i.value))
         $form.querySelectorAll('input[name="members"]:checked').forEach(($i) => body.append('members', $i.value))
+        // Version 5: any other field marked data-app-save-field (a member's
+        // registration number and the comment on their page) goes too
+        $form.querySelectorAll('[data-app-save-field]').forEach(($i) => body.append($i.name, $i.value))
         window.fetch(address, { method: 'POST', body, credentials: 'same-origin' }).catch(() => {})
       }, 150)
     }
+    // Typing in a saved field saves it too (version 5's comment)
+    $form.addEventListener('input', (event) => {
+      if (event.target.matches('[data-app-save-field]')) save()
+    })
     // Pressing Make a decision sends the ticks itself: don't send them twice
     $form.addEventListener('submit', () => window.clearTimeout(timer))
     $form.addEventListener('change', save)

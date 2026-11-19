@@ -17,7 +17,7 @@
     title:     the page name, descriptive enough on its own. It's the link
     href:      the page
     status:    Ideation, Validation, Refinement, Ready for dev, Test later or Discounted
-    ticket:    the Jira ticket, for example "EB-237". Leave it "" if it's not known yet: it shows "To confirm"
+    tickets:   the Jira tickets, for example ["EB-366", "EB-367"]. Leave it [] if not known yet: it shows "To confirm"
 #}
 
 {% set pageName = "Regulators" %}
@@ -36,8 +36,100 @@
    Version 3B (17 Nov 2026): the version 3 pages that were called "full", an
    alternative to version 3. Was "BRIEF:" and "FULL:" in the page names.
    Version 4 (17 Nov 2026): EB-366, and the journey to it. The journey's ticket
-   is an EB-325 subtask, to add when it's made. #}
+   is an EB-325 subtask, to add when it's made.
+   Version 5 (19 Nov 2026): EB-367, a simpler way to pick members to query
+   (only on a member's page), then the members you want to query, then the
+   decision. Version 4 stays as it was. #}
+{# Shown (Marie, 19 November): the 2 versions of the whole regulator journey
+   (4 and 5), each starting at the list of submissions, then every earlier
+   page. The separate version 4 and 5 pages are hidden below. tickets: one or
+   more Jira tickets, each on its own line #}
 {% set work = [
+  {
+    date: "19 Nov 2026", sortDate: "2026-11-19", version: 5,
+    title: "Regulator placed on the market submissions: the whole journey, from the list of submissions to a decision",
+    href: "/regulator/pom-submissions/v5",
+    status: "Ideation", tickets: ["EB-366", "EB-367"]
+  },
+  {
+    date: "18 Nov 2026", sortDate: "2026-11-18", version: 4,
+    title: "Regulator placed on the market submissions: the whole journey, from the list of submissions to a decision",
+    href: "/regulator/pom-submissions/v4",
+    status: "Ideation", tickets: ["EB-366", "EB-367"]
+  },
+  {
+    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
+    title: "Members of a scheme, with search and filters",
+    href: "/regulator/pom-submissions/full/recycling-lives/2026/3/members",
+    status: "Ideation", tickets: ["EB-326"]
+  },
+  {
+    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
+    title: "Organisation details of a scheme",
+    href: "/regulator/pom-submissions/full/recycling-lives/2026/3/organisation-details",
+    status: "Ideation", tickets: ["EB-325"]
+  },
+  {
+    date: "16 Nov 2026", sortDate: "2026-11-16", version: "3B",
+    title: "Placed on the market submission (alternative)",
+    href: "/regulator/pom-submissions/full/recycling-lives/2026/3",
+    status: "Ideation", tickets: ["EB-325"]
+  },
+  {
+    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
+    title: "Placed on the market submission",
+    href: "/regulator/pom-submissions/brief/recycling-lives/2026/3",
+    status: "Ideation", tickets: ["EB-325"]
+  },
+  {
+    date: "16 Nov 2026", sortDate: "2026-11-16", version: "3B",
+    title: "Placed on the market submissions, all quarters (alternative)",
+    href: "/regulator/pom-submissions/all-submissions",
+    status: "Ideation", tickets: ["EB-324"]
+  },
+  {
+    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
+    title: "Placed on the market submissions, latest quarter",
+    href: "/regulator/pom-submissions/latest-quarter",
+    status: "Ideation", tickets: ["EB-324"]
+  },
+  {
+    date: "5 Nov 2026", sortDate: "2026-11-05", version: 3,
+    title: "Indicative obligation check, Jen's latest content",
+    href: "/regulator/indicative-obligation/jens-content",
+    status: "Ideation", tickets: []
+  },
+  {
+    date: "28 Oct 2026", sortDate: "2026-10-28", version: 2,
+    title: "Indicative obligation check, without chemistry",
+    href: "/regulator/indicative-obligation/without-chemistry",
+    status: "Ready for dev", tickets: ["EB-237"]
+  },
+  {
+    date: "27 Oct 2026", sortDate: "2026-10-27", version: 1,
+    title: "Indicative obligation check, with chemistry",
+    href: "/regulator/indicative-obligation/option-a-table",
+    status: "Test later", tickets: ["EB-237"]
+  },
+  {
+    date: "27 Oct 2026", sortDate: "2026-10-27", version: 1,
+    title: "Indicative obligation check, summary lists",
+    href: "/regulator/indicative-obligation/option-b-summary-list",
+    status: "Discounted", tickets: ["EB-237"]
+  }
+] %}
+
+{# Hidden for now (Marie, 19 November): the separate version 4 and 5 pages,
+   one row each. The 2 whole-journey rows above link to them. To show them
+   again, add these rows to "work" above and change ticket: "EB-366" to
+   tickets: ["EB-366"] (or [] if not known).
+{% set olderWork = [
+  {
+    date: "19 Nov 2026", sortDate: "2026-11-19", version: 5,
+    title: "Make a decision: pick members to query on their own page, check them, then decide (start of the version 5 journey)",
+    href: "/regulator/pom-submissions/v5/recycling-lives/2026/3",
+    status: "Ideation", ticket: "EB-367"
+  },
   {
     date: "17 Nov 2026", sortDate: "2026-11-17", version: "4B",
     title: "All submissions with filters, as 3B, opening the version 4 submission (back-up list for research)",
@@ -73,68 +165,9 @@
     title: "Placed on the market submissions, latest quarter, one link per row (start of the version 4 journey)",
     href: "/regulator/pom-submissions/v4",
     status: "Ideation", ticket: ""
-  },
-  {
-    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
-    title: "Members of a scheme, with search and filters",
-    href: "/regulator/pom-submissions/full/recycling-lives/2026/3/members",
-    status: "Ideation", ticket: "EB-326"
-  },
-  {
-    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
-    title: "Organisation details of a scheme",
-    href: "/regulator/pom-submissions/full/recycling-lives/2026/3/organisation-details",
-    status: "Ideation", ticket: "EB-325"
-  },
-  {
-    date: "16 Nov 2026", sortDate: "2026-11-16", version: "3B",
-    title: "Placed on the market submission (alternative)",
-    href: "/regulator/pom-submissions/full/recycling-lives/2026/3",
-    status: "Ideation", ticket: "EB-325"
-  },
-  {
-    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
-    title: "Placed on the market submission",
-    href: "/regulator/pom-submissions/brief/recycling-lives/2026/3",
-    status: "Ideation", ticket: "EB-325"
-  },
-  {
-    date: "16 Nov 2026", sortDate: "2026-11-16", version: "3B",
-    title: "Placed on the market submissions, all quarters (alternative)",
-    href: "/regulator/pom-submissions/all-submissions",
-    status: "Ideation", ticket: "EB-324"
-  },
-  {
-    date: "16 Nov 2026", sortDate: "2026-11-16", version: 3,
-    title: "Placed on the market submissions, latest quarter",
-    href: "/regulator/pom-submissions/latest-quarter",
-    status: "Ideation", ticket: "EB-324"
-  },
-  {
-    date: "5 Nov 2026", sortDate: "2026-11-05", version: 3,
-    title: "Indicative obligation check, Jen's latest content",
-    href: "/regulator/indicative-obligation/jens-content",
-    status: "Ideation", ticket: ""
-  },
-  {
-    date: "28 Oct 2026", sortDate: "2026-10-28", version: 2,
-    title: "Indicative obligation check, without chemistry",
-    href: "/regulator/indicative-obligation/without-chemistry",
-    status: "Ready for dev", ticket: "EB-237"
-  },
-  {
-    date: "27 Oct 2026", sortDate: "2026-10-27", version: 1,
-    title: "Indicative obligation check, with chemistry",
-    href: "/regulator/indicative-obligation/option-a-table",
-    status: "Test later", ticket: "EB-237"
-  },
-  {
-    date: "27 Oct 2026", sortDate: "2026-10-27", version: 1,
-    title: "Indicative obligation check, summary lists",
-    href: "/regulator/indicative-obligation/option-b-summary-list",
-    status: "Discounted", ticket: "EB-237"
   }
 ] %}
+#}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -171,7 +204,7 @@
           <td class="govuk-table__cell govuk-table__cell--numeric">{{ item.version }}</td>
           <td class="govuk-table__cell app-table-cell--wrap"><a href="{{ item.href }}" class="govuk-link">{{ item.title }}</a></td>
           <td class="govuk-table__cell"><strong class="govuk-tag {{ statusClasses[item.status] }}">{{ item.status }}</strong></td>
-          <td class="govuk-table__cell">{% if item.ticket %}<a href="https://eaflood.atlassian.net/browse/{{ item.ticket }}" class="govuk-link">{{ item.ticket }}</a>{% else %}To confirm{% endif %}</td>
+          <td class="govuk-table__cell">{% if item.tickets and item.tickets.length %}{% for t in item.tickets %}<a href="https://eaflood.atlassian.net/browse/{{ t }}" class="govuk-link">{{ t }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}{% else %}To confirm{% endif %}</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -1,0 +1,21 @@
+{#
+  MAKE A DECISION, at the bottom of all 5 pages of a submission
+  (Flags, Members, Submission details, Changes and Scheme details).
+
+  The same green button at the bottom of every page, and on a member's
+  page, so you always know where to go next. Was "Continue to make a
+  decision" (Marie, 19 November: just Make a decision). Version 5: no tickboxes on these pages, so it's always
+  its own small form. It goes to Members you're querying if you've picked
+  any members on their own pages, if not straight to Make a decision
+  (app/routes/v5-decision.js).
+
+  The words: app/content/regulator/v5/continue.md
+#}
+{% set continueWords = content("regulator/v5/continue") %}
+{% set continueButton = govukButton({ text: continueWords.button }) %}
+<div class="app-continue">
+  <form method="post" action="{{ continueAction }}" novalidate>
+    <input type="hidden" name="from" value="{{ continueFrom }}">
+    {{ continueButton }}
+  </form>
+</div>

@@ -1,0 +1,148 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 5 (19 November 2026). EB-367: Make a decision. A copy of version 4's
+  page, without the list of members at the top.
+  Address: /regulator/pom-submissions/v5/recycling-lives/2026/3/decision
+  You get here from Members you're querying, or from Continue to make a
+  decision at the bottom of any page of a submission (Flags, Members,
+  Submission details, Changes, Scheme details) if you haven't picked any
+  members.
+
+  Why: the regulator accepts, queries or returns the whole submission
+  (EB-367, UN-068, UN-069), then Send decision. In version 5 it comes
+  after Members you're querying, if you've picked any.
+
+  Top to bottom:
+  - Back to the page you came from
+  - The scheme name in the caption, and the quarter, written out, then
+    "decision" as the heading ("July to September 2026 decision")
+  - No list of the members you picked (version 5, Marie, 19 November):
+    you've just checked them on Members you're querying, the page before.
+    Back goes there. Was a summary list of the members at the top
+  - "What's your decision?": Accept the submission, Query the submission,
+    Return the submission. All 3, whatever's ticked: very open for now,
+    and research asks whether you'd ever accept after picking members, or
+    query without picking any (David, team walkthrough, 18 November). With
+    members selected, Query has a hint: the email names them. "Return", not
+    "Reject": what the EA (Alice) and Caz call it, to take to the EA working
+    group. The only thing that opens up, under Query: Respond by (UN-060), a
+    GOV.UK date input, set by the regulator, in the future (Mak)
+  - Message to the scheme: optional to accept, required to query or return
+    (Mak; alpha research: accepting shouldn't need a reason). Then Attach a
+    file (optional), which goes with it
+  - Internal note (optional), with a short hint: the scheme won't see it,
+    and you can read it on Submission details (UN-061; regulators keep
+    "agency notes" in NPWD today). The labels say which is which, no extra
+    headings (Marie, 18 November: keep it lean. Was "To the scheme" and
+    "For regulators only" headings)
+  - Send decision (green): the button says what it does. Not "Make a decision", the button that brings you here (Marie, 19 November). Then the
+    confirmation (v5/decision-done.html)
+
+  Prototype only: what you send isn't added to Submission details, and the
+  status on the list doesn't change (Marie, 18 November: keep it simple).
+
+  Prototype only: the file upload keeps the file's name, not the file.
+
+  The routes: app/routes/v5-decision.js
+  The words: app/content/regulator/v5/decision.md
+#}
+
+{% set wordsFile = "regulator/v5/decision" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+{% set a = answers %}
+
+{# err: each field's error message; errorList: the error summary (both from app/routes/v5-decision.js) #}
+{% set hasErrors = errorList.length > 0 %}
+
+{% set pageName = ("Error: " if hasErrors else "") + s.yearQuarterFull + " " + words.heading + ", " + s.scheme + " (version 5)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{% block content %}
+{# Built inside the block: the GOV.UK macros are only there once the layout has loaded them #}
+{# Query: with members selected, a hint says the email names them #}
+{% if count %}
+  {% set queryHint = words.queryHintBefore + " " + count + " " + (words.member if count == 1 else words.members) + " " + words.queryHintAfter %}
+{% endif %}
+
+{# Query: the only reveal, the date to respond by #}
+{% set queryHtml %}
+  {{ govukDateInput({
+    id: "respondBy",
+    namePrefix: "respondBy",
+    fieldset: { legend: { text: words.respondByLegend, classes: "govuk-fieldset__legend--s" } },
+    hint: { text: words.respondByHint },
+    errorMessage: err.respondBy,
+    items: [
+      { name: "day", label: words.day, value: a.respondByDay, classes: "govuk-input--width-2" + (" govuk-input--error" if err.respondBy else "") },
+      { name: "month", label: words.month, value: a.respondByMonth, classes: "govuk-input--width-2" + (" govuk-input--error" if err.respondBy else "") },
+      { name: "year", label: words.year, value: a.respondByYear, classes: "govuk-input--width-4" + (" govuk-input--error" if err.respondBy else "") }
+    ]
+  }) }}
+{% endset %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if hasErrors %}
+      {{ govukErrorSummary({ titleText: words.errorSummaryTitle, errorList: errorList }) }}
+    {% endif %}
+
+    <span class="govuk-caption-l">{{ s.scheme }}</span>
+    <h1 class="govuk-heading-l">{{ s.yearQuarterFull }} {{ words.heading }}</h1>
+
+    {# Prototype only: a plain form, so the file upload sends the file's name,
+       not the file. A real service sends the file #}
+    <form method="post" action="{{ formAction }}" novalidate>
+
+      {{ govukRadios({
+        name: "decision",
+        idPrefix: "decision",
+        fieldset: { legend: { text: words.decisionLegend, classes: "govuk-fieldset__legend--m" } },
+        errorMessage: err.decision,
+        items: [
+          { value: "accept", text: words.accept, checked: a.decision == "accept" },
+          { value: "query", text: words.query, checked: a.decision == "query", hint: { text: queryHint } if queryHint else undefined, conditional: { html: queryHtml } },
+          { value: "reject", text: words.reject, checked: a.decision == "reject" }
+        ]
+      }) }}
+
+      {{ govukCharacterCount({
+        id: "message",
+        name: "message",
+        value: a.message,
+        maxlength: 1000,
+        label: { text: words.messageLabel, classes: "govuk-label--s" },
+        hint: { text: words.messageHint },
+        errorMessage: err.message
+      }) }}
+
+      {{ govukFileUpload({
+        id: "file",
+        name: "file",
+        label: { text: words.fileLabel, classes: "govuk-label--s" }
+      }) }}
+
+      {# Only regulators see this: the hint says so #}
+      {{ govukCharacterCount({
+        id: "note",
+        name: "note",
+        value: a.note,
+        maxlength: 1000,
+        label: { text: words.noteLabel, classes: "govuk-label--s" },
+        hint: { text: words.noteHint }
+      }) }}
+
+      {{ govukButton({ text: words.sendButton }) }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

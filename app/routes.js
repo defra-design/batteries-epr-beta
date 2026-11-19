@@ -212,6 +212,13 @@ require('./routes/v4')(router)
 // (accept, query or reject). In its own file: app/routes/v4-decision.js
 require('./routes/v4-decision')(router)
 
+// Version 5 (19 November 2026): a copy of version 4, with a simpler way to
+// pick members to query. Only on a member's page, then a summary of the
+// members you want to query, then the decision. Version 4 stays as it was.
+// Pages: app/views/regulator/v5/, words: app/content/regulator/v5/
+require('./routes/v5')(router)
+require('./routes/v5-decision')(router)
+
 // A holding page for links to pages we haven't built yet
 router.get('/regulator/not-built', (req, res) => {
   const back = String(req.query.back || '')

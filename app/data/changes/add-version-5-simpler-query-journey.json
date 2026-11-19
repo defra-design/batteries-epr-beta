@@ -1,0 +1,70 @@
+{
+  "title": "Version 5: choose members to query on their own page, then check them (EB-367)",
+  "type": "change",
+  "date": "2026-11-19",
+  "why": "Version 5 changes how regulators choose which members to query. Version 4 stays as it was, so the two can be compared.\n\n**Why we changed it**\n\nIn version 4, regulators could tick members to query on 3 different pages: Flags, Members and each member's page. This caused 2 problems.\n\nFirst, the tables on Flags and Members had 2 jobs at once. Regulators were looking at the figures and choosing members on the same table. It was not clear which they were meant to be doing.\n\nSecond, with ticks spread across 3 pages, it was easy to lose track of who had been chosen. To remove a member, regulators had to go back and find them again, possibly on another page of a long list. They only saw everyone they had chosen at the very end.\n\n**What happens now**\n\nRegulators choose members to query in one place only: at the bottom of each member's page, which they reach by selecting View figures. This is where the member's figures, flags and changes are, so regulators decide with all the information in front of them.\n\nFlags and Members are now just for looking. They no longer have tickboxes.\n\n**On a member's page**\n\nAt the bottom of the page there is a tickbox: \"Send query to scheme about this member\". Ticking it opens an optional box where regulators can say what they want to query. This is sent to the scheme with the query. If regulators change their mind, they can untick the box.\n\nThere are 2 buttons:\n\n- Make a decision (green) takes regulators to a page listing all the members they want to query\n- Continue (grey) takes them back to the page they came from, so they can keep looking\n\nBoth buttons save the tick and the comment. With JavaScript, they are also saved as the regulator types, so nothing is lost if they leave the page another way.\n\n**Checking the members to query**\n\nThis is a new page, called \"Members you're querying\". It uses the GOV.UK check answers pattern and shows each member the regulator wants to query, with:\n\n- why the member stands out (its flag, or its largest change if it has no flags)\n- what the regulator wants to query, which is left blank if they did not write anything\n- a Change link back to the member's page, where they can change what they wrote or untick the box to remove the member\n\nRegulators only see this page if they have chosen at least one member. Otherwise they go straight to the decision.\n\n**Making the decision**\n\nThe decision page works as it did in version 4: accept, query or return the submission, with a message to the scheme, a file and an internal note. We have removed the list of members from the top of the page, because regulators have just checked them on the page before. The button at the bottom now says \"Send decision\", so it makes sense whichever option the regulator chooses.\n\nThe button at the bottom of all 5 pages of the submission now says \"Make a decision\", the same as the green button on a member's page.\n\n**Back links**\n\nWe have fixed the Back links so they always take regulators to the page they came from. Going back from a member's page to Members now keeps the page number and sort order. Going back from \"Members you're querying\" after changing a member no longer sends regulators round in a loop.\n\n**Questions for research**\n\n- Do regulators find it natural to choose members on each member's page?\n- Is the check page useful, or does it feel like an extra step?\n- Do regulators write something for each member, or leave it to the message on the decision page?\n\nThe wording in the prototype is a draft for content design to review.",
+  "pages": [
+    {
+      "label": "Version 5: Flags, the start of the journey",
+      "url": "/regulator/pom-submissions/v5/recycling-lives/2026/3"
+    },
+    {
+      "label": "Version 5: a member's page",
+      "url": "/regulator/pom-submissions/v5/recycling-lives/2026/3/member-figures/BPRN142037?from=submission"
+    },
+    {
+      "label": "Version 4, to compare",
+      "url": "/regulator/pom-submissions/v4/recycling-lives/2026/3"
+    }
+  ],
+  "beforeAfter": [
+    {
+      "label": "Flags: version 4, then version 5, desktop (1020 pixels wide)",
+      "before": "changes/add-version-5-simpler-query-journey/before--flags-1020-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--flags-1020-pixels.png"
+    },
+    {
+      "label": "Flags: version 4, then version 5, 320 pixels wide",
+      "before": "changes/add-version-5-simpler-query-journey/before--flags-320-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--flags-320-pixels.png"
+    },
+    {
+      "label": "Members, top of the page: version 4, then version 5, desktop (1020 pixels wide)",
+      "before": "changes/add-version-5-simpler-query-journey/before--members-1020-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--members-1020-pixels.png"
+    },
+    {
+      "label": "Members, top of the page: version 4, then version 5, 320 pixels wide",
+      "before": "changes/add-version-5-simpler-query-journey/before--members-320-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--members-320-pixels.png"
+    },
+    {
+      "label": "A member's page, with the member chosen to query: version 4, then version 5, desktop (1020 pixels wide)",
+      "before": "changes/add-version-5-simpler-query-journey/before--member-1020-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--member-1020-pixels.png"
+    },
+    {
+      "label": "A member's page, with the member chosen to query: version 4, then version 5, 320 pixels wide",
+      "before": "changes/add-version-5-simpler-query-journey/before--member-320-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--member-320-pixels.png"
+    },
+    {
+      "label": "New in version 5: Members you're querying, desktop (1020 pixels wide)",
+      "after": "changes/add-version-5-simpler-query-journey/after--summary-1020-pixels.png"
+    },
+    {
+      "label": "New in version 5: Members you're querying, 320 pixels wide",
+      "after": "changes/add-version-5-simpler-query-journey/after--summary-320-pixels.png"
+    },
+    {
+      "label": "Make a decision, with Query chosen: version 4, then version 5, desktop (1020 pixels wide)",
+      "before": "changes/add-version-5-simpler-query-journey/before--decision-1020-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--decision-1020-pixels.png"
+    },
+    {
+      "label": "Make a decision, with Query chosen: version 4, then version 5, 320 pixels wide",
+      "before": "changes/add-version-5-simpler-query-journey/before--decision-320-pixels.png",
+      "after": "changes/add-version-5-simpler-query-journey/after--decision-320-pixels.png"
+    }
+  ]
+}

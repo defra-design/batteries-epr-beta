@@ -1,0 +1,132 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 5 (19 November 2026), a copy of version 4 (17 November 2026): a copy of version 3 (the brief version), so the
+  version 4 journey starts here. Changes from version 3:
+  - Accepted returns show their submitted date too, so older quarters still
+    show when they were due. Version 3 left the cell empty (Marie, 17 November)
+  - One link per row,
+  View submission. The scheme name isn't a link: two links in a row going to
+  two places make people choose, and double the tab stops for keyboard users.
+  The organisation details are reached from inside the submission (Marie,
+  17 November). Version 3 keeps the scheme name as a link, so research can compare.
+
+  EB-324: placed on the market (PoM) submissions, brief version: one quarter at a time.
+  5 November 2026. Lands on the latest quarter with submissions (July to September 2026).
+  Quarter and year selects and a Show button, no status filter. Short dates (23 Oct 2026).
+  A plain GOV.UK table: only ever 4 rows (one per scheme), so no sorting and no pagination.
+
+  Design session, 10 November 2026:
+  - "Show" not "Apply filters": the selects swap the quarter shown, they don't
+    filter a bigger list down (Phil, Mak). Clear filters removed: it only
+    reset the defaults, which confused people (Kieran, Ashley). The button
+    stays, so the page never changes while someone is still choosing (WCAG 3.2.2)
+  - A line saying what's showing, so the table and the selects never disagree
+    (Ashley), and so dates after the quarter make sense (Kieran)
+  - What needs action first: oldest submission still to review, accepted last (Jen, Rich,
+    David). Was alphabetical by scheme, so each scheme was always in the same place
+
+  Team playback, 16 November 2026: one date column, Review by, with the time
+  left under it. The Submitted column is gone: the date is on the submission
+  The rows come from app/routes/v5.js and app/data/pom-submissions.js (dummy data).
+  "View submission" opens the version 4 submission. Version 3 history: the
+  scheme name linked to the organisation details (team playback, 16 November
+  2026); before that, the name wasn't a link, and the link said "View" (6 November).
+  Action is right aligned.
+  The words: app/content/regulator/v5/pom-submissions.md
+
+  The Action column heading is only for screen readers: on screen it's empty,
+  as the links say what they do (Jen, 16 November). Without it, the column has
+  no name for people who use a screen reader.
+#}
+
+{% set wordsFile = "regulator/v5/pom-submissions" %}
+{% set words = content(wordsFile) %}
+
+{% set pageName = words.heading + " (version 5)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% set yearItems = [] %}
+{% for year in pom.YEARS %}
+  {% set yearItems = (yearItems.push({ value: year, text: year, selected: year == filters.year }), yearItems) %}
+{% endfor %}
+{% set quarterItems = [] %}
+{% for quarterName in pom.QUARTERS %}
+  {% set quarterItems = (quarterItems.push({ value: loop.index | string, text: quarterName, selected: (loop.index | string) == filters.quarter }), quarterItems) %}
+{% endfor %}
+
+{# Table text is 16px, as large tables of data allow and as the regulator toolkit does,
+   so the columns stay steady when the filters change #}
+{% set small = "govuk-!-font-size-16" %}
+{% macro statusTag(row) %}<strong class="govuk-tag govuk-!-font-size-16 {{ row.statusClasses }}">{{ row.status }}</strong>{% endmacro %}
+{#
+  Submitted (Mak and David, 18 November): the date it was sent, with how long
+  ago under it ("12 days ago", "Today"), so anyone working to 10 days can see
+  it at a glance without counting. 28 consecutive days or more: Overdue in
+  bold, in place of the days. Once it's accepted or queried: just the date,
+  as the status says where it's at. Was: the review by date, 10 days after it
+  was sent, with "3 days overdue" or "Due today" under it.
+#}
+{% macro submittedWhen(row, words, dateText) %}{{ dateText }}{% if row.overdue %}<strong class="govuk-!-display-block">{{ words.overdue }}</strong>{% elif row.daysSince != null %}<span class="govuk-!-display-block">{% if row.daysSince == 0 %}{{ words.submittedToday }}{% elif row.daysSince == 1 %}1 {{ words.dayAgo }}{% else %}{{ row.daysSince }} {{ words.daysAgo }}{% endif %}</span>{% endif %}{% endmacro %}
+
+{% set tableRows = [] %}
+{% for row in rows %}
+  {% set tableRows = (tableRows.push([
+    { text: row.scheme, classes: small + " app-table-cell--wrap" },
+    { html: submittedWhen(row, words, row.submittedText), classes: small },
+    { html: statusTag(row), classes: small },
+    { html: '<a href="' + row.submissionHref + '" class="govuk-link">' + (words.viewLink | escape) + '<span class="govuk-visually-hidden"> (' + (row.scheme | escape) + ')</span></a>', classes: small + " govuk-!-text-align-right" }
+  ]), tableRows) %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    {# The filters: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
+    <form method="get" action="{{ formAction }}" novalidate>
+      <div class="app-filters">
+        {{ govukSelect({ id: "quarter", name: "quarter", label: { text: words.quarterLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: quarterItems }) }}
+        {{ govukSelect({ id: "year", name: "year", label: { text: words.yearLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: yearItems }) }}
+        <div class="govuk-button-group">
+          {{ govukButton({ text: words.showButton }) }}
+        </div>
+      </div>
+    </form>
+
+    {% if rows.length %}
+      {# The line says which quarter is showing, so the table and the selects
+         never disagree (Ashley, design session, 10 November). Put back on
+         17 November: "Showing 4 results" (16 November) lost the quarter. No
+         count: the table only ever has the 4 schemes (Marie) #}
+      <p class="govuk-body">{{ words.showing }} {{ quarterText }} {{ words.returns }}</p>
+
+      {# Add-on: MOJ scrollable pane (copied from MOJ Frontend 12), so only the table scrolls sideways at small widths.
+         The Scheme column wraps (add-on: app-table-cell--wrap), so the table fits a desktop. See application.scss #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+        {{ govukTable({
+          caption: words.tableCaption + ", " + quarterText,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.schemeColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.dueColumn, classes: small },
+            { text: words.statusColumn, classes: small },
+            { html: '<span class="govuk-visually-hidden">' + (words.linkColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
+          ],
+          rows: tableRows
+        }) }}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ words.noSubmissions }}</p>
+    {% endif %}
+
+    {# Prototype only, for research: switch to version 4B, every submission with filters #}
+    <p class="govuk-body govuk-!-margin-top-8"><a href="{{ switchHref }}" class="govuk-link">{{ words.switchLink }}</a></p>
+
+  </div>
+</div>
+{% endblock %}

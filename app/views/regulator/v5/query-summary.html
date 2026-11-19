@@ -1,0 +1,90 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 5 (19 November 2026). EB-367: Members you're querying, before the
+  decision.
+  New page. The GOV.UK check answers pattern, with a summary card for each
+  member.
+  Address: /regulator/pom-submissions/v5/recycling-lives/2026/3/decision/queries
+  You get here from Make a decision on a member's page, or Continue to make
+  a decision at the bottom of any page of the submission, if you've picked
+  any members to query. With none picked, you go straight to the decision.
+
+  Why (Marie, 19 November): you pick members one at a time, on their own
+  pages, so this is the one place to see everyone you've picked, and what
+  you're asking about each, before you decide. In version 4 you could tick
+  members on 3 pages and only saw them listed at the end.
+
+  Top to bottom:
+  - Back to the page you came from
+  - The scheme in the caption, then the heading
+  - A line saying how to change what you've written or take someone off
+  - A summary card for each member, in the order you picked them:
+    - the member's name as the card's title, with Change (screen readers
+      hear "Change your query (Northpower Batteries Ltd)"): back to their
+      page (?from=queries), where you can change the comment, or untick the
+      box to take them off. Their page's Continue comes back here
+    - Why they stand out: their flags, or if they have none, their largest
+      change on the quarter before
+    - Your query: the comment, or left empty if there isn't one (Marie, 19
+      November)
+  - Continue (green): to Make a decision
+
+  The routes: app/routes/v5-decision.js
+  The words: app/content/regulator/v5/query-summary.md
+#}
+
+{% set wordsFile = "regulator/v5/query-summary" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+
+{% set pageName = words.heading + ", " + s.yearQuarterFull + ", " + s.scheme + " (version 5)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{#
+  A change in words: "up 0.50 (42%)", "down 0.02 (8%)", "no change", "new
+  this quarter" or "none this quarter". The same as on Members
+#}
+{% macro changeText(figure, words) -%}
+  {%- if figure.diff == 0 -%}{{ words.noChange }}
+  {%- elif figure.before == 0 -%}{{ words.newThisQuarter }}
+  {%- elif figure.now == 0 -%}{{ words.noneThisQuarter }}
+  {%- elif figure.diff > 0 -%}{{ words.up }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- else -%}{{ words.down }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- endif -%}
+{%- endmacro %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-l">{{ s.scheme }}</span>
+    <h1 class="govuk-heading-l">{{ words.heading }}</h1>
+
+    <p class="govuk-body">{{ words.intro }}</p>
+
+    {% for m in members %}
+      {% set whyHtml %}{% if m.flags.length %}{% for f in m.flags %}<span class="govuk-!-display-block">{{ f.type }}: {{ f.found | replace(r/\.$/, "") }}</span>{% endfor %}{% else %}{{ words.largestChange }}: {{ m.largest.chemistry }}, {{ changeText(m.largest, words) | lower }}{% endif %}{% endset %}
+      {{ govukSummaryList({
+        card: {
+          title: { text: m.name, headingLevel: 2 },
+          actions: { items: [{ href: m.changeHref, text: words.changeLink, visuallyHiddenText: words.changeHidden }] }
+        },
+        rows: [
+          { key: { text: words.whyKey }, value: { html: whyHtml } },
+          { key: { text: words.queryKey }, value: { text: m.comment } }
+        ]
+      }) }}
+    {% endfor %}
+
+    {{ govukButton({ text: words.continueButton, href: continueHref }) }}
+
+  </div>
+</div>
+{% endblock %}

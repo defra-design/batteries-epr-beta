@@ -1,0 +1,155 @@
+{# Made by record-a-change from app/data/changes/. Edit the record, then run build-pages.js again: changes made here are lost. #}
+{% extends "layouts/areas.html" %}
+
+{% set pageName = "Version 5: choose members to query on their own page, then check them (EB-367)" %}
+{% set area = "changes" %}
+
+{% block beforeContent %}
+<a href="/changes" class="govuk-back-link">What's changed</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<span class="govuk-caption-l">19 November 2026</span>
+<h1 class="govuk-heading-l">Version 5: choose members to query on their own page, then check them (EB-367)</h1>
+<p class="govuk-body"><strong class="govuk-tag govuk-tag--yellow">Change</strong></p>
+</div>
+</div>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<p class="govuk-body">Version 5 changes how regulators choose which members to query. Version 4 stays as it was, so the two can be compared.</p>
+<p class="govuk-body"><strong>Why we changed it</strong></p>
+<p class="govuk-body">In version 4, regulators could tick members to query on 3 different pages: Flags, Members and each member's page. This caused 2 problems.</p>
+<p class="govuk-body">First, the tables on Flags and Members had 2 jobs at once. Regulators were looking at the figures and choosing members on the same table. It was not clear which they were meant to be doing.</p>
+<p class="govuk-body">Second, with ticks spread across 3 pages, it was easy to lose track of who had been chosen. To remove a member, regulators had to go back and find them again, possibly on another page of a long list. They only saw everyone they had chosen at the very end.</p>
+<p class="govuk-body"><strong>What happens now</strong></p>
+<p class="govuk-body">Regulators choose members to query in one place only: at the bottom of each member's page, which they reach by selecting View figures. This is where the member's figures, flags and changes are, so regulators decide with all the information in front of them.</p>
+<p class="govuk-body">Flags and Members are now just for looking. They no longer have tickboxes.</p>
+<p class="govuk-body"><strong>On a member's page</strong></p>
+<p class="govuk-body">At the bottom of the page there is a tickbox: &quot;Send query to scheme about this member&quot;. Ticking it opens an optional box where regulators can say what they want to query. This is sent to the scheme with the query. If regulators change their mind, they can untick the box.</p>
+<p class="govuk-body">There are 2 buttons:</p>
+<ul class="govuk-list govuk-list--bullet"><li>Make a decision (green) takes regulators to a page listing all the members they want to query</li><li>Continue (grey) takes them back to the page they came from, so they can keep looking</li></ul>
+<p class="govuk-body">Both buttons save the tick and the comment. With JavaScript, they are also saved as the regulator types, so nothing is lost if they leave the page another way.</p>
+<p class="govuk-body"><strong>Checking the members to query</strong></p>
+<p class="govuk-body">This is a new page, called &quot;Members you're querying&quot;. It uses the GOV.UK check answers pattern and shows each member the regulator wants to query, with:</p>
+<ul class="govuk-list govuk-list--bullet"><li>why the member stands out (its flag, or its largest change if it has no flags)</li><li>what the regulator wants to query, which is left blank if they did not write anything</li><li>a Change link back to the member's page, where they can change what they wrote or untick the box to remove the member</li></ul>
+<p class="govuk-body">Regulators only see this page if they have chosen at least one member. Otherwise they go straight to the decision.</p>
+<p class="govuk-body"><strong>Making the decision</strong></p>
+<p class="govuk-body">The decision page works as it did in version 4: accept, query or return the submission, with a message to the scheme, a file and an internal note. We have removed the list of members from the top of the page, because regulators have just checked them on the page before. The button at the bottom now says &quot;Send decision&quot;, so it makes sense whichever option the regulator chooses.</p>
+<p class="govuk-body">The button at the bottom of all 5 pages of the submission now says &quot;Make a decision&quot;, the same as the green button on a member's page.</p>
+<p class="govuk-body"><strong>Back links</strong></p>
+<p class="govuk-body">We have fixed the Back links so they always take regulators to the page they came from. Going back from a member's page to Members now keeps the page number and sort order. Going back from &quot;Members you're querying&quot; after changing a member no longer sends regulators round in a loop.</p>
+<p class="govuk-body"><strong>Questions for research</strong></p>
+<ul class="govuk-list govuk-list--bullet"><li>Do regulators find it natural to choose members on each member's page?</li><li>Is the check page useful, or does it feel like an extra step?</li><li>Do regulators write something for each member, or leave it to the message on the decision page?</li></ul>
+<p class="govuk-body">The wording in the prototype is a draft for content design to review.</p>
+<h2 class="govuk-heading-m">Pages</h2>
+<ul class="govuk-list">
+<li><a class="govuk-link" href="/regulator/pom-submissions/v5/recycling-lives/2026/3">Version 5: Flags, the start of the journey</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v5/recycling-lives/2026/3/member-figures/BPRN142037?from=submission">Version 5: a member's page</a></li>
+<li><a class="govuk-link" href="/regulator/pom-submissions/v4/recycling-lives/2026/3">Version 4, to compare</a></li>
+</ul>
+</div>
+</div>
+<h2 class="govuk-heading-m">Flags: version 4, then version 5, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--flags-1020-pixels.png" alt="Before: Flags: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--flags-1020-pixels.png" alt="After: Flags: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Flags: version 4, then version 5, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--flags-320-pixels.png" alt="Before: Flags: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--flags-320-pixels.png" alt="After: Flags: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, top of the page: version 4, then version 5, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--members-1020-pixels.png" alt="Before: Members, top of the page: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--members-1020-pixels.png" alt="After: Members, top of the page: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Members, top of the page: version 4, then version 5, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--members-320-pixels.png" alt="Before: Members, top of the page: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--members-320-pixels.png" alt="After: Members, top of the page: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">A member's page, with the member chosen to query: version 4, then version 5, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--member-1020-pixels.png" alt="Before: A member's page, with the member chosen to query: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--member-1020-pixels.png" alt="After: A member's page, with the member chosen to query: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">A member's page, with the member chosen to query: version 4, then version 5, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--member-320-pixels.png" alt="Before: A member's page, with the member chosen to query: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--member-320-pixels.png" alt="After: A member's page, with the member chosen to query: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">New in version 5: Members you're querying, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--summary-1020-pixels.png" alt="New in version 5: Members you're querying, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">New in version 5: Members you're querying, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-two-thirds">
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--summary-320-pixels.png" alt="New in version 5: Members you're querying, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+<h2 class="govuk-heading-m">Make a decision, with Query chosen: version 4, then version 5, desktop (1020 pixels wide)</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--decision-1020-pixels.png" alt="Before: Make a decision, with Query chosen: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--decision-1020-pixels.png" alt="After: Make a decision, with Query chosen: version 4, then version 5, desktop (1020 pixels wide)" class="app-change-screenshot" width="510">
+</div>
+</div>
+<h2 class="govuk-heading-m">Make a decision, with Query chosen: version 4, then version 5, 320 pixels wide</h2>
+<div class="govuk-grid-row">
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">Before</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/before--decision-320-pixels.png" alt="Before: Make a decision, with Query chosen: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+<div class="govuk-grid-column-one-half">
+<h3 class="govuk-heading-s">After</h3>
+<img src="/public/images/changes/add-version-5-simpler-query-journey/after--decision-320-pixels.png" alt="After: Make a decision, with Query chosen: version 4, then version 5, 320 pixels wide" class="app-change-screenshot" width="160">
+</div>
+</div>
+
+{% endblock %}

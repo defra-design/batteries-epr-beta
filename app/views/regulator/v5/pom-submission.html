@@ -1,0 +1,105 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 5 (19 November 2026): one placed on the market (PoM) submission.
+  A copy of version 4's Flags page, without the tickboxes.
+  Address: /regulator/pom-submissions/v5/recycling-lives/2026/3
+
+  The first of 5 pages of a submission, with a sub navigation between them
+  (Flags, Members, Submission details, Changes, Scheme details). The top of the page is the
+  same on all 5: v5/_submission-header.html. Flags come first: they're what
+  regulators want to see most, and they decide whether to accept or query
+  (Jen, 17 November).
+
+  Version 5 (Marie, 19 November): this page is only for looking. No
+  tickboxes, no Select all, no "Select any members you want to query". You
+  pick members to query on their own page (View figures). In version 4 this
+  table did 2 jobs, looking and picking, and you could pick on 3 different
+  pages, which was easy to lose track of.
+
+  At the bottom, Make a decision, the same on all 5 pages
+  (v5/_continue.html): to Members you're querying if you've picked any,
+  if not straight to the decision (app/routes/v5-decision.js).
+
+  With no flags, the page says so and how many members passed the checks,
+  so you don't land on an empty page (Marie, 17 November).
+
+  Flags (Marie, 17 November):
+  - A table, one row per flag, 4 columns: Member, Flag, Scheme's reason,
+    and View figures. Compact and easy to scan, as a return can have lots of flags.
+    In a scrollable pane, so it works on a phone. Was: a block per flag, with
+    a line between each, which spread the flags down the page
+  - No tags: the flag type is plain text, in bold, above what was found.
+    Waste has around 10 checks, too many types for tag colours to mean
+    anything, so the words say what the flag is
+  - The figures behind the flag, if there are any: a flag is two figures that don't match
+  - The member's name isn't a link: each row is a flag, not a member.
+    "View figures" (with the member's name for screen readers) goes to that
+    member's figures, the table on their page, where the flag is shown
+    against the chemistry it's about. One link per row, as on the list
+
+  The data: app/data/pom-submission-details.js (dummy). The example flags: app/content/regulator/flags.md
+  The words: app/content/regulator/v5/pom-submission.md
+#}
+
+{% set wordsFile = "regulator/v5/pom-submission" %}
+{% set words = content(wordsFile) %}
+{% set s = submission %}
+
+{% set pageName = words.pageTitle + ", " + s.yearQuarterFull + ", " + s.scheme + " (version 5)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{# Small text in tables, the same as the other version 5 tables #}
+{% set small = "govuk-!-font-size-16" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{# Flags: one row each #}
+{% set flagRows = [] %}
+{% for flag in flags %}
+  {% set flagHtml %}<strong class="govuk-!-display-block">{{ flag.type }}</strong>{{ flag.found }}{% if (flag.found | last) != "." %}.{% endif %}{% if flag.figures %} {{ flag.figures }}{% if (flag.figures | last) != "." %}.{% endif %}{% endif %}{% endset %}
+  {% set linkHtml %}{% if flag.figuresHref %}<a href="{{ flag.figuresHref }}" class="govuk-link">{{ words.viewFiguresLink }}<span class="govuk-visually-hidden"> {{ words.viewFiguresFor }} {{ flag.producer }}</span></a>{% endif %}{% endset %}
+  {% set flagRows = (flagRows.push([
+    { text: flag.producer, classes: small + " app-table-cell--wrap" },
+    { html: flagHtml, classes: small + " app-table-cell--wrap" },
+    { text: flag.reason, classes: small + " app-table-cell--wrap" },
+    { html: linkHtml, classes: small + " govuk-!-text-align-right" }
+  ]), flagRows) %}
+{% endfor %}
+
+{% block content %}
+{% include "regulator/v5/_submission-header.html" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+
+    {% if flagRows.length %}
+      {# Add-on: MOJ scrollable pane (on a phone only the table scrolls sideways) #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsHeading }}">
+        {{ govukTable({
+          caption: words.flagsHeading,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.memberColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.flagColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.reasonColumn, classes: small + " app-table-cell--wrap" },
+            { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
+          ],
+          rows: flagRows
+        }) }}
+      </div>
+    {% else %}
+      <p class="govuk-body">{{ words.noFlags }}</p>
+      <p class="govuk-body">{{ words.allPassedBefore }} {{ membersCount }} {{ words.allPassedAfter }}</p>
+    {% endif %}
+
+    {# Make a decision: the same at the bottom of all 5 pages #}
+    {% include "regulator/v5/_continue.html" %}
+  </div>
+</div>
+{% endblock %}

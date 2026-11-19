@@ -1,0 +1,281 @@
+{% extends "layouts/regulator.html" %}
+
+{#
+  VERSION 5 (19 November 2026). EB-366 and EB-367: one member's figures,
+  and the one place to pick a member to query. A copy of version 4's page.
+  Address: /regulator/pom-submissions/v5/recycling-lives/2026/3/member-figures/BPRN142037
+  You get here from View figures (on a flag, or on the member figures list),
+  View changes (changes to figures), or Change on Members you're querying
+  (?from=queries). It opens at the top of the page.
+  Back goes where you came from (Marie, 17 November): the submission, the
+  changes page, or the member figures list. The address says which
+  (?from=submission, ?from=changes), and the form keeps it.
+
+  What regulators come for goes first: the flags, then the figures. The
+  member's details go last (Marie, 17 November), as on the submission.
+
+  Top to bottom, in the order a regulator thinks it through (Marie, 17 November):
+  - Back to where you came from
+  - The scheme name in the caption, the member's name as the heading, then
+    one line close under it: a Current member or Former member tag, the
+    registration number, when they joined the scheme, and when they left,
+    if they have. Spaced apart, no dots (Marie, 17 November). Was a
+    Member details section at the bottom, which read as an afterthought.
+    Kept, as regulators copy registration numbers into their risk sheets
+  - Flags in this submission (only if they have some): a table, as on the
+    submission: the flag (type in bold, then what we found) and the
+    scheme's reason. Only on the submission's quarter
+  - Their figures: Quarter and Compared with (two selects and a Show button,
+    a plain form, so it works without JavaScript, WCAG 3.2.2), a line saying
+    what's showing, then the table: one row per chemistry, then the total.
+    4 columns: chemistry, the two quarters (tonnes), and the change in words
+    (Up, Down, No change). The flag's type shows in bold against the
+    chemistry it's about. In a scrollable pane
+  - Changes to figures (only if they have some): each figure changed since
+    the scheme sent the return, newest first: date, chemistry, before and
+    after (tonnes), who changed it. From Ian's amendment history design.
+    After the figures, so you see what's odd, then what's been fixed
+  - At the bottom, once you've looked (version 5, Marie, 19 November): the
+    only place to pick a member to query. A tickbox, "Send query to scheme
+    about this member". Ticking it opens an optional box for what you want
+    to query (a GOV.UK checkbox with a related question). Untick it if you
+    change your mind: the member comes off the list. Then:
+    - Make a decision (green): to Members you're querying, the list of
+      everyone you've picked, then the decision
+    - Continue (grey): back to the page you came from (Flags, Members,
+      Changes, or Members you're querying), to keep looking
+    Both buttons save the tick and the comment, so it works without
+    JavaScript. With JavaScript they're also saved as you go (add-on:
+    saveTicks in application.js), so nothing's lost if you leave another way
+  - No links under the tables: Back at the top is the way back
+
+  One page, not a sub navigation like the submission: the flags, figures and
+  changes explain each other, so regulators need to see them together
+  (Marie, 17 November).
+
+  Why two quarters: today regulators compare a return with last quarter's, in
+  the EA comparison tool. Two quarters keep the table to 4 columns, and they
+  can pick any two (for example the same quarter last year). Still to test:
+  whether they need more than two, the last accepted version, or an average.
+
+  Still to agree: the list of chemistries (the dummy data has the 3 portable
+  battery returns use today) and whether to split by category too (UN-036).
+
+  The data: app/data/member-figures.js (dummy).
+  The words: app/content/regulator/v5/member.md
+#}
+
+{% set wordsFile = "regulator/v5/member" %}
+{% set words = content(wordsFile) %}
+
+{# The grey button at the bottom: back to where you came from, beside
+   Continue (Marie, 18 November evening). Was the only button, and from
+   Changes it went to Members #}
+
+{% set pageName = member.name + ", " + org.name + " (version 5)" %}
+
+{# Prototype only, not part of the design: a link back to the Regulators page, in the footer #}
+{% set prototypeBackLink = { href: "/regulators", text: "Regulators" } %}
+
+{# Small text in tables, the same as the other version 5 tables #}
+{% set small = "govuk-!-font-size-16" %}
+
+{% block beforeContent %}
+  {{ govukBackLink({ text: words.backLink, href: backHref }) }}
+{% endblock %}
+
+{#
+  The change between two figures, in words: "Up 0.50 (42%)", "Down 0.02 (8%)",
+  "No change", "New this quarter" (none before) or "None this quarter".
+  The numbers come from app/data/member-figures.js, the words from the words file.
+  The same on the member figures and member pages.
+#}
+{% macro changeText(figure, words) -%}
+  {%- if figure.diff == 0 -%}{{ words.noChange }}
+  {%- elif figure.before == 0 -%}{{ words.newThisQuarter }}
+  {%- elif figure.now == 0 -%}{{ words.noneThisQuarter }}
+  {%- elif figure.diff > 0 -%}{{ words.up }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- else -%}{{ words.down }} {{ figure.diffText }} ({{ figure.percent }}%)
+  {%- endif -%}
+{%- endmacro %}
+
+{# This member's flags: a table, the same as on the submission #}
+{% set flagRows = [] %}
+{% for flag in flags %}
+  {% set flagHtml %}<strong class="govuk-!-display-block">{{ flag.type }}</strong>{{ flag.found }}{% if (flag.found | last) != "." %}.{% endif %}{% if flag.figures %} {{ flag.figures }}{% if (flag.figures | last) != "." %}.{% endif %}{% endif %}{% endset %}
+  {% set flagRows = (flagRows.push([
+    { html: flagHtml, classes: small + " app-table-cell--wrap" },
+    { text: flag.reason, classes: small + " app-table-cell--wrap" }
+  ]), flagRows) %}
+{% endfor %}
+
+{# Their changes since the return was first sent #}
+{% set changeRows = [] %}
+{% for c in changes %}
+  {% set changeRows = (changeRows.push([
+    { text: c.date, classes: small },
+    { text: c.chemistry, classes: small },
+    { text: c.beforeText, format: "numeric", classes: small },
+    { text: c.afterText, format: "numeric", classes: small },
+    { text: c.madeBy, classes: small }
+  ]), changeRows) %}
+{% endfor %}
+
+{# About the member. Left the scheme only shows if they have #}
+{# The line under the name: membership as a tag (green for current, grey for
+   former, as on the member list), then the registration number and when they
+   joined, and left if they have. Spaced apart, no dots. Each fact wraps as a
+   whole (inline-block), so a date never splits across lines. Screen readers
+   hear "Registration number" before the number #}
+{% set aboutHtml %}
+<strong class="govuk-tag {{ 'govuk-tag--green' if member.current else 'govuk-tag--grey' }} govuk-!-margin-right-3">{{ words.currentMember if member.current else words.formerMember }}</strong>
+<span class="govuk-!-display-inline-block govuk-!-margin-right-3"><span class="govuk-visually-hidden">{{ words.registrationNumber }} </span>{{ member.bprn }}</span>
+<span class="govuk-!-display-inline-block govuk-!-margin-right-3">{{ words.joined }} {{ about.joined }}</span>
+{% if about.left %}<span class="govuk-!-display-inline-block">{{ words.left }} {{ about.left }}</span>{% endif %}
+{% endset %}
+
+{# The table. Numbers are right aligned, as GOV.UK tables do #}
+{% set nowHeading = showShort + " " + words.tonnes %}
+{% if table.nowEstimated %}{% set nowHeading = showShort + ", " + words.estimated + " " + words.tonnes %}{% endif %}
+{% set beforeHeading = compareShort + " " + words.tonnes %}
+{% if table.beforeEstimated %}{% set beforeHeading = compareShort + ", " + words.estimated + " " + words.tonnes %}{% endif %}
+
+{% set tableRows = [] %}
+{% for row in table.rows %}
+  {% set tableRows = (tableRows.push([
+    { text: row.chemistry, classes: small },
+    { text: row.nowText, format: "numeric", classes: small },
+    { text: row.beforeText, format: "numeric", classes: small },
+    { html: (changeText(row, words) | escape) + ('<strong class="govuk-!-display-block">' + (flags[0].type | escape) + '</strong>' if (flaggedChemistry == row.chemistry and flags.length) else ''), classes: small }
+  ]), tableRows) %}
+{% endfor %}
+{% set tableRows = (tableRows.push([
+  { html: "<strong>" + (words.total | escape) + "</strong>", classes: small },
+  { html: "<strong>" + table.total.nowText + "</strong>", format: "numeric", classes: small },
+  { html: "<strong>" + table.total.beforeText + "</strong>", format: "numeric", classes: small },
+  { html: "<strong>" + (changeText(table.total, words) | escape) + "</strong>", classes: small }
+]), tableRows) %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    <span class="govuk-caption-l">{{ org.name }}</span>
+    {# Less space under the name, so the line below reads as part of it #}
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ member.name }}</h1>
+    <p class="govuk-body govuk-!-margin-bottom-7">{{ aboutHtml | safe }}</p>
+  </div>
+</div>
+
+{# Full width from here, so the tables fit on one line each on a desktop #}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {% if flagRows.length %}
+      <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+      {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsHeading }}">
+        {{ govukTable({
+          caption: words.flagsHeading,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.flagColumn, classes: small + " app-table-cell--wrap" },
+            { text: words.reasonColumn, classes: small + " app-table-cell--wrap" }
+          ],
+          rows: flagRows
+        }) }}
+      </div>
+    {% endif %}
+
+
+    {# The selects: GOV.UK selects and button in a row (add-on: app-filters, see application.scss) #}
+    <form method="get" action="{{ formAction }}" novalidate>
+      {# Keeps where you came from, so Back still goes there #}
+      <input type="hidden" name="from" value="{{ from }}">
+      <div class="app-filters">
+        {{ govukSelect({ id: "show", name: "show", label: { text: words.showLabel, classes: "govuk-label--s" }, items: showItems }) }}
+        {{ govukSelect({ id: "compare", name: "compare", label: { text: words.compareLabel, classes: "govuk-label--s" }, items: compareItems }) }}
+        <div class="govuk-button-group">
+          {# Grey: it changes what you see. Green is for the action that moves you on (Marie, 18 November) #}
+          {{ govukButton({ text: words.showButton, classes: "govuk-button--secondary" }) }}
+        </div>
+      </div>
+    </form>
+
+    <p class="govuk-body">{{ words.showing }} {{ showName }} {{ words.comparedWith }} {{ compareName }}</p>
+
+    {% if same %}
+      {{ govukInsetText({ text: words.sameQuarter }) }}
+    {% endif %}
+
+    {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways, not the page.
+ #}
+    <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.tableCaption }}">
+    {{ govukTable({
+      caption: words.tableCaption,
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: true,
+      head: [
+        { text: words.chemistryColumn, classes: small },
+        { text: nowHeading, format: "numeric", classes: small },
+        { text: beforeHeading, format: "numeric", classes: small },
+        { text: words.changeColumn, classes: small }
+      ],
+      rows: tableRows
+    }) }}
+    </div>
+
+    {% if changeRows.length %}
+      {# id: View changes on the Changes page comes straight here #}
+      <h2 class="govuk-heading-m" id="changes">{{ words.changesHeading }}</h2>
+      {# Add-on: MOJ scrollable pane, so on a phone only the table scrolls sideways #}
+      <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.changesHeading }}">
+        {{ govukTable({
+          caption: words.changesHeading,
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            { text: words.dateColumn, classes: small },
+            { text: words.chemistryColumn, classes: small },
+            { text: words.beforeColumn, format: "numeric", classes: small },
+            { text: words.afterColumn, format: "numeric", classes: small },
+            { text: words.changedByColumn, classes: small }
+          ],
+          rows: changeRows
+        }) }}
+      </div>
+    {% endif %}
+
+    {# At the bottom, once you've looked: pick this member to query, with an
+       optional comment, then Make a decision or Continue (version 5) #}
+    {% set queryHtml %}
+      {{ govukCharacterCount({
+        id: "comment",
+        name: "comment",
+        value: comment,
+        maxlength: 500,
+        label: { text: words.commentLabel, classes: "govuk-label--s" },
+        hint: { text: words.commentHint },
+        attributes: { "data-app-save-field": "" }
+      }) }}
+    {% endset %}
+    <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}" class="govuk-!-margin-top-6">
+      <input type="hidden" name="bprn" value="{{ member.bprn }}" data-app-save-field>
+      <input type="hidden" name="back" value="{{ backHref }}">
+      {# Back on the next page comes back to this page #}
+      <input type="hidden" name="from" value="{{ currentUrl }}">
+      {{ govukCheckboxes({
+        name: "members",
+        idPrefix: "query",
+        items: [
+          { value: member.bprn, text: words.queryCheckbox, checked: selected, conditional: { html: queryHtml } }
+        ]
+      }) }}
+      <div class="govuk-button-group">
+        {{ govukButton({ text: words.makeDecisionButton, name: "next", value: "decision" }) }}
+        {{ govukButton({ text: words.continueButton, name: "next", value: "continue", classes: "govuk-button--secondary" }) }}
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
