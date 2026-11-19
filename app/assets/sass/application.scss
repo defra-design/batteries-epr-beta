@@ -55,6 +55,18 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   position: relative;
 }
 
+// Add-on: a second fix to the MOJ scrollable pane. The MOJ sortable table adds
+// a visually hidden message ("sorted by...") for screen readers just below the
+// table. It stuck out 1 pixel below the pane, so the pane could scroll up and
+// down by 1 pixel and caught the mouse wheel: the page juddered when scrolling
+// with the mouse over the table (seen on the Regulators page). Pinning visually
+// hidden text to the top of the pane keeps it inside. Screen readers still
+// read it.
+.moj-scrollable-pane .govuk-visually-hidden {
+  top: 0;
+  left: 0;
+}
+
 // Add-on: filters in a row. The dropdowns and the button sit side by side with
 // a fixed gap, and wrap onto a new line when there isn't room, so they never
 // squash into each other (a GOV.UK select won't go narrower than 11.5em).
