@@ -81,5 +81,5 @@ Pages of members
 ## Compare line (first line under the heading: what the Largest change column compares)
 Largest change compares this quarter with the previous one.
 
-## Download button (grey, under the line above: every member's figures as a CSV report, the same as on Submission details)
+## Download button (grey, on the right, level with the heading: every member's figures as a CSV report, the same as on Submission details)
 Download CSV report

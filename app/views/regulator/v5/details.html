@@ -102,10 +102,19 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">{{ words.heading }}</h2>
-    {{ govukSummaryList({ rows: detailRows }) }}
-
-    {# Every member's figures as a CSV report (Marie, 20 November) #}
+  </div>
+  {# Every member's figures as a CSV report. On the right, level with the
+     heading, in the same place on Flags, Members, Submission details and a
+     member's page (Marie, 20 November). On a phone it goes under the
+     heading, full width, as GOV.UK buttons do #}
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
     {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {{ govukSummaryList({ rows: detailRows }) }}
 
     {% if fileRows.length %}
       <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>

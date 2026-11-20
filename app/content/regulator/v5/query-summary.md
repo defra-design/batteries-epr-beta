@@ -46,3 +46,6 @@ your query
 
 ## Continue button (green: to the decision)
 Continue
+
+## Add more button (grey, next to Continue: back to the members list to pick more)
+Review other members

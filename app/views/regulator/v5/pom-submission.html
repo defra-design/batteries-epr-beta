@@ -75,9 +75,20 @@
 {% include "regulator/v5/_submission-header.html" %}
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+  </div>
+  {# Every member's figures as a CSV report. On the right, level with the
+     heading, in the same place on Flags, Members, Submission details and a
+     member's page (Marie, 20 November). On a phone it goes under the
+     heading, full width, as GOV.UK buttons do #}
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
+  </div>
+</div>
 
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
     {% if flagRows.length %}
       {# Add-on: MOJ scrollable pane (on a phone only the table scrolls sideways) #}
       <div class="moj-scrollable-pane" role="region" tabindex="0" aria-label="{{ words.flagsHeading }}">

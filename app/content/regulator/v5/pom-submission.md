@@ -43,3 +43,5 @@ All
 ## All passed after (after the number of members)
 members passed the checks.
 
+## Download button (grey, on the right, level with the heading: every member's figures as a CSV report, the same on Flags, Members and Submission details)
+Download CSV report

@@ -158,12 +158,19 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
 
     <span class="govuk-caption-l">{{ org.name }}</span>
     {# Less space under the name, so the line below reads as part of it #}
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ member.name }}</h1>
     <p class="govuk-body govuk-!-margin-bottom-7">{{ aboutHtml | safe }}</p>
+  </div>
+  {# This member's figures as a CSV report. On the right, at the top
+     (Marie, 20 November). On a phone it goes under the line about them, full
+     width, as GOV.UK buttons do. Not built: it goes to the "not built yet"
+     page, so we can ask people what they'd expect #}
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
   </div>
 </div>
 
@@ -245,13 +252,6 @@
       </div>
     {% endif %}
 
-    {# This member's figures as a CSV report (Marie, 20 November). Not built:
-       it goes to the "not built yet" page, so we can ask people what they'd
-       expect. govuk-!-margin-top-6 gives it room after the tables #}
-    <div class="govuk-!-margin-top-6">
-      {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
-    </div>
-
     {# At the bottom, once you've looked: pick this member to query, with an
        optional comment, then Make a decision or Continue (version 5) #}
     {% set queryHtml %}
@@ -265,7 +265,7 @@
         attributes: { "data-app-save-field": "" }
       }) }}
     {% endset %}
-    <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}">
+    <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}" class="govuk-!-margin-top-6">
       <input type="hidden" name="bprn" value="{{ member.bprn }}" data-app-save-field>
       <input type="hidden" name="back" value="{{ backHref }}">
       {# Back on the next page comes back to this page #}

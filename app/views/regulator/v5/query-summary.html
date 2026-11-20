@@ -83,7 +83,12 @@
       }) }}
     {% endfor %}
 
-    {{ govukButton({ text: words.continueButton, href: continueHref }) }}
+    {# Add more members: back to the members list, as you left it, to pick
+       more (Marie, 20 November) #}
+    <div class="govuk-button-group">
+      {{ govukButton({ text: words.continueButton, href: continueHref }) }}
+      {{ govukButton({ text: words.addMoreButton, href: addMoreHref, classes: "govuk-button--secondary" }) }}
+    </div>
 
   </div>
 </div>

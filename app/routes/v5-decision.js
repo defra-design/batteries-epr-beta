@@ -209,6 +209,9 @@ module.exports = (router) => {
           changeHref: s.here + '/member-figures/' + m.bprn + '?from=queries'
         })),
       continueHref: s.urls.decision,
+      // Add more members: the members list, with the search, sort and page
+      // you left it on (app/routes/v5.js)
+      addMoreHref: (req.session.v5MembersBack || {})[s.scheme + '/' + s.year + '/' + s.quarter] || s.urls.members,
       backHref: s.decision.from || s.urls.flags
     })
   })

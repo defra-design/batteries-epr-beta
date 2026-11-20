@@ -134,8 +134,11 @@
     {# What the table shows, in one short line. The heading above already
        says which quarter #}
     <p class="govuk-body">{{ words.compareLine }}</p>
-    {# Every member's figures as a CSV report, the same as on Submission
-       details (Marie, 20 November) #}
+  </div>
+  {# Every member's figures as a CSV report, the same as on Submission
+     details. On the right, level with the heading (Marie, 20 November). On a
+     phone it goes under the line above, full width, as GOV.UK buttons do #}
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
     {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
   </div>
 </div>
@@ -150,8 +153,10 @@
            "Name (BPRN)", for the suggestions (see application.js) #}
         {# Keeps the sort when you search. Search goes back to page 1 #}
         <input type="hidden" name="sort" value="{{ sort.text }}">
-        {# 20 characters wide: about as long as a member's name (Marie, 20 November) #}
-        {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-input--width-20", spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
+        {# Half the page wide, so a long member's name fits, with their
+           registration number in the suggestions (Marie, 20 November). On a
+           phone it's full width, like everything in app-filters #}
+        {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "govuk-!-width-one-half" }, spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
         <div class="govuk-button-group">
           {# Green: search is the main thing you do at the top of this page, as
              in Defra Internal Frontend's search (Marie, 18 November). Continue

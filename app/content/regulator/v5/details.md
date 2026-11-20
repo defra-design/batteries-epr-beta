@@ -58,7 +58,7 @@ View changes
 ## Files heading
 Files in this submission
 
-## Download button (grey, under the details: every member's figures, as a CSV report made from the data we hold, not a file the scheme sent)
+## Download button (grey, on the right, level with the heading: every member's figures, as a CSV report made from the data we hold, not a file the scheme sent)
 Download CSV report
 
 ## Supporting document (before its type and size, for example "Supporting document (PDF, 240 KB)")

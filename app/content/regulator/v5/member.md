@@ -97,7 +97,7 @@ New this quarter
 ## None this quarter (none in the quarter shown)
 None this quarter
 
-## Download button (grey, near the bottom, above the query box: this member's figures as a CSV report. Not built yet: it goes to the "not built yet" page)
+## Download button (grey, at the top on the right: this member's figures as a CSV report. Not built yet: it goes to the "not built yet" page)
 Download CSV report
 
 ## Query checkbox (at the bottom of the page: ticking it adds this member to the ones you want to query)
@@ -113,4 +113,4 @@ This is sent to the scheme with your query.
 Make a decision
 
 ## Continue button (grey: back to the page you came from)
-Continue
+Review other members
