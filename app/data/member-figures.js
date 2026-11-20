@@ -87,6 +87,13 @@ function round (n) {
 // they have no figures after that
 const LEFT_AFTER = '2026-2'
 
+// Whether a member is in a quarter's return: members who've left are only in
+// the returns up to when they left (Marie, 20 November: with no Membership
+// filter, members who'd left showed on the July to September 2026 list)
+function inReturn (member, key) {
+  return member.current || quarters().indexOf(key) <= quarters().indexOf(LEFT_AFTER)
+}
+
 // One member's tonnes for one quarter: { 'Lead acid': 0.31, 'Nickel cadmium': 0, Other: 1.2 }
 function tonnes (member, key) {
   if (FLAGGED[member.name] && FLAGGED[member.name][key]) {
@@ -171,4 +178,4 @@ function flaggedChemistry (member) {
   return FLAGGED_CHEMISTRY[member.name] || null
 }
 
-module.exports = { quarters, quarterName, previousQuarter, comparison, biggestChange, about, flaggedChemistry, tonnes }
+module.exports = { quarters, quarterName, previousQuarter, comparison, biggestChange, about, flaggedChemistry, tonnes, inReturn }

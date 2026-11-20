@@ -248,9 +248,10 @@ module.exports = (router) => {
   router.get(V5 + '/:scheme/:year/:quarter/download', (req, res, next) => {
     const { scheme, year, quarter } = req.params
     const submission = details.submission(scheme, year, quarter)
-    const members = details.members(scheme, year, quarter)
-    if (!submission || !members) return next()
     const key = year + '-' + quarter
+    // Only the members in this quarter's return, as on Members
+    const members = (details.members(scheme, year, quarter) || []).filter(m => figures.inReturn(m, key))
+    if (!submission || !members.length) return next()
     const compareKey = figures.previousQuarter(key)
     const cell = (value) => '"' + String(value).replace(/"/g, '""') + '"'
     const chemistries = figures.comparison(members[0], key, compareKey).rows.map(r => r.chemistry)
@@ -315,9 +316,10 @@ module.exports = (router) => {
     const { scheme, year, quarter } = req.params
     const organisation = details.organisation(scheme)
     const submission = details.submission(scheme, year, quarter)
-    const all = details.members(scheme, year, quarter)
-    if (!organisation || !submission || !all) return next()
     const key = year + '-' + quarter
+    // Only the members in this quarter's return: not members who'd already left
+    const all = (details.members(scheme, year, quarter) || []).filter(m => figures.inReturn(m, key))
+    if (!organisation || !submission || !all.length) return next()
     const compareKey = figures.previousQuarter(key)
     const search = String(req.query.search || '').trim().slice(0, 100)
     const term = search.toLowerCase()
