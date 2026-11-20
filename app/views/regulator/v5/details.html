@@ -83,13 +83,11 @@
   lastChangedRow
 ] %}
 
-{# Files in this submission: the return as a spreadsheet first, then the
-   scheme's supporting documents. Download has the file name for screen readers #}
-{% set fileRows = [{
-  key: { text: downloadName },
-  value: { text: words.returnFile },
-  actions: { items: [{ href: downloadHref, text: words.downloadLink, visuallyHiddenText: downloadName }] }
-}] %}
+{# Files in this submission: only what the scheme sent, its supporting
+   documents. Download has the file name for screen readers. The return's
+   figures are a CSV report, made from the data we hold, with its own button
+   (team walkthrough, 19 November) #}
+{% set fileRows = [] %}
 {% for doc in s.supportingDocuments %}
   {% set fileRows = (fileRows.push({
     key: { text: doc.name },
@@ -106,8 +104,13 @@
     <h2 class="govuk-heading-m">{{ words.heading }}</h2>
     {{ govukSummaryList({ rows: detailRows }) }}
 
-    <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
-    {{ govukSummaryList({ rows: fileRows }) }}
+    {# Every member's figures as a CSV report (Marie, 20 November) #}
+    {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
+
+    {% if fileRows.length %}
+      <h2 class="govuk-heading-m">{{ words.filesHeading }}</h2>
+      {{ govukSummaryList({ rows: fileRows }) }}
+    {% endif %}
 
     {# Messages to the scheme and internal notes, newest first. Plain text:
        what it is in bold, then when and who, then the words. Only there

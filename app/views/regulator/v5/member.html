@@ -245,6 +245,13 @@
       </div>
     {% endif %}
 
+    {# This member's figures as a CSV report (Marie, 20 November). Not built:
+       it goes to the "not built yet" page, so we can ask people what they'd
+       expect. govuk-!-margin-top-6 gives it room after the tables #}
+    <div class="govuk-!-margin-top-6">
+      {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
+    </div>
+
     {# At the bottom, once you've looked: pick this member to query, with an
        optional comment, then Make a decision or Continue (version 5) #}
     {% set queryHtml %}
@@ -258,7 +265,7 @@
         attributes: { "data-app-save-field": "" }
       }) }}
     {% endset %}
-    <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}" class="govuk-!-margin-top-6">
+    <form method="post" action="{{ selectAction }}" novalidate data-app-save-ticks="{{ saveAction }}">
       <input type="hidden" name="bprn" value="{{ member.bprn }}" data-app-save-field>
       <input type="hidden" name="back" value="{{ backHref }}">
       {# Back on the next page comes back to this page #}

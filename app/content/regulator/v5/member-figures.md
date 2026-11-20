@@ -1,4 +1,4 @@
-Page: every member in a submission (EB-366), version 5 (19 November 2026), with the chemistry that changed most on the quarter before. Search by name or registration number, and filter by membership. Each name opens that member's page.
+Page: every member in a submission (EB-366), version 5 (19 November 2026), with the chemistry that changed most on the quarter before. Search by name or registration number. Each name opens that member's page.
 
 Change the words under each label. Don't change the labels (lines starting ##).
 The members and figures are dummy data: ask Marie to change those.
@@ -13,22 +13,10 @@ Members
 ## Search label
 Name or registration number
 
-## Status label
-Membership
-
-## Current (membership, and its filter option)
-Current
-
-## Former (membership, and its filter option)
-Former
-
-## All (filter option)
-All
-
 ## Search button (green: the main thing you do at the top of this page)
 Search
 
-## Reset button (goes back to every current member)
+## Reset button (clears the search and shows every member)
 Reset
 
 ## Showing (before the numbers, for example "Showing 1 to 30 of 281 members")
@@ -59,9 +47,6 @@ Member
 
 ## BPRN column
 Registration number
-
-## Status column
-Membership
 
 ## Change column (the chemistry that changed most, for example "Other: up 0.50 (42%)")
 Largest change
@@ -95,3 +80,6 @@ Pages of members
 
 ## Compare line (first line under the heading: what the Largest change column compares)
 Largest change compares this quarter with the previous one.
+
+## Download button (grey, under the line above: every member's figures as a CSV report, the same as on Submission details)
+Download CSV report

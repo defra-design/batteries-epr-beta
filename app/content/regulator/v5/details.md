@@ -58,8 +58,8 @@ View changes
 ## Files heading
 Files in this submission
 
-## Return file (what the spreadsheet is)
-The return, every member's figures (CSV)
+## Download button (grey, under the details: every member's figures, as a CSV report made from the data we hold, not a file the scheme sent)
+Download CSV report
 
 ## Supporting document (before its type and size, for example "Supporting document (PDF, 240 KB)")
 Supporting document

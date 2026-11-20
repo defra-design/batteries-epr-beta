@@ -58,7 +58,7 @@
     { text: c.date, classes: small },
     { text: c.madeBy, classes: small },
     { text: c.chemistries.length, format: "numeric", classes: small },
-    { html: '<a href="' + c.href + '" class="govuk-link">' + (words.viewChangesLink | escape) + '<span class="govuk-visually-hidden"> ' + (words.viewChangesFor | escape) + ' ' + (c.member | escape) + '</span></a>', classes: small + " govuk-!-text-align-right" }
+    { html: '<a href="' + c.href + '" class="govuk-link">' + (words.viewFiguresLink | escape) + '<span class="govuk-visually-hidden"> ' + (words.viewFiguresFor | escape) + ' ' + (c.member | escape) + '</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
 {% endfor %}
 

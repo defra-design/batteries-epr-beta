@@ -99,7 +99,8 @@ const byName = (a, b) => a.name.localeCompare(b.name)
 const MEMBER_SORTS = {
   member: byName,
   bprn: (a, b) => a.bprn.localeCompare(b.bprn),
-  status: (a, b) => (b.current - a.current) || byName(a, b),
+  // No Membership column (Marie, 20 November): current or former may be hard
+  // to get, as the data is in another service. The member's page keeps its tag
   change: (a, b) => (Math.abs(a.biggest.diff) - Math.abs(b.biggest.diff)) || byName(b, a)
 }
 
@@ -231,7 +232,6 @@ module.exports = (router) => {
     if (!submission) return next()
     res.render('regulator/v5/details', {
       submission,
-      downloadName: scheme + '-' + year + '-q' + quarter + '.csv',
       lastChanged: amendments.lastChanged(scheme, year, quarter),
       notBuiltHref: notBuilt(req.originalUrl),
       // Messages to the scheme and internal notes, newest first (EB-367,
@@ -320,10 +320,8 @@ module.exports = (router) => {
     const key = year + '-' + quarter
     const compareKey = figures.previousQuarter(key)
     const search = String(req.query.search || '').trim().slice(0, 100)
-    const status = pick(req.query.status, ['current', 'former', 'all'], 'current')
     const term = search.toLowerCase()
     const found = all.filter(m =>
-      (status === 'all' || (status === 'current') === m.current) &&
       (!term ||
         m.name.toLowerCase().includes(term) ||
         m.bprn.toLowerCase().includes(term) ||
@@ -340,7 +338,7 @@ module.exports = (router) => {
     const page = Math.min(pages, Math.max(1, parseInt(req.query.page, 10) || 1))
     const shown = rows.slice((page - 1) * MEMBERS_PER_PAGE, page * MEMBERS_PER_PAGE)
     // The address without sort or page, for the column headers and the pages
-    const baseQuery = new URLSearchParams({ status })
+    const baseQuery = new URLSearchParams()
     if (search) baseQuery.set('search', search)
     const baseUrl = req.path + '?' + baseQuery.toString()
     const sortText = sort.column + '[' + sort.direction + ']'
@@ -361,7 +359,7 @@ module.exports = (router) => {
       pagination: paginationFor(page, pages, baseUrl + '&sort=' + encodeURIComponent(sortText)),
       suggestions: all.map(m => m.name + ' (' + m.bprn + ')'),
       total: all.length,
-      filters: { search, status },
+      filters: { search },
       formAction: req.path,
       ...submissionTabs(req, scheme, year, quarter, 'members')
     })
@@ -422,7 +420,9 @@ module.exports = (router) => {
       selected: selectedMembers(req, scheme, year, quarter).includes(member.bprn),
       comment: memberComment(req, scheme, year, quarter, member.bprn),
       selectAction: here + '/decision/select',
-      saveAction: here + '/decision/save'
+      saveAction: here + '/decision/save',
+      // Download CSV report: not built yet (Marie, 20 November)
+      downloadHref: notBuilt(req.originalUrl)
     })
   })
 }

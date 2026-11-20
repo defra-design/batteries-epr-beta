@@ -22,8 +22,8 @@
   - The top of every page of the submission, then "Members" (h2),
     then a line saying what the biggest change compares, and that biggest
     changes come first
-  - Search by name or registration number, and Membership (Current, the
-    default, Former or All, as version 3), with Search and Reset. With
+  - Search by name or registration number, with Search and Reset. No
+    Membership filter (Marie, 20 November): every member shows. With
     JavaScript, the search box suggests members as you type, with the letters
     typed in bold (add-on: accessible autocomplete). Search filters this
     list: it never jumps to another page
@@ -35,9 +35,12 @@
   - Make a decision, close under the table, the same at the
     bottom of all 5 pages (v5/_continue.html)
   - Search is green: it's the main thing you do at the top of this page
-  - The table, 5 columns: member, registration number, membership, the
-    biggest change in words (with any flag types in bold under it), and
-    View figures.
+  - Download CSV report under the first line: every member's figures (Marie,
+    20 November)
+  - The table, 4 columns: member, registration number, the biggest change in
+    words (with any flag types in bold under it), and View figures. No
+    Membership column or filter (Marie, 20 November): the data is in another
+    service. The member's page keeps its Current or Former tag
     Opens with the biggest change first, by its size in tonnes, up or down,
     so what looks wrong comes first (Marie, 18 November). Was name order.
     Sorted on the server (Marie, 18 November): each column header is a link,
@@ -89,11 +92,6 @@
 
 {# Table text is 16px, as on the lists of submissions #}
 {% set small = "govuk-!-font-size-16" %}
-{% set statusItems = [
-  { value: "current", text: words.current, selected: filters.status == "current" },
-  { value: "former", text: words.former, selected: filters.status == "former" },
-  { value: "all", text: words.all, selected: filters.status == "all" }
-] %}
 
 {#
   A column header you can sort by: a link that sorts the whole list on the
@@ -122,7 +120,6 @@
   {% set rows = (rows.push([
     { text: m.name, classes: small + " app-table-cell--wrap" },
     { text: m.bprn, classes: small },
-    { html: '<strong class="govuk-tag govuk-!-font-size-16 ' + ('govuk-tag--green' if m.current else 'govuk-tag--grey') + '">' + ((words.current if m.current else words.former) | escape) + '</strong>', classes: small },
     { html: ((m.biggest.chemistry + ": " + (changeText(m.biggest, words) | lower)) | escape) + tagsHtml, classes: small },
     { html: '<a href="' + m.href + '" class="govuk-link">' + (words.viewFiguresLink | escape) + '<span class="govuk-visually-hidden"> ' + (words.viewFiguresFor | escape) + ' ' + (m.name | escape) + '</span></a>', classes: small + " govuk-!-text-align-right" }
   ]), rows) %}
@@ -137,6 +134,9 @@
     {# What the table shows, in one short line. The heading above already
        says which quarter #}
     <p class="govuk-body">{{ words.compareLine }}</p>
+    {# Every member's figures as a CSV report, the same as on Submission
+       details (Marie, 20 November) #}
+    {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
   </div>
 </div>
 
@@ -150,8 +150,8 @@
            "Name (BPRN)", for the suggestions (see application.js) #}
         {# Keeps the sort when you search. Search goes back to page 1 #}
         <input type="hidden" name="sort" value="{{ sort.text }}">
-        {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", formGroup: { classes: "app-filters__grow" }, spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
-        {{ govukSelect({ id: "status", name: "status", label: { text: words.statusLabel, classes: "govuk-label--s" }, classes: "govuk-!-width-full", items: statusItems }) }}
+        {# 20 characters wide: about as long as a member's name (Marie, 20 November) #}
+        {{ govukInput({ id: "search", name: "search", value: filters.search, label: { text: words.searchLabel, classes: "govuk-label--s" }, classes: "govuk-input--width-20", spellcheck: false, autocomplete: "off", attributes: { "data-app-suggestions": suggestions | dump } }) }}
         <div class="govuk-button-group">
           {# Green: search is the main thing you do at the top of this page, as
              in Defra Internal Frontend's search (Marie, 18 November). Continue
@@ -173,7 +173,6 @@
           head: [
             { html: sortHeader("member", words.memberColumn, "asc", sort), attributes: { "aria-sort": ariaSort("member", sort) }, classes: small + " app-table-cell--wrap" },
             { html: sortHeader("bprn", words.bprnColumn, "asc", sort), attributes: { "aria-sort": ariaSort("bprn", sort) }, classes: small },
-            { html: sortHeader("status", words.statusColumn, "asc", sort), attributes: { "aria-sort": ariaSort("status", sort) }, classes: small },
             { html: sortHeader("change", words.changeColumn, "desc", sort), attributes: { "aria-sort": ariaSort("change", sort) }, classes: small },
             { html: '<span class="govuk-visually-hidden">' + (words.actionColumn | escape) + '</span>', classes: small + " govuk-!-text-align-right" }
           ],

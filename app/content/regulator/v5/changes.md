@@ -31,10 +31,10 @@ Changes
 ## Action column (only screen readers hear this, it's hidden on screen)
 Action
 
-## View changes link (on each row, goes to the member's page)
-View changes
+## View figures link (on each row, goes to the member's page. "View figures", the same as on Flags and Members, so it doesn't look like the View changes link on Submission details, which goes to this page)
+View figures
 
-## View changes for (only screen readers hear this, before the member's name, for example "View changes for Acorn Hill Electrical Ltd")
+## View figures for (only screen readers hear this, before the member's name, for example "View figures for Acorn Hill Electrical Ltd")
 for
 
 ## No changes
