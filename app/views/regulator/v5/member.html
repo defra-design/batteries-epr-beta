@@ -162,12 +162,13 @@
    width, as GOV.UK buttons do. Not built: it goes to the "not built yet"
    page, so we can ask people what they'd expect #}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+  {# Half each, so "Download member history (CSV)" fits on one line #}
+  <div class="govuk-grid-column-one-half">
     <span class="govuk-caption-l">{{ org.name }}</span>
     {# Less space under the name, so the line below reads as part of it #}
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ member.name }}</h1>
   </div>
-  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+  <div class="govuk-grid-column-one-half govuk-!-text-align-right">
     {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
   </div>
 </div>

@@ -98,7 +98,7 @@ New this quarter
 None this quarter
 
 ## Download button (grey, at the top on the right, level with the name: all this member's figures, every quarter for 3 years, as a CSV. Not built yet: it goes to the "not built yet" page)
-Download all figures
+Download member history (CSV)
 
 ## Query checkbox (at the bottom of the page: ticking it adds this member to the ones you want to query)
 Send query to scheme about this member
