@@ -8,13 +8,13 @@ Done? Select Commit changes. It's live in about 5 minutes.
 Back
 
 ## Heading
-Changes to figures
+Updated data
 
 ## Intro (paragraphs welcome)
-Changes to the figures in this return.
+Data the scheme has updated since it first submitted.
 
 ## Table caption (only screen readers hear this)
-Changes to figures
+Updated data
 
 ## Member column
 Member
@@ -23,19 +23,19 @@ Member
 Date
 
 ## Changed by column
-Changed by
+Updated by
 
 ## Changes column (how many figures changed)
-Changes
+Figures updated
 
 ## Action column (only screen readers hear this, it's hidden on screen)
 Action
 
 ## View figures link (on each row, goes to the member's page. "View figures", the same as on Flags and Members, so it doesn't look like the View changes link on Submission details, which goes to this page)
-View figures
+View
 
 ## View figures for (only screen readers hear this, before the member's name, for example "View figures for Acorn Hill Electrical Ltd")
-for
+updated data for
 
 ## No changes
-There have been no changes to the figures in this return.
+The scheme has not provided any updated data.
