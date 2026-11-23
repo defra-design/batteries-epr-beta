@@ -20,7 +20,7 @@ Show
 Showing
 
 ## Returns (after the quarter, in the line above the table)
-returns
+submissions
 
 ## No submissions
 There are no submissions for this quarter yet.
