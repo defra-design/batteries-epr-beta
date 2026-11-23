@@ -8,13 +8,13 @@ Done? Select Commit changes. It's live in about 5 minutes.
 Back
 
 ## Heading
-Members you're querying
+Check your query
 
 ## Intro (under the heading)
-To change what you want to query, or to remove a member, select Change and update or untick the box on their page.
+
 
 ## Why key (in each card: their flag, or their largest change)
-Why they stand out
+Flag
 
 ## Largest change (when the member has no flags, for example "Largest change: Other, up 0.50 (42%)")
 Largest change
