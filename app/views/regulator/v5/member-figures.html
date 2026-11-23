@@ -128,19 +128,18 @@
 {% block content %}
 {% include "regulator/v5/_submission-header.html" %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
+{# Heading on the left, Download on the right, on one line (app-heading-row,
+   Marie, 23 November). The button is as wide as its words and the heading
+   takes the rest, so the button doesn't wrap. On a phone the button goes
+   under the heading, full width, as GOV.UK buttons do #}
+<div class="app-heading-row">
+  <div>
     <h2 class="govuk-heading-m">{{ words.heading }}</h2>
     {# What the table shows, in one short line. The heading above already
        says which quarter #}
     <p class="govuk-body">{{ words.compareLine }}</p>
   </div>
-  {# Every member's figures as a CSV report, the same as on Submission
-     details. On the right, level with the heading (Marie, 20 November). On a
-     phone it goes under the line above, full width, as GOV.UK buttons do #}
-  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-    {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
-  </div>
+  {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
 </div>
 
 <div class="govuk-grid-row">

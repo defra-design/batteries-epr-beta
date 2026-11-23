@@ -68,7 +68,8 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-m">{{ words.heading }}</h2>
-    {{ words.intro | paragraphs }}
+    {# The line under the heading only when there are updates (Jen, 23 November) #}
+    {% if rows.length %}{{ words.intro | paragraphs }}{% endif %}
   </div>
 </div>
 

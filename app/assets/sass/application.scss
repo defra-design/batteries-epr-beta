@@ -146,3 +146,25 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   align-items: center;
   text-decoration: none;
 }
+
+// Add-on: a heading with a button on the right, on one line (Marie, 23
+// November). Used for Download on Flags, Members, Submission details and a
+// member's page. The button is as wide as its words and the heading takes
+// the rest; when there isn't room, the button drops underneath. On a phone
+// GOV.UK buttons are full width anyway. Remove: swap app-heading-row back to
+// a GOV.UK grid row with two columns
+.app-heading-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  column-gap: govuk-spacing(6);
+
+  > :first-child {
+    flex: 1 1 20em;
+  }
+
+  > .govuk-button {
+    flex: 0 0 auto;
+  }
+}

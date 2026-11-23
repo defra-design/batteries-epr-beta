@@ -74,17 +74,13 @@
 {% block content %}
 {% include "regulator/v5/_submission-header.html" %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
-  </div>
-  {# Every member's figures as a CSV report. On the right, level with the
-     heading, in the same place on Flags, Members, Submission details and a
-     member's page (Marie, 20 November). On a phone it goes under the
-     heading, full width, as GOV.UK buttons do #}
-  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-    {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
-  </div>
+{# Heading on the left, Download on the right, on one line (app-heading-row,
+   Marie, 23 November). The button is as wide as its words and the heading
+   takes the rest, so the button doesn't wrap. On a phone the button goes
+   under the heading, full width, as GOV.UK buttons do #}
+<div class="app-heading-row">
+  <h2 class="govuk-heading-m">{{ words.flagsHeading }}</h2>
+  {{ govukButton({ text: words.downloadButton, href: downloadHref, classes: "govuk-button--secondary" }) }}
 </div>
 
 <div class="govuk-grid-row">

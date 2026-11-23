@@ -26,19 +26,19 @@
 
 const pom = require('./pom-submissions')
 
-const CHEMISTRIES = ['Lead acid', 'Nickel cadmium', 'Other']
+const CHEMISTRIES = ['Lead-acid', 'Nickel-cadmium', 'Other']
 
 // The flagged members, in the two quarters their flags compare
 const FLAGGED = {
   // Variance: Other up 42% on last quarter, 1.2 to 1.7 tonnes
   'Northpower Batteries Ltd': {
-    '2026-2': { 'Lead acid': 0.31, 'Nickel cadmium': 0, Other: 1.20 },
-    '2026-3': { 'Lead acid': 0.32, 'Nickel cadmium': 0, Other: 1.70 }
+    '2026-2': { 'Lead-acid': 0.31, 'Nickel-cadmium': 0, Other: 1.20 },
+    '2026-3': { 'Lead-acid': 0.32, 'Nickel-cadmium': 0, Other: 1.70 }
   },
   // Irregularity: figures look rounded, 1.0 tonnes
   'Cellwise Trading Ltd': {
-    '2026-2': { 'Lead acid': 0.12, 'Nickel cadmium': 0, Other: 0.94 },
-    '2026-3': { 'Lead acid': 0.11, 'Nickel cadmium': 0, Other: 1.00 }
+    '2026-2': { 'Lead-acid': 0.12, 'Nickel-cadmium': 0, Other: 0.94 },
+    '2026-3': { 'Lead-acid': 0.11, 'Nickel-cadmium': 0, Other: 1.00 }
   }
 }
 
@@ -94,13 +94,13 @@ function inReturn (member, key) {
   return member.current || quarters().indexOf(key) <= quarters().indexOf(LEFT_AFTER)
 }
 
-// One member's tonnes for one quarter: { 'Lead acid': 0.31, 'Nickel cadmium': 0, Other: 1.2 }
+// One member's tonnes for one quarter: { 'Lead-acid': 0.31, 'Nickel-cadmium': 0, Other: 1.2 }
 function tonnes (member, key) {
   if (FLAGGED[member.name] && FLAGGED[member.name][key]) {
     return FLAGGED[member.name][key]
   }
   if (!member.current && quarters().indexOf(key) > quarters().indexOf(LEFT_AFTER)) {
-    return { 'Lead acid': 0, 'Nickel cadmium': 0, Other: 0 }
+    return { 'Lead-acid': 0, 'Nickel-cadmium': 0, Other: 0 }
   }
   // The number in the registration number, for example 142037 in BPRN142037
   const n = Number(member.bprn.replace(/\D/g, ''))
@@ -108,24 +108,24 @@ function tonnes (member, key) {
   const step = (quarters().indexOf(key) + n) % 5
   const change = 1 + (step - 2) * 0.03
   return {
-    'Lead acid': round((0.10 + (n % 20) / 100) * change),
+    'Lead-acid': round((0.10 + (n % 20) / 100) * change),
     // Every third member doesn't sell nickel cadmium batteries
-    'Nickel cadmium': n % 3 === 0 ? 0 : round((0.05 + (n % 10) / 100) * change),
+    'Nickel-cadmium': n % 3 === 0 ? 0 : round((0.05 + (n % 10) / 100) * change),
     Other: round((0.20 + (n % 40) / 100) * change)
   }
 }
 
 // Two figures and the change between them, as numbers and as text with
-// 2 decimal places. The pages turn this into words
+// 3 decimal places, as tonnes are reported to the kilogram. The pages turn this into words
 function compare (now, before) {
   const diff = round(now - before)
   return {
     now,
     before,
-    nowText: now.toFixed(2),
-    beforeText: before.toFixed(2),
+    nowText: now.toFixed(3),
+    beforeText: before.toFixed(3),
     diff,
-    diffText: Math.abs(diff).toFixed(2),
+    diffText: Math.abs(diff).toFixed(3),
     // How big the change is, as a whole percentage (none if there was nothing before)
     percent: before > 0 ? Math.round(Math.abs(diff) / before * 100) : null
   }

@@ -255,15 +255,17 @@ module.exports = (router) => {
     const compareKey = figures.previousQuarter(key)
     const cell = (value) => '"' + String(value).replace(/"/g, '""') + '"'
     const chemistries = figures.comparison(members[0], key, compareKey).rows.map(r => r.chemistry)
-    const head = ['Member', 'Registration number', 'Membership']
+    // No Membership column: it isn't on Members any more (Jen, 23 November)
+    const head = ['Member', 'Registration number']
     chemistries.forEach(c => head.push(c + ' ' + figures.quarterName(key, true) + ' (tonnes)', c + ' ' + figures.quarterName(compareKey, true) + ' (tonnes)'))
     const lines = [head.map(cell).join(',')]
     members.forEach(m => {
-      const row = [m.name, m.bprn, m.current ? 'Current' : 'Former']
+      const row = [m.name, m.bprn]
       figures.comparison(m, key, compareKey).rows.forEach(r => row.push(r.nowText, r.beforeText))
       lines.push(row.map(cell).join(','))
     })
-    res.attachment(scheme + '-' + year + '-q' + quarter + '.csv')
+    // For example recycling-lives-july-to-september-2026.csv (Jen, 23 November)
+    res.attachment(scheme + '-' + figures.quarterName(key).toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.csv')
     res.type('text/csv').send(lines.join('\r\n'))
   })
 

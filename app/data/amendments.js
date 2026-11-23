@@ -27,11 +27,11 @@ const AMENDMENTS = {
     },
     {
       member: 'Acorn Hill Electrical Ltd', bprn: 'BPRN146366', date: '10 Nov 2026', madeBy: 'Michael Osei',
-      chemistries: ['Lead acid', 'Nickel cadmium', 'Other']
+      chemistries: ['Lead-acid', 'Nickel-cadmium', 'Other']
     },
     {
       member: 'Acorn Point Electrical Ltd', bprn: 'BPRN142518', date: '10 Nov 2026', madeBy: 'Michael Osei',
-      chemistries: ['Lead acid', 'Nickel cadmium', 'Other']
+      chemistries: ['Lead-acid', 'Nickel-cadmium', 'Other']
     },
     {
       member: 'Beacon Gate Power Ltd', bprn: 'BPRN144479', date: '6 Nov 2026', madeBy: 'Daniel Hughes',
@@ -39,21 +39,21 @@ const AMENDMENTS = {
     },
     {
       member: 'Acorn Moor Energy Ltd', bprn: 'BPRN149252', date: '3 Nov 2026', madeBy: 'Daniel Hughes',
-      chemistries: ['Nickel cadmium']
+      chemistries: ['Nickel-cadmium']
     },
     {
       member: 'Acorn Hill Electrical Ltd', bprn: 'BPRN146366', date: '3 Nov 2026', madeBy: 'Daniel Hughes',
-      chemistries: ['Lead acid']
+      chemistries: ['Lead-acid']
     }
   ],
   'erp-uk-2026-3': [
     {
       member: 'Beacon Cross Supplies Ltd', bprn: 'BPRN186848', date: '13 Nov 2026', madeBy: 'James Patel',
-      chemistries: ['Other', 'Lead acid']
+      chemistries: ['Other', 'Lead-acid']
     },
     {
       member: 'Acorn Hill Electrical Ltd', bprn: 'BPRN185849', date: '13 Nov 2026', madeBy: 'James Patel',
-      chemistries: ['Nickel cadmium']
+      chemistries: ['Nickel-cadmium']
     }
   ]
 }
@@ -65,7 +65,7 @@ function forReturn (scheme, year, quarter) {
 
 // One member's changes in one return, a row per changed figure, newest
 // first: { date, chemistry, madeBy, beforeText, afterText }.
-// "figures" is the member's figures now: { 'Lead acid': 0.31, ... }, from
+// "figures" is the member's figures now: { 'Lead-acid': 0.31, ... }, from
 // member-figures.js. The newest change ends on today's figure, and each
 // change before it ends where the next one started, so the figures add up.
 // Dummy kinds of change, in turn: a decimal point in the wrong place, a
@@ -79,7 +79,7 @@ function changesFor (scheme, year, quarter, bprn, figures) {
       const after = now[chemistry]
       let before = [round(after * 10), 0, round(after + 0.2)][turn % 3]
       if (before === after) before = round(after + 0.2)
-      rows.push({ date: c.date, chemistry, madeBy: c.madeBy, beforeText: before.toFixed(2), afterText: after.toFixed(2) })
+      rows.push({ date: c.date, chemistry, madeBy: c.madeBy, beforeText: before.toFixed(3), afterText: after.toFixed(3) })
       now[chemistry] = before
       turn++
     })

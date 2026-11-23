@@ -204,7 +204,7 @@ function submission (slug, year, quarter) {
     version: versions,
     versions,
     submittedBy,
-    tonnes: (s.tonnes + Number(quarter) * 0.7).toFixed(1),
+    tonnes: (s.tonnes + Number(quarter) * 0.7).toFixed(3),
     // Members in this submission's data. It can differ from the scheme's member count
     membersInSubmission: org.members,
     flags,
