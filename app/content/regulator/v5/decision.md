@@ -50,16 +50,16 @@ Year
 Return the submission
 
 ## Message label
-Message to the scheme
+Add a message for the scheme
 
 ## Message hint (under the label)
 Optional if you're accepting the submission.
 
 ## File label
-Attach a file (optional)
+Attach a file to your message (optional)
 
 ## Note label
-Internal note (optional)
+Regulator note (optional)
 
 ## Note hint (under the label)
 The scheme will not see this. You can read it on Submission details.
