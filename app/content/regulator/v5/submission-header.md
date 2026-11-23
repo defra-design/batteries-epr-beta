@@ -20,7 +20,7 @@ Submission details
 Members
 
 ## Changes (in the sub navigation)
-Changes
+Updated data
 
 ## Scheme details (in the sub navigation)
 Scheme details
