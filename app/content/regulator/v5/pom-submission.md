@@ -23,16 +23,16 @@ Member
 Flag
 
 ## Reason column (flags table)
-Scheme's reason
+Note from scheme
 
 ## Action column (flags table: only screen readers hear this, it's hidden on screen)
 Action
 
 ## View figures link (on each flag)
-View figures
+View
 
 ## View figures for (only screen readers hear this, before the member's name, for example "View figures for Northpower Batteries Ltd")
-for
+figures for
 
 ## No flags
 There are no flags in this submission.
@@ -44,4 +44,4 @@ All
 members passed the checks.
 
 ## Download button (grey, on the right, level with the heading: every member's figures as a CSV report, the same on Flags, Members and Submission details)
-Download CSV report
+Download submission data (CSV)
