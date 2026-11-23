@@ -47,19 +47,19 @@ tonnes
 Members
 
 ## Last changed (when a figure in the return was last changed)
-Last changed
+Last updated
 
 ## No changes (in place of the date, when nothing has changed since the scheme sent it)
-No changes since it was sent
+No update since submission
 
 ## View changes link (on the Last changed row, goes to the Changes page)
-View changes
+View updated data
 
 ## Files heading
-Files in this submission
+Uploaded files
 
 ## Download button (grey, on the right, level with the heading: every member's figures, as a CSV report made from the data we hold, not a file the scheme sent)
-Download CSV report
+Download submission data (CSV)
 
 ## Supporting document (before its type and size, for example "Supporting document (PDF, 240 KB)")
 Supporting document
@@ -68,19 +68,19 @@ Supporting document
 Download
 
 ## History heading (at the bottom, only when there's something to show)
-Messages to the scheme and internal notes
+Review history
 
 ## History query (a query sent to the scheme)
-Query sent to the scheme
+Query sent
 
 ## History accept (an acceptance sent to the scheme)
-Acceptance sent to the scheme
+Submission accepted
 
 ## History return (a return sent to the scheme: we say "return", not "reject")
 Return sent to the scheme
 
 ## History note (an internal note: only regulators see these)
-Internal note
+Regulator note
 
 ## History about (before the members a query was about, for example "About Northpower Batteries Ltd, Acorn Hill Electrical Ltd.")
 About
