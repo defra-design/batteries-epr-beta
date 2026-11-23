@@ -29,22 +29,22 @@ Flags in this submission
 Flag
 
 ## Reason column (flags table)
-Scheme's reason
+Note from scheme
 
 ## Changes heading (each figure changed since the scheme first sent the return)
-Changes to figures
+Updated data
 
 ## Date column (changes table)
 Date
 
 ## Before column (changes table)
-Before (tonnes)
+Previous weight (tonnes)
 
 ## After column (changes table)
-After (tonnes)
+New weight (tonnes)
 
 ## Changed by column (changes table)
-Changed by
+Updated by
 
 ## Show label (the quarter to look at)
 Quarter
@@ -68,7 +68,7 @@ You've chosen the same quarter twice. Choose a different quarter to compare it w
 Batteries placed on the market, in tonnes
 
 ## Chemistry column
-Chemistry
+Chemistry type
 
 ## Tonnes (after the quarter in the column headings, for example "Jul to Sep 2026 (tonnes)")
 (tonnes)
@@ -101,7 +101,7 @@ None this quarter
 Download member history (CSV)
 
 ## Query checkbox (at the bottom of the page: ticking it adds this member to the ones you want to query)
-Send query to scheme about this member
+Raise a query for this member
 
 ## Comment label (opens when the box is ticked)
 What do you want to query? (optional)
