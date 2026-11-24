@@ -67,6 +67,26 @@ $govuk-font-family-print: var(--app-font-family-print, sans-serif);
   left: 0;
 }
 
+// Add-on: a third fix to the MOJ scrollable pane (24 November 2026).
+// WHY: in Edge on Windows the pane always showed a scroll bar, even when the
+// table fitted, and clicking the table drew the yellow and black focus box
+// round all of it. Jason found this. Macs hide scroll bars until you scroll,
+// so we hadn't seen it.
+// HOW: "auto" only shows a scroll bar when the table is too wide (MOJ uses
+// "scroll", which always shows one on Windows). The focus box now only shows
+// when someone reaches the pane with the keyboard (:focus-visible), not when
+// they click it with a mouse. Keyboard users still see it.
+// See also keepScrollPanesTidy() in application.js.
+// FOR DEVELOPERS: build this. Worth offering to the shared regulator components.
+.moj-scrollable-pane[role="region"][tabindex] {
+  overflow-x: auto;
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
 // Add-on: filters in a row. The dropdowns and the button sit side by side with
 // a fixed gap, and wrap onto a new line when there isn't room, so they never
 // squash into each other (a GOV.UK select won't go narrower than 11.5em).

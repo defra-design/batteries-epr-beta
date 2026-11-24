@@ -7,6 +7,7 @@ window.GOVUKPrototypeKit.documentReady(() => {
   rememberTableSort()
   suggestMembers()
   saveTicks()
+  keepScrollPanesTidy()
 })
 
 //
@@ -185,5 +186,38 @@ function saveTicks () {
     $form.addEventListener('click', (event) => {
       if (event.target.matches('input[type="checkbox"]')) save()
     })
+  })
+}
+
+//
+// Add-on: scrolling panes are only a tab stop when they scroll (24 November 2026).
+//
+// Why: the MOJ scrollable pane has tabindex="0" so keyboard users can reach it
+// and scroll it with the arrow keys (WCAG 2.1.1). But when the table fits,
+// there's nothing to scroll, so it's a pointless extra tab stop.
+//
+// How: when the table fits, the pane gets tabindex="-1" (out of the tab order,
+// but still styled as a pane). When it doesn't fit, it gets tabindex="0" again.
+// Checked when the page loads and when the window changes size or zoom.
+// Without JavaScript nothing changes: every pane stays a tab stop, which is safe.
+//
+// To remove this add-on: delete this function and the line that calls it.
+//
+function keepScrollPanesTidy () {
+  const $panes = document.querySelectorAll('.moj-scrollable-pane[role="region"][tabindex]')
+  if (!$panes.length) return
+
+  const check = () => {
+    $panes.forEach(($pane) => {
+      const scrolls = $pane.scrollWidth > $pane.clientWidth + 1
+      $pane.setAttribute('tabindex', scrolls ? '0' : '-1')
+    })
+  }
+
+  check()
+  let timer
+  window.addEventListener('resize', () => {
+    window.clearTimeout(timer)
+    timer = window.setTimeout(check, 100)
   })
 }
